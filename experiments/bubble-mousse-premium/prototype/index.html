@@ -172,6 +172,7 @@
         <legend class="lp-bm-sr">اختاري العرض</legend>
 
         <label class="lp-bm-tier">
+          <span class="lp-bm-tier__check" aria-hidden="true"></span>
           <input type="radio" name="tier" value="1" data-tier="1">
           <img src="img/pack-1.svg" alt="" width="800" height="800" loading="lazy">
           <span class="lp-bm-tier__name">عبوة + الطقم</span>
@@ -180,6 +181,7 @@
         </label>
 
         <label class="lp-bm-tier lp-bm-tier--best">
+          <span class="lp-bm-tier__check" aria-hidden="true"></span>
           <input type="radio" name="tier" value="2" data-tier="2" checked>
           <span class="lp-bm-tier__badge">الأكثر طلبًا</span>
           <img src="img/pack-2.svg" alt="" width="800" height="800" loading="lazy">
@@ -189,6 +191,7 @@
         </label>
 
         <label class="lp-bm-tier">
+          <span class="lp-bm-tier__check" aria-hidden="true"></span>
           <input type="radio" name="tier" value="3" data-tier="3">
           <span class="lp-bm-tier__badge lp-bm-tier__badge--alt">أفضل سعر للقطعة</span>
           <img src="img/pack-3.svg" alt="" width="800" height="800" loading="lazy">
@@ -200,8 +203,8 @@
 
       <div class="lp-bm-field">
         <label for="fullname">الاسم الكامل</label>
-        <input id="fullname" name="fullname" type="text" autocomplete="name" required>
-        <p class="lp-bm-err" data-err="fullname"></p>
+        <input id="fullname" name="fullname" type="text" autocomplete="name" aria-describedby="err-fullname" required>
+        <p class="lp-bm-err" id="err-fullname" data-err="fullname" aria-live="polite"></p>
       </div>
 
       <div class="lp-bm-field">
@@ -209,21 +212,21 @@
         <div class="lp-bm-phone">
           <span class="lp-bm-phone__cc" data-cc>+966</span>
           <input id="phone" name="phone" type="tel" inputmode="numeric"
-                 autocomplete="tel-national" required>
+                 autocomplete="tel-national" aria-describedby="err-phone" required>
         </div>
-        <p class="lp-bm-err" data-err="phone"></p>
+        <p class="lp-bm-err" id="err-phone" data-err="phone" aria-live="polite"></p>
       </div>
 
       <div class="lp-bm-field">
         <label for="city">المدينة</label>
-        <select id="city" name="city" data-city required></select>
-        <p class="lp-bm-err" data-err="city"></p>
+        <select id="city" name="city" data-city aria-describedby="err-city" required></select>
+        <p class="lp-bm-err" id="err-city" data-err="city" aria-live="polite"></p>
       </div>
 
       <div class="lp-bm-field">
         <label for="address">العنوان بالتفصيل</label>
-        <input id="address" name="address" type="text" autocomplete="street-address" required>
-        <p class="lp-bm-err" data-err="address"></p>
+        <input id="address" name="address" type="text" autocomplete="street-address" aria-describedby="err-address" required>
+        <p class="lp-bm-err" id="err-address" data-err="address" aria-live="polite"></p>
       </div>
 
       <div class="lp-bm-total">

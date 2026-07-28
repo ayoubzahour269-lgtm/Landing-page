@@ -83,6 +83,9 @@
   transition: transform .12s ease, background-color .2s ease;
 }
 .lp-bm-btn:active { transform: scale(.98); }
+.lp-bm-btn:focus-visible { outline: 3px solid var(--gold-ink); outline-offset: 3px; }
+.lp-bm-sec--offer .lp-bm-btn:focus-visible,
+.lp-bm-btn--primary:focus-visible { outline-color: var(--gold); }
 .lp-bm-btn--primary { background: var(--green); color: var(--ivory); }
 .lp-bm-btn--primary:hover { background: var(--green-2); }
 .lp-bm-btn--ghost {
@@ -184,19 +187,25 @@
 
 .lp-bm-hotspots { position: relative; margin-block: clamp(28px, 6vw, 52px); }
 .lp-bm-hotspots img { margin-inline: auto; inline-size: min(100%, 460px); }
+/* Cible tactile de 44px, anneau visible de 26px : la zone cliquable est plus
+   grande que le dessin. */
 .lp-bm-hs {
   position: absolute;
   inset-block-start: var(--y); inset-inline-start: var(--x);
   translate: 50% -50%;
-  inline-size: 26px; block-size: 26px; padding: 0;
-  border: 1px solid var(--gold-ink); border-radius: 50%;
-  background: #F4EFE6cc; cursor: pointer;
+  inline-size: 44px; block-size: 44px; padding: 0;
+  border: 0; background: transparent; cursor: pointer;
+}
+.lp-bm-hs::before {
+  content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%;
+  inline-size: 26px; block-size: 26px; border-radius: 50%;
+  border: 1px solid var(--gold-ink); background: #F4EFE6cc;
 }
 .lp-bm-hs::after {
   content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%;
   inline-size: 6px; block-size: 6px; border-radius: 50%; background: var(--gold-ink);
 }
-.lp-bm-hs.is-on { background: var(--gold-ink); }
+.lp-bm-hs.is-on::before { background: var(--gold-ink); }
 .lp-bm-hs.is-on::after { background: var(--ivory); }
 .lp-bm-hs:focus-visible { outline: 2px solid var(--gold-ink); outline-offset: 3px; }
 .lp-bm-hs__out {
@@ -220,7 +229,7 @@
 .lp-bm-country { display: flex; align-items: center; gap: 12px; margin-block-end: 26px; }
 .lp-bm-country label { font-size: 15px; opacity: .8; }
 .lp-bm-country select {
-  font-family: inherit; font-size: 16px; padding: 10px 14px;
+  font-family: inherit; font-size: 16px; padding: 12px 14px;
   color: var(--ivory); background: transparent;
   border: 1px solid #F4EFE64d; border-radius: var(--radius);
 }
@@ -242,6 +251,20 @@
 .lp-bm-tier__unit  { grid-area: unit; font-size: 14px; color: #F4EFE6a0; }
 .lp-bm-tier__price { grid-area: price; font-size: 21px; font-weight: 700; white-space: nowrap; }
 .lp-bm-tier input { position: absolute; opacity: 0; pointer-events: none; }
+.lp-bm-tier__check {
+  position: absolute; inset-block-start: 12px; inset-inline-end: 12px;
+  inline-size: 22px; block-size: 22px; border-radius: 50%;
+  border: 1px solid #F4EFE666;
+  display: grid; place-items: center;
+}
+.lp-bm-tier__check::after {
+  content: "\2713"; font-size: 13px; font-weight: 700;
+  color: var(--green); opacity: 0; transition: opacity .15s ease;
+}
+.lp-bm-tier:has(input:checked) .lp-bm-tier__check {
+  background: var(--gold); border-color: var(--gold);
+}
+.lp-bm-tier:has(input:checked) .lp-bm-tier__check::after { opacity: 1; }
 .lp-bm-tier:has(input:checked) { border-color: var(--gold); background: #B08D4F1f; }
 .lp-bm-tier:has(input:focus-visible) { outline: 2px solid var(--gold); outline-offset: 3px; }
 .lp-bm-tier__badge {
