@@ -1,194 +1,376 @@
 /* ==========================================================================
    Bubble Mousse — Concept A « الصالون الصامت »
+
+   UNE SEULE IDÉE VISUELLE
+   Une nature morte de salon : ivoire chaud, lumière rasante, ombres longues
+   portées, et la mousse blanche comme unique matière. Toutes les photographies
+   partagent ce fond ivoire ; la page adopte exactement le même ton pour que
+   les images n'aient plus de bord et se fondent dans la mise en page.
+
+   Conséquences de cette idée, appliquées partout :
+   — pas de cartes, pas d'ombres portées d'interface : des filets d'un pixel ;
+   — l'or n'est jamais un aplat, seulement une lumière (dégradé, trait fin) ;
+   — la composition est asymétrique, tenue par une grille éditoriale ;
+   — le grain photographique unifie photos et à-plats.
+
    Isolation : tout est préfixé .lp-bm. Aucun style global, aucune dépendance.
    RTL : propriétés logiques uniquement, aucun left/right codé en dur.
    ========================================================================== */
 
-.lp-bm {
-  --ivory:        #F4EFE6;
-  --ivory-2:      #EDE5D8;
-  --ivory-3:      #E4D9C6;
-  --green:        #1B3A2F;
-  --green-2:      #2E6B52;
-  --gold:         #B08D4F;   /* décoratif uniquement : traits, anneaux, puces */
-  --gold-ink:     #7E6029;   /* texte et bordures de contrôle — 5,1:1 sur ivoire */
-  --ink:          #14120F;
-  --ink-60:       #14120Fa0;
+/* Les @font-face sont chargées par un <link> dans le document, et non par
+   @import : @import créerait une chaîne de requêtes et retarderait le texte. */
 
-  --pad:          clamp(20px, 5vw, 40px);
-  --sec:          clamp(72px, 12vw, 132px);
+.lp-bm {
+  /* --- Ivoires : échantillonnés sur les photographies pour que les
+         images pleine largeur n'aient pas de bord visible. --- */
+  --ivory:        #F2ECE1;   /* fond de lecture */
+  --ivory-2:      #EAE1D2;   /* chapitres secondaires */
+  --ivory-3:      #E3D7C4;   /* fond des sections illustrées = fond des photos */
+  --rule:         #14120f1f; /* filet : encre à 12 %, jamais une couleur grise */
+
+  --green:        #17332A;
+  --green-2:      #2E6B52;
+  --gold:         #B08D4F;   /* lumière décorative uniquement */
+  --gold-ink:     #654B1E;   /* texte et filets — 5,7:1 sur ivoire-3, 6,9:1 sur ivoire */
+  --ink:          #14120F;
+  --ink-70:       #14120Fb8;
+  --ink-55:       #14120Fa8;  /* 5,0:1 sur ivoire-3 : lisible en 11 px */
+
+  --pad:          clamp(20px, 5.5vw, 44px);
+  --sec:          clamp(80px, 13vw, 150px);
   --radius:       2px;
 
-  --f-sans: "Tajawal", "IBM Plex Sans Arabic", "Noto Sans Arabic",
-            "Segoe UI", system-ui, sans-serif;
+  --f-display: "El Messiri", "Noto Naskh Arabic", Georgia, serif;
+  --f-body:    "Plex Arabic", "IBM Plex Sans Arabic", "Segoe UI", system-ui, sans-serif;
+  --f-mono:    "Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Mouvement : décélération marquée (Material 3 « emphasized decelerate »).
+     Les durées d'interface restent courtes ; seule l'animation signature
+     s'autorise une durée cinématographique. */
+  --ease:      cubic-bezier(.05, .7, .1, 1);
+  --in:        340ms;
+  --out:       200ms;
 
   margin: 0;
   background: var(--ivory);
   color: var(--ink);
-  font-family: var(--f-sans);
+  font-family: var(--f-body);
   font-size: 17px;
-  line-height: 1.75;
+  line-height: 1.8;
+  font-synthesis: none;               /* jamais de gras ni d'italique simulés en arabe */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  overflow-x: clip;                   /* « hidden » casserait position: sticky */
 }
 
 .lp-bm *, .lp-bm *::before, .lp-bm *::after { box-sizing: border-box; }
+/* height:auto neutralise les attributs width/height du HTML, qui sinon
+   écrasent aspect-ratio et affichent les images à leur hauteur brute. */
 .lp-bm img { max-width: 100%; height: auto; display: block; }
-.lp-bm h1, .lp-bm h2, .lp-bm p, .lp-bm dl, .lp-bm dd, .lp-bm ol, .lp-bm ul,
-.lp-bm figure { margin: 0; }
+.lp-bm h1, .lp-bm h2, .lp-bm h3, .lp-bm p, .lp-bm dl, .lp-bm dd, .lp-bm ol,
+.lp-bm ul, .lp-bm figure, .lp-bm blockquote { margin: 0; }
 .lp-bm ol, .lp-bm ul { padding: 0; list-style: none; }
 
+/* Grain : liant photographique entre les images et les à-plats.
+   Posé en position: fixed pour ne pas être redessiné au scroll. */
+.lp-bm-grain {
+  position: fixed; inset: 0; z-index: 1;
+  pointer-events: none;
+  opacity: .05; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 .lp-bm-sr {
-  position: absolute; width: 1px; height: 1px;
+  position: absolute; inline-size: 1px; block-size: 1px;
   padding: 0; margin: -1px; overflow: hidden;
   clip-path: inset(50%); white-space: nowrap;
 }
 
-.lp-bm-wrap { inline-size: min(100% - var(--pad) * 2, 1120px); margin-inline: auto; }
-.lp-bm-narrow { inline-size: min(100% - var(--pad) * 2, 680px); }
+.lp-bm-wrap   { inline-size: min(100% - var(--pad) * 2, 1180px); margin-inline: auto; }
+.lp-bm-narrow { inline-size: min(100% - var(--pad) * 2, 660px); }
 
-/* ---------- Typographie ---------- */
+/* ==========================================================================
+   Typographie
+   ========================================================================== */
 
-.lp-bm-h1 {
-  font-size: clamp(38px, 11vw, 76px);
-  line-height: 1.15;
+/* L'arabe est une écriture liée : letter-spacing négatif détruit les
+   ligatures. La règle typographique latine « resserrer les grands titres »
+   ne se transpose pas. */
+.lp-bm-h1, .lp-bm-h2, .lp-bm-h3 {
+  font-family: var(--f-display);
   font-weight: 700;
-  letter-spacing: -0.01em;
-  margin-block: 6px 14px;
+  letter-spacing: normal;
+  text-wrap: balance;
 }
-.lp-bm-h2 {
-  font-size: clamp(26px, 6vw, 40px);
-  line-height: 1.35;
-  font-weight: 700;
-  margin-block-end: 18px;
+
+.lp-bm-h1 { font-size: clamp(42px, 10vw, 84px); line-height: 1.16; }
+.lp-bm-h2 { font-size: clamp(29px, 5.8vw, 48px); line-height: 1.26; margin-block-end: 20px; }
+.lp-bm-h3 { font-size: clamp(20px, 3vw, 24px); line-height: 1.4; font-weight: 600; }
+
+/* Numéro de chapitre : la seule occurrence du monospace. Il donne l'échelle
+   éditoriale sans ajouter une troisième famille de texte courant. */
+.lp-bm-chap {
+  display: flex; align-items: center; gap: 14px;
+  font-family: var(--f-mono); font-size: 12px; font-weight: 500;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold-ink);
+  margin-block-end: clamp(20px, 3vw, 32px);
 }
+.lp-bm-chap::after {
+  content: ""; block-size: 1px; flex: 1; max-inline-size: 120px;
+  background: linear-gradient(to left, transparent, var(--gold));
+}
+.lp-bm-sec--offer .lp-bm-chap { color: #C7A868; }
+.lp-bm-sec--offer .lp-bm-chap::after {
+  background: linear-gradient(to left, transparent, #C7A868);
+}
+
 .lp-bm-eyebrow {
-  font-size: 13px; letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--gold-ink); font-weight: 500;
+  font-family: var(--f-mono); font-size: 12px; font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--gold-ink);
 }
-.lp-bm-lede { font-size: clamp(18px, 4.4vw, 23px); color: var(--ink-60); max-inline-size: 30ch; }
-.lp-bm-p    { color: var(--ink-60); max-inline-size: 58ch; }
+.lp-bm-lede {
+  font-size: clamp(19px, 4.2vw, 25px); line-height: 1.6;
+  color: var(--ink-70); max-inline-size: 26ch;
+  margin-block-start: 16px;
+}
+.lp-bm-p { color: var(--ink-70); max-inline-size: 56ch; }
+.lp-bm-p + .lp-bm-p { margin-block-start: 1em; }
 
-/* ---------- Boutons ---------- */
+/* ==========================================================================
+   Boutons — un seul libellé d'action sur toute la page : « اطلبي الآن »
+   ========================================================================== */
 
 .lp-bm-btn {
-  display: inline-flex; flex-direction: column; align-items: center;
-  justify-content: center; gap: 1px;
-  padding: 17px 40px;
+  position: relative;
+  display: inline-flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 2px;
+  padding: 18px 42px;
   border: 0; border-radius: var(--radius);
-  font-family: inherit; font-size: 18px; font-weight: 700;
+  font-family: var(--f-body); font-size: 18px; font-weight: 500;
   text-decoration: none; cursor: pointer;
-  transition: transform .12s ease, background-color .2s ease;
+  transition: background-color var(--out) var(--ease),
+              transform 120ms var(--ease),
+              box-shadow var(--out) var(--ease);
 }
-.lp-bm-btn:active { transform: scale(.98); }
-.lp-bm-btn:focus-visible { outline: 3px solid var(--gold-ink); outline-offset: 3px; }
-.lp-bm-sec--offer .lp-bm-btn:focus-visible,
-.lp-bm-btn--primary:focus-visible { outline-color: var(--gold); }
+.lp-bm-btn:active { transform: translateY(1px); }
+.lp-bm-btn:focus-visible { outline: 2px solid var(--gold-ink); outline-offset: 3px; }
+.lp-bm-btn__sub {
+  font-size: 12px; font-weight: 400; opacity: .72; letter-spacing: .02em;
+}
+
 .lp-bm-btn--primary { background: var(--green); color: var(--ivory); }
 .lp-bm-btn--primary:hover { background: var(--green-2); }
+.lp-bm-btn--primary:focus-visible { outline-color: var(--green); }
+
+/* Bouton fantôme : le filet s'éclaire à l'or au survol — l'or se comporte
+   comme une lumière, jamais comme un aplat. */
 .lp-bm-btn--ghost {
   background: transparent; color: var(--green);
-  box-shadow: inset 0 0 0 1px var(--green);
+  box-shadow: inset 0 0 0 1px #17332a59;
 }
+.lp-bm-btn--ghost:hover { box-shadow: inset 0 0 0 1px var(--gold); }
+
+.lp-bm-sec--offer .lp-bm-btn--primary { background: var(--ivory); color: var(--green); }
+.lp-bm-sec--offer .lp-bm-btn--primary:hover { background: #fff; }
+.lp-bm-sec--offer .lp-bm-btn:focus-visible { outline-color: var(--gold); }
+
 .lp-bm-btn--block { inline-size: 100%; }
-.lp-bm-btn--sm { padding: 13px 26px; font-size: 16px; }
-.lp-bm-btn__sub { font-size: 12px; font-weight: 400; opacity: .8; letter-spacing: .02em; }
+.lp-bm-btn--sm    { padding: 13px 26px; font-size: 16px; }
+.lp-bm-cta-inline { margin-block-start: clamp(30px, 5vw, 48px); }
 
-/* ---------- 1 · Hero ---------- */
+/* ==========================================================================
+   Images — le bord doit disparaître
+   ========================================================================== */
 
-.lp-bm-hero { padding-block: clamp(28px, 6vw, 64px) var(--sec); }
-.lp-bm-hero__grid { display: grid; gap: clamp(24px, 5vw, 56px); align-items: center; }
+/* Les photographies partagent le fond des sections illustrées. Un fondu de
+   masque sur les bords supprime la dernière couture visible. */
+.lp-bm-bleed {
+  position: relative;
+  margin-block-start: clamp(32px, 6vw, 64px);
+  background: var(--ivory-3);
+}
+.lp-bm-bleed img { inline-size: 100%; }
+.lp-bm-bleed--fade img {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
+          mask-image: linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
+}
+.lp-bm-figcap {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--ink-55);
+  padding: 14px var(--pad) 0;
+}
+
+/* ==========================================================================
+   1 · Hero — asymétrie éditoriale
+   ========================================================================== */
+
+/* La photographie du hero part d'un bord à l'autre : elle partage le fond de
+   la section, donc aucun cadre ne doit apparaître autour d'elle. C'est la
+   traduction directe de l'idée visuelle — une seule surface éclairée. */
+.lp-bm-hero {
+  position: relative;
+  display: grid;
+  padding-block-start: clamp(26px, 5vw, 56px);
+  background: var(--ivory-3);
+  /* Reprend la lumière rasante des photographies. */
+  background-image: linear-gradient(118deg, #00000012 0%, transparent 34%, transparent 100%);
+}
+.lp-bm-hero__body {
+  inline-size: min(100% - var(--pad) * 2, 1180px);
+  margin-inline: auto;
+  padding-block-end: clamp(36px, 6vw, 64px);
+}
+.lp-bm-hero__body .lp-bm-btn { margin-block-start: clamp(26px, 4vw, 36px); }
+
+.lp-bm-hero__media { position: relative; }
 .lp-bm-hero__media img {
-  inline-size: 100%; max-block-size: 56svh; object-fit: contain;
-  filter: drop-shadow(0 24px 40px #14120f18);
+  inline-size: 100%;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+  object-position: 50% 62%;
 }
+/* Fondus haut et bas : la photo se dissout dans la page au lieu de s'arrêter
+   sur une arête. En mobile, la couture visible est celle du haut, là où
+   l'ombre diagonale de la photographie rencontre l'à-plat. */
+.lp-bm-hero__media::before,
+.lp-bm-hero__media::after {
+  content: ""; position: absolute; inset-inline: 0; pointer-events: none;
+}
+.lp-bm-hero__media::before {
+  inset-block-start: -1px; block-size: 14%;
+  background: linear-gradient(to bottom, var(--ivory-3), transparent);
+}
+.lp-bm-hero__media::after {
+  inset-block-end: -1px; block-size: 22%;
+  background: linear-gradient(to top, var(--ivory-3), transparent);
+}
+
+.lp-bm-mark {
+  direction: ltr;               /* évite que le RTL rogne le mot latin */
+  font-family: var(--f-mono); font-size: 12px; font-weight: 500;
+  letter-spacing: .34em; color: var(--ink-55);
+  margin-block-end: clamp(28px, 6vw, 56px);
+}
+
 .lp-bm-strip {
-  display: flex; flex-wrap: wrap; gap: 8px 22px;
-  margin-block-start: 22px; font-size: 14px; color: var(--ink-60);
+  display: flex; flex-wrap: wrap; gap: 10px 26px;
+  margin-block-start: 28px; padding-block-start: 22px;
+  border-block-start: 1px solid var(--rule);
+  font-size: 14px; color: var(--ink-55);
 }
-.lp-bm-strip li { position: relative; padding-inline-start: 16px; }
+.lp-bm-strip li { position: relative; padding-inline-start: 15px; }
 .lp-bm-strip li::before {
-  content: ""; position: absolute; inset-block-start: .68em; inset-inline-start: 0;
-  inline-size: 6px; block-size: 6px; border-radius: 50%; background: var(--gold);
+  content: ""; position: absolute; inset-block-start: .72em; inset-inline-start: 0;
+  inline-size: 5px; block-size: 5px; border-radius: 50%; background: var(--gold);
 }
-.lp-bm-hero__body .lp-bm-btn { margin-block-start: 26px; }
 
-/* ---------- Sections ---------- */
+/* ==========================================================================
+   Sections
+   ========================================================================== */
 
-.lp-bm-sec { padding-block: var(--sec); }
-.lp-bm-sec--result,
-.lp-bm-sec--kit    { background: var(--ivory-2); }
-.lp-bm-sec--offer  { background: var(--green); color: var(--ivory); }
+.lp-bm-sec { padding-block: var(--sec); position: relative; }
+/* content-visibility: auto a été retiré volontairement. Sur une page de dix
+   écrans, le gain de rendu est marginal, alors que l'estimation de hauteur
+   fait sauter la barre de défilement et fausse les captures pleine page.
+   La classe est conservée comme point d'accroche si le besoin réapparaît. */
+
+.lp-bm-sec--result   { background: var(--ivory-3); }
+.lp-bm-sec--kit      { background: var(--ivory-2); }
+.lp-bm-sec--botanical{ background: var(--ivory-3); }
+.lp-bm-sec--offer    { background: var(--green); color: var(--ivory); }
 .lp-bm-sec--offer .lp-bm-h2 { color: var(--ivory); }
+.lp-bm-sec--offer .lp-bm-p  { color: #F2ECE1b8; }
 
-.lp-bm-figure { margin-block-start: clamp(28px, 6vw, 56px); }
-.lp-bm-figure img { inline-size: 100%; }
-.lp-bm-figure--split { display: grid; gap: 12px; }
-.lp-bm-two { display: grid; gap: clamp(28px, 5vw, 56px); align-items: center; }
-.lp-bm-cta-inline { margin-block-start: clamp(28px, 5vw, 44px); }
+.lp-bm-two { display: grid; gap: clamp(30px, 5vw, 60px); align-items: center; }
+/* En colonne unique, l'image d'une section à deux colonnes ressort de la
+   gouttière pour rejoindre les bords, comme toutes les autres photographies. */
+@media (max-width: 979px) {
+  .lp-bm-two > .lp-bm-bleed { margin-inline: calc(var(--pad) * -1); }
+}
 
-/* ---------- 3 · Timer 25 minutes (animation signature) ---------- */
+/* ==========================================================================
+   3 · Les 25 minutes — ANIMATION SIGNATURE
+   L'anneau se remplit pendant que le nombre compte jusqu'à 25. C'est le seul
+   moment cinématographique de la page ; tout le reste du mouvement est bref.
+   ========================================================================== */
 
 .lp-bm-timer {
-  position: relative; inline-size: 150px; block-size: 150px;
-  margin: clamp(30px, 6vw, 52px) auto;
+  position: relative; inline-size: 168px; block-size: 168px;
+  margin: clamp(34px, 6vw, 60px) auto clamp(24px, 4vw, 40px);
 }
 .lp-bm-timer__svg { inline-size: 100%; block-size: 100%; transform: rotate(-90deg); }
-.lp-bm-timer__track, .lp-bm-timer__fill {
-  fill: none; stroke-width: 2; stroke-linecap: round;
-}
-.lp-bm-timer__track { stroke: var(--ivory-3); }
+.lp-bm-timer__track, .lp-bm-timer__fill { fill: none; stroke-linecap: round; }
+.lp-bm-timer__track { stroke: #14120f14; stroke-width: 1; }
 .lp-bm-timer__fill {
-  stroke: var(--gold);
+  stroke: url(#lp-bm-ring);          /* l'or est un dégradé de lumière */
+  stroke-width: 2;
   stroke-dasharray: 327;
   stroke-dashoffset: 327;
-  transition: stroke-dashoffset 1200ms cubic-bezier(.22,.61,.36,1);
 }
-.lp-bm-timer.is-on .lp-bm-timer__fill { stroke-dashoffset: 0; }
+/* Sans JavaScript, l'anneau s'affiche déjà rempli : la page ne doit jamais
+   montrer un compteur vide comme s'il restait quelque chose à charger. */
+.lp-bm:not(.lp-bm-js) .lp-bm-timer__fill { stroke-dashoffset: 0; }
+.lp-bm-timer.is-on .lp-bm-timer__fill {
+  transition: stroke-dashoffset 1600ms cubic-bezier(.22, .61, .36, 1);
+  stroke-dashoffset: 0;
+}
 .lp-bm-timer__num {
   position: absolute; inset: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  font-size: 42px; font-weight: 700; line-height: 1;
+  font-family: var(--f-mono); font-size: 54px; font-weight: 500; line-height: 1;
+  font-variant-numeric: tabular-nums;   /* le compteur ne doit pas gigoter */
 }
-.lp-bm-timer__num span { font-size: 13px; font-weight: 400; color: var(--ink-60); margin-block-start: 6px; }
+.lp-bm-timer__num span {
+  font-family: var(--f-body); font-size: 13px; font-weight: 400;
+  color: var(--ink-55); margin-block-start: 10px; letter-spacing: normal;
+}
 
-.lp-bm-steps { display: grid; gap: 4px; counter-reset: s; }
+/* Étapes : filets, pas de cartes. */
+.lp-bm-steps { display: grid; border-block-start: 1px solid var(--rule); }
 .lp-bm-steps li {
-  display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start;
-  padding-block: 18px;
-  border-block-end: 1px solid var(--ivory-3);
+  display: grid; grid-template-columns: 3ch 1fr; gap: 18px; align-items: baseline;
+  padding-block: 22px; border-block-end: 1px solid var(--rule);
 }
-.lp-bm-steps li:last-child { border-block-end: 0; }
 .lp-bm-steps__n {
-  font-size: 15px; color: var(--gold-ink); font-weight: 700;
-  inline-size: 28px; padding-block-start: 2px;
+  font-family: var(--f-mono); font-size: 13px; font-weight: 500;
+  color: var(--gold-ink); letter-spacing: .06em;
 }
 
-/* ---------- 4 & 5 · Listes de définitions ---------- */
+/* ==========================================================================
+   4 & 5 · Listes de définitions
+   ========================================================================== */
 
-.lp-bm-benefits, .lp-bm-actives { display: grid; gap: 2px; margin-block-start: 14px; }
+.lp-bm-benefits, .lp-bm-actives {
+  display: grid; margin-block-start: 8px;
+  border-block-start: 1px solid var(--rule);
+}
 .lp-bm-benefits > div, .lp-bm-actives > div {
-  padding-block: 20px; border-block-end: 1px solid var(--ivory-3);
+  padding-block: 24px; border-block-end: 1px solid var(--rule);
 }
-.lp-bm-benefits > div:last-child, .lp-bm-actives > div:last-child { border-block-end: 0; }
-.lp-bm-benefits dt, .lp-bm-actives dt { font-weight: 700; font-size: 19px; }
-.lp-bm-benefits dd, .lp-bm-actives dd { color: var(--ink-60); margin: 0; font-size: 16px; }
+.lp-bm-benefits dt, .lp-bm-actives dt {
+  font-family: var(--f-display); font-weight: 600;
+  font-size: clamp(19px, 2.6vw, 22px); line-height: 1.4;
+}
+.lp-bm-benefits dd, .lp-bm-actives dd {
+  color: var(--ink-55); font-size: 16px; margin-block-start: 2px;
+}
 
-.lp-bm-list { margin-block-start: 24px; display: grid; gap: 12px; color: var(--ink-60); }
-.lp-bm-list li { position: relative; padding-inline-start: 20px; }
+.lp-bm-list { margin-block-start: 26px; display: grid; gap: 14px; color: var(--ink-70); }
+.lp-bm-list li { position: relative; padding-inline-start: 22px; }
 .lp-bm-list li::before {
-  content: ""; position: absolute; inset-block-start: .78em; inset-inline-start: 0;
-  inline-size: 8px; block-size: 1px; background: var(--gold);
+  content: ""; position: absolute; inset-block-start: .82em; inset-inline-start: 0;
+  inline-size: 10px; block-size: 1px; background: var(--gold);
 }
 
-/* ---------- 6 · Hotspots applicateur ---------- */
+/* ==========================================================================
+   6 · Points d'intérêt sur l'applicateur
+   ========================================================================== */
 
-.lp-bm-hotspots { position: relative; margin-block: clamp(28px, 6vw, 52px); }
-.lp-bm-hotspots img { margin-inline: auto; inline-size: min(100%, 460px); }
-/* Cible tactile de 44px, anneau visible de 26px : la zone cliquable est plus
-   grande que le dessin. */
+.lp-bm-hotspots { position: relative; margin-block: clamp(30px, 6vw, 56px); }
+.lp-bm-hotspots img { margin-inline: auto; inline-size: min(100%, 440px); }
+/* La cible tactile fait 44 px, l'anneau visible 26 px : la zone cliquable est
+   volontairement plus grande que le dessin. */
 .lp-bm-hs {
   position: absolute;
   inset-block-start: var(--y); inset-inline-start: var(--x);
@@ -199,88 +381,99 @@
 .lp-bm-hs::before {
   content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%;
   inline-size: 26px; block-size: 26px; border-radius: 50%;
-  border: 1px solid var(--gold-ink); background: #F4EFE6cc;
+  border: 1px solid var(--gold-ink); background: #F2ECE1cc;
+  transition: background-color var(--out) var(--ease), scale var(--out) var(--ease);
 }
 .lp-bm-hs::after {
   content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%;
-  inline-size: 6px; block-size: 6px; border-radius: 50%; background: var(--gold-ink);
+  inline-size: 5px; block-size: 5px; border-radius: 50%; background: var(--gold-ink);
+  transition: background-color var(--out) var(--ease);
 }
-.lp-bm-hs.is-on::before { background: var(--gold-ink); }
-.lp-bm-hs.is-on::after { background: var(--ivory); }
+.lp-bm-hs:hover::before { scale: 1.12; }
+.lp-bm-hs.is-on::before { background: var(--gold-ink); scale: 1.12; }
+.lp-bm-hs.is-on::after  { background: var(--ivory); }
 .lp-bm-hs:focus-visible { outline: 2px solid var(--gold-ink); outline-offset: 3px; }
 .lp-bm-hs__out {
-  text-align: center; margin-block-start: 18px;
-  font-size: 16px; color: var(--ink-60); min-block-size: 3em;
+  text-align: center; margin-block-start: 20px;
+  font-size: 16px; color: var(--ink-70); min-block-size: 3.2em;
 }
 
-/* ---------- 7 · Réassurance ---------- */
+/* ==========================================================================
+   7 · Réassurance
+   ========================================================================== */
 
-.lp-bm-trust { display: grid; gap: 2px; }
-.lp-bm-trust li {
-  display: grid; gap: 2px; padding-block: 18px;
-  border-block-end: 1px solid var(--ivory-3);
+.lp-bm-trust { display: grid; border-block-start: 1px solid var(--rule); }
+.lp-bm-trust li { padding-block: 22px; border-block-end: 1px solid var(--rule); }
+.lp-bm-trust strong {
+  display: block; font-family: var(--f-display); font-weight: 600; font-size: 19px;
 }
-.lp-bm-trust li:last-child { border-block-end: 0; }
-.lp-bm-trust strong { font-size: 18px; }
-.lp-bm-trust span { color: var(--ink-60); font-size: 15px; }
+.lp-bm-trust span { color: var(--ink-55); font-size: 15px; }
 
-/* ---------- 8 · Offre ---------- */
+/* ==========================================================================
+   8 · Offre — le seul fond sombre de la page
+   ========================================================================== */
 
-.lp-bm-country { display: flex; align-items: center; gap: 12px; margin-block-end: 26px; }
-.lp-bm-country label { font-size: 15px; opacity: .8; }
+.lp-bm-country { display: flex; align-items: center; gap: 14px; margin-block-end: 30px; }
+.lp-bm-country label { font-size: 15px; opacity: .75; }
 .lp-bm-country select {
   font-family: inherit; font-size: 16px; padding: 12px 14px;
   color: var(--ivory); background: transparent;
-  border: 1px solid #F4EFE64d; border-radius: var(--radius);
+  border: 1px solid #F2ECE140; border-radius: var(--radius);
 }
 .lp-bm-country select option { color: var(--ink); }
 
-.lp-bm-tiers { border: 0; padding: 0; margin: 0 0 30px; display: grid; gap: 12px; }
+.lp-bm-tiers { border: 0; padding: 0; margin: 0 0 34px; display: grid; gap: 12px; }
 .lp-bm-tier {
   position: relative; display: grid;
-  grid-template-columns: 68px minmax(0, 1fr) auto;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
   grid-template-areas: "img name price" "img unit price";
   gap: 2px 16px; align-items: center;
-  padding: 16px; cursor: pointer;
-  border: 1px solid #F4EFE633; border-radius: var(--radius);
-  background: #F4EFE60d;
-  transition: border-color .2s ease, background-color .2s ease;
+  padding: 18px; cursor: pointer;
+  border: 1px solid #F2ECE12b; border-radius: var(--radius);
+  transition: border-color var(--out) var(--ease), background-color var(--out) var(--ease);
 }
-.lp-bm-tier img { grid-area: img; inline-size: 68px; border-radius: var(--radius); }
-.lp-bm-tier__name  { grid-area: name; font-weight: 700; font-size: 17px; text-wrap: balance; }
-.lp-bm-tier__unit  { grid-area: unit; font-size: 14px; color: #F4EFE6a0; }
-.lp-bm-tier__price { grid-area: price; font-size: 21px; font-weight: 700; white-space: nowrap; }
+.lp-bm-tier:hover { border-color: #F2ECE155; }
+.lp-bm-tier img { grid-area: img; inline-size: 64px; border-radius: var(--radius); }
+.lp-bm-tier__name  { grid-area: name; font-family: var(--f-display); font-weight: 600; font-size: 18px; }
+.lp-bm-tier__unit  { grid-area: unit; font-size: 14px; color: #F2ECE199; }
+.lp-bm-tier__price {
+  grid-area: price; font-family: var(--f-mono); font-size: 21px; font-weight: 500;
+  white-space: nowrap; font-variant-numeric: tabular-nums;
+}
 .lp-bm-tier input { position: absolute; opacity: 0; pointer-events: none; }
 .lp-bm-tier__check {
-  position: absolute; inset-block-start: 12px; inset-inline-end: 12px;
-  inline-size: 22px; block-size: 22px; border-radius: 50%;
-  border: 1px solid #F4EFE666;
-  display: grid; place-items: center;
+  position: absolute; inset-block-start: 13px; inset-inline-end: 13px;
+  inline-size: 20px; block-size: 20px; border-radius: 50%;
+  border: 1px solid #F2ECE159; display: grid; place-items: center;
+  transition: background-color var(--out) var(--ease), border-color var(--out) var(--ease);
 }
 .lp-bm-tier__check::after {
-  content: "\2713"; font-size: 13px; font-weight: 700;
-  color: var(--green); opacity: 0; transition: opacity .15s ease;
+  content: "\2713"; font-size: 12px; font-weight: 700;
+  color: var(--green); opacity: 0; transition: opacity var(--out) var(--ease);
 }
+.lp-bm-tier:has(input:checked) { border-color: var(--gold); background: #B08D4F1a; }
 .lp-bm-tier:has(input:checked) .lp-bm-tier__check {
   background: var(--gold); border-color: var(--gold);
 }
 .lp-bm-tier:has(input:checked) .lp-bm-tier__check::after { opacity: 1; }
-.lp-bm-tier:has(input:checked) { border-color: var(--gold); background: #B08D4F1f; }
 .lp-bm-tier:has(input:focus-visible) { outline: 2px solid var(--gold); outline-offset: 3px; }
 .lp-bm-tier__badge {
-  position: absolute; inset-block-start: -10px; inset-inline-start: 16px;
-  background: var(--gold); color: var(--ink);
-  font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: var(--radius);
+  position: absolute; inset-block-start: -9px; inset-inline-start: 18px;
+  font-family: var(--f-mono); font-size: 11px; font-weight: 500; letter-spacing: .1em;
+  background: #C9A868; color: var(--green);   /* 6,0:1 en 11 px */
+  padding: 3px 10px; border-radius: var(--radius);
 }
 .lp-bm-tier__badge--alt { background: var(--ivory); color: var(--green); }
 
-.lp-bm-field { margin-block-end: 16px; }
-.lp-bm-field label { display: block; font-size: 15px; margin-block-end: 6px; }
+.lp-bm-field { margin-block-end: 18px; }
+.lp-bm-field label { display: block; font-size: 15px; margin-block-end: 7px; opacity: .82; }
 .lp-bm-field input, .lp-bm-field select {
   inline-size: 100%; font-family: inherit; font-size: 17px;
-  padding: 14px 15px; color: var(--ivory);
-  background: #F4EFE60f; border: 1px solid #F4EFE633; border-radius: var(--radius);
+  padding: 15px; color: var(--ivory);
+  background: #F2ECE10d; border: 1px solid #F2ECE12b; border-radius: var(--radius);
+  transition: border-color var(--out) var(--ease);
 }
+.lp-bm-field input:hover, .lp-bm-field select:hover { border-color: #F2ECE155; }
 .lp-bm-field select option { color: var(--ink); }
 .lp-bm-field input:focus, .lp-bm-field select:focus,
 .lp-bm-country select:focus { outline: 2px solid var(--gold); outline-offset: 2px; }
@@ -290,105 +483,190 @@
 
 .lp-bm-phone { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: center; }
 .lp-bm-phone__cc {
-  padding: 14px 12px; font-size: 16px; direction: ltr;
-  border: 1px solid #F4EFE633; border-radius: var(--radius); background: #F4EFE60f;
+  padding: 15px 13px; font-family: var(--f-mono); font-size: 15px; direction: ltr;
+  border: 1px solid #F2ECE12b; border-radius: var(--radius); background: #F2ECE10d;
 }
 .lp-bm-phone input { direction: ltr; text-align: start; }
 
-.lp-bm-err { font-size: 14px; color: #E9B4B4; margin-block-start: 5px; min-block-size: 1.2em; }
+.lp-bm-err { font-size: 14px; color: #EFB9B9; margin-block-start: 6px; min-block-size: 1.2em; }
 
 .lp-bm-total {
   display: flex; justify-content: space-between; align-items: baseline;
-  padding-block: 18px; margin-block-end: 18px;
-  border-block-start: 1px solid #F4EFE633;
+  padding-block: 20px; margin-block-end: 20px;
+  border-block-start: 1px solid #F2ECE12b;
   font-size: 17px;
 }
-.lp-bm-total strong { font-size: 26px; }
-.lp-bm-note { font-size: 14px; color: #F4EFE6a0; text-align: center; margin-block-start: 12px; }
+.lp-bm-total strong {
+  font-family: var(--f-mono); font-size: 27px; font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.lp-bm-note {
+  font-size: 14px; color: #F2ECE199; text-align: center; margin-block-start: 14px;
+}
 .lp-bm-ok {
-  margin-block-start: 16px; padding: 14px;
+  margin-block-start: 18px; padding: 15px;
   background: var(--gold); color: var(--green);
-  text-align: center; font-weight: 700; border-radius: var(--radius);
+  text-align: center; font-weight: 500; border-radius: var(--radius);
 }
 
-/* ---------- 9 · FAQ ---------- */
+/* ==========================================================================
+   9 · FAQ
+   ========================================================================== */
 
-.lp-bm-faq { border-block-end: 1px solid var(--ivory-3); }
+.lp-bm-faq { border-block-end: 1px solid var(--rule); }
+.lp-bm-faq:first-of-type { border-block-start: 1px solid var(--rule); }
 .lp-bm-faq summary {
-  padding-block: 20px; cursor: pointer; font-weight: 700; font-size: 18px;
-  list-style: none; display: flex; justify-content: space-between; gap: 16px;
+  padding-block: 22px; cursor: pointer;
+  font-family: var(--f-display); font-weight: 600; font-size: 19px; line-height: 1.4;
+  list-style: none; display: flex; justify-content: space-between; gap: 18px;
 }
 .lp-bm-faq summary::-webkit-details-marker { display: none; }
-.lp-bm-faq summary::after { content: "+"; color: var(--gold-ink); font-size: 22px; line-height: 1; }
-.lp-bm-faq[open] summary::after { content: "–"; }
-.lp-bm-faq p { padding-block-end: 20px; color: var(--ink-60); max-inline-size: 58ch; }
+.lp-bm-faq summary:focus-visible { outline: 2px solid var(--gold-ink); outline-offset: 2px; }
+.lp-bm-faq summary::after {
+  content: ""; flex: none;
+  inline-size: 11px; block-size: 11px; margin-block-start: .55em;
+  border-inline-end: 1px solid var(--gold-ink);
+  border-block-end: 1px solid var(--gold-ink);
+  rotate: 45deg;
+  transition: rotate var(--out) var(--ease);
+}
+.lp-bm-faq[open] summary::after { rotate: -135deg; }
+.lp-bm-faq p { padding-block-end: 24px; color: var(--ink-70); max-inline-size: 56ch; }
 
-/* ---------- Pied ---------- */
+/* ==========================================================================
+   Pied et barre d'action fixe
+   ========================================================================== */
 
 .lp-bm-foot {
-  padding-block: 40px 110px; text-align: center;
-  font-size: 13px; letter-spacing: .16em; color: var(--ink-60);
+  padding-block: 56px 120px; text-align: center;
+  border-block-start: 1px solid var(--rule);
+}
+.lp-bm-foot p {
+  direction: ltr;
+  font-family: var(--f-mono); font-size: 12px; letter-spacing: .34em;
+  color: var(--ink-55);
 }
 
-/* ---------- Barre CTA fixe ---------- */
-
+/* Pas de backdrop-filter : c'est la première cause de saccade au scroll sur
+   les GPU mobiles milieu de gamme. Un ivoire opaque rend le même service. */
 .lp-bm-sticky {
-  position: fixed; inset-block-end: 0; inset-inline: 0; z-index: 20;
-  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  position: fixed; inset-block-end: 0; inset-inline: 0; z-index: 30;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
   padding: 12px var(--pad) calc(12px + env(safe-area-inset-bottom));
-  background: #F4EFE6f2; border-block-start: 1px solid var(--ivory-3);
-  backdrop-filter: blur(8px);
-  transform: translateY(100%);
-  transition: transform .25s ease;
+  background: var(--ivory);
+  border-block-start: 1px solid var(--rule);
+  transform: translateY(101%);
+  transition: transform 260ms var(--ease);
 }
 .lp-bm-sticky.is-on { transform: translateY(0); }
-.lp-bm-sticky__price { font-size: 19px; font-weight: 700; }
-
-/* ---------- Révélation au scroll ---------- */
-
-.js-reveal { opacity: 0; transform: translateY(12px); }
-.js-reveal.is-in {
-  opacity: 1; transform: none;
-  transition: opacity .4s ease, transform .4s ease;
+.lp-bm-sticky__price {
+  font-family: var(--f-mono); font-size: 19px; font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
-.no-js .js-reveal { opacity: 1; transform: none; }
 
-/* ---------- Desktop ---------- */
+/* ==========================================================================
+   Révélation au scroll
+   Le masquage n'est appliqué QUE si le script s'est exécuté. Sans ce garde-fou,
+   une erreur JS rendrait la page entièrement blanche sur du trafic payant.
+   ========================================================================== */
 
-@media (min-width: 860px) {
+.lp-bm-js .js-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.lp-bm-js .js-reveal.is-in {
+  opacity: 1; transform: none;
+  transition: opacity var(--in) var(--ease) var(--d, 0ms),
+              transform var(--in) var(--ease) var(--d, 0ms);
+}
+
+/* ==========================================================================
+   Tablette et bureau
+   ========================================================================== */
+
+@media (min-width: 720px) {
+  .lp-bm-benefits, .lp-bm-actives, .lp-bm-trust {
+    grid-template-columns: 1fr 1fr; column-gap: clamp(30px, 5vw, 64px);
+  }
+  /* Sur deux colonnes, le filet supérieur ne doit apparaître qu'une fois. */
+  .lp-bm-benefits > div:nth-child(-n+2),
+  .lp-bm-actives  > div:nth-child(-n+2),
+  .lp-bm-trust li:nth-child(-n+2) { padding-block-start: 24px; }
+}
+
+@media (min-width: 980px) {
   .lp-bm { font-size: 18px; }
-  .lp-bm-hero__grid { grid-template-columns: 1fr 1fr; }
-  .lp-bm-hero__media { order: 2; }
-  .lp-bm-hero__media img { max-block-size: 72svh; }
-  .lp-bm-figure--split { grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  /* Hero asymétrique : le texte tient dans la colonne de lecture, l'image
+     touche le bord de la fenêtre. Le raccord entre les deux est un fondu,
+     pas une arête. La page est en RTL, donc l'image occupe la gauche. */
+  .lp-bm-hero {
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr);
+    align-items: center;
+    min-block-size: 92svh;
+    padding-block-start: 0;
+  }
+  /* En RTL, la première piste de la grille se place à droite : le texte
+     occupe donc la piste 1 pour démarrer au bord de lecture, et l'image la
+     piste 2, où elle touche le bord gauche de la fenêtre. */
+  .lp-bm-hero__body {
+    grid-column: 1; grid-row: 1;
+    inline-size: auto; margin-inline: 0;
+    padding-block: clamp(60px, 8vw, 110px);
+    padding-inline-start: max(var(--pad), calc((100vw - 1180px) / 2));
+    padding-inline-end: clamp(32px, 4vw, 72px);
+  }
+  .lp-bm-hero__media {
+    grid-column: 2; grid-row: 1;
+    block-size: 100%; align-self: stretch;
+  }
+  .lp-bm-hero__media img {
+    block-size: 100%; aspect-ratio: auto; object-position: 50% 58%;
+  }
+  /* Au bureau, le fondu quitte le bas pour le bord intérieur : l'image se
+     dissout vers la colonne de texte, qui se trouve à sa droite. */
+  .lp-bm-hero__media::before {
+    inset-block-start: auto; inset-block-end: -1px; block-size: 16%;
+    background: linear-gradient(to top, var(--ivory-3), transparent);
+  }
+  .lp-bm-hero__media::after {
+    inset: 0 -1px 0 auto; block-size: auto; inline-size: 28%;
+    background: linear-gradient(to left, var(--ivory-3), transparent);
+  }
+
   .lp-bm-two { grid-template-columns: 1fr 1fr; }
-  .lp-bm-benefits, .lp-bm-actives { grid-template-columns: 1fr 1fr; gap: 2px 40px; }
-  .lp-bm-trust { grid-template-columns: 1fr 1fr; gap: 2px 40px; }
+  .lp-bm-two > .lp-bm-bleed { margin-block-start: 0; }
+
   .lp-bm-tiers { grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .lp-bm-tier {
     grid-template-columns: 1fr;
     grid-template-areas: "img" "name" "unit" "price";
-    text-align: center; padding: 24px 18px; gap: 6px;
+    text-align: center; padding: 26px 20px 22px; gap: 6px;
   }
-  .lp-bm-tier img { inline-size: 100%; max-inline-size: 150px; margin-inline: auto; }
-  .lp-bm-tier__price { font-size: 26px; }
+  .lp-bm-tier img { inline-size: 100%; max-inline-size: 140px; margin-inline: auto; }
+  .lp-bm-tier__price { font-size: 26px; margin-block-start: 6px; }
   /* Centrage indépendant de la direction : inset-inline: 50% écraserait la
      largeur à zéro en fixant les deux bords. */
   .lp-bm-tier__badge {
     inset-inline: 0; margin-inline: auto;
     inline-size: fit-content; white-space: nowrap;
   }
+
   .lp-bm-sticky { display: none; }
 }
 
-/* ---------- Fallback mouvement réduit ---------- */
+/* ==========================================================================
+   Mouvement réduit — le contenu reste intégralement visible
+   ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   .lp-bm *, .lp-bm *::before, .lp-bm *::after {
     animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
   }
-  .js-reveal { opacity: 1 !important; transform: none !important; }
+  .lp-bm-js .js-reveal { opacity: 1 !important; transform: none !important; }
   .lp-bm-timer__fill { stroke-dashoffset: 0 !important; }
   .lp-bm-sticky { transform: translateY(0); }
 }

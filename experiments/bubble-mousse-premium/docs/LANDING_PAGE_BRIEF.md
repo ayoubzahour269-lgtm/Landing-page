@@ -139,3 +139,124 @@ GSAP, Lenis, Three.js, React Three Fiber et Framer Motion sont **écartés**.
 Les trois dernières provenaient d'une fiche produit différente et ont été
 supprimées : ce sont des allégations thérapeutiques, rejetées par les régies
 publicitaires et sanctionnables par la SFDA.
+
+---
+
+# Refonte visuelle complète — journal de décisions
+
+Passe de refonte menée avec le skill `premium-landing-page-designer`, en mode
+*redesign*. La structure en neuf sections, le CTA unique, la teinte noire seule
+et l'interdiction de fabriquer une preuve de résultat sont conservés tels quels.
+Ce qui change est la direction artistique et la mise en œuvre.
+
+## L'idée visuelle, en une phrase
+
+**Une nature morte de salon** : ivoire chaud, lumière rasante, ombres longues
+portées, et la mousse blanche comme unique matière.
+
+Toutes les photographies ont été produites sur le même fond ivoire, et la page
+adopte exactement ce ton (`--ivory-3: #E3D7C4`, échantillonné sur les fichiers).
+Les images n'ont donc plus de bord : elles se fondent dans la mise en page au
+lieu d'être posées dessus. C'est le geste qui porte tout le reste.
+
+Conséquences appliquées partout :
+
+- aucune carte, aucune ombre portée d'interface — uniquement des filets d'un pixel ;
+- l'or n'est jamais un aplat, seulement une lumière : dégradé, trait fin, anneau ;
+- composition asymétrique tenue par une grille éditoriale ;
+- un grain photographique unique relie les photos et les à-plats.
+
+## Système typographique
+
+| Usage | Famille | Graisses |
+|---|---|---|
+| Titres | El Messiri | 600, 700 |
+| Texte courant | IBM Plex Sans Arabic | 400, 500 |
+| Chiffres, numéros de chapitre, prix | IBM Plex Mono | 500 |
+
+Polices auto-hébergées en woff2, sous-ensembles arabe et latin séparés par
+`unicode-range` : le latin n'est téléchargé que pour « BEIROU » et « +966 ».
+`font-synthesis: none` — aucun faux gras sur de l'arabe. `letter-spacing`
+laissé à `normal` sur tous les titres : l'arabe est une écriture liée, et
+resserrer les grands titres, règle latine courante, y détruit les ligatures.
+
+## Animation signature
+
+L'anneau des 25 minutes se remplit en 1600 ms pendant que le nombre compte
+jusqu'à 25, sur la même courbe pour que les deux finissent ensemble. C'est le
+seul moment cinématographique ; tout le reste du mouvement tient en 340 ms
+d'entrée et 200 ms de sortie, sur `cubic-bezier(.05, .7, .1, 1)`.
+
+Le nombre final est écrit en dur dans le HTML et l'anneau s'affiche déjà
+rempli quand le script ne tourne pas.
+
+## Trois décisions qui contredisent la documentation existante
+
+Elles sont signalées ici plutôt que tranchées en silence.
+
+### 1. Chiffres occidentaux, et non arabo-indiens
+
+`01-architecture.md` écrit ٢٥ دقيقة. La page écrit **25 دقيقة**.
+
+Motif : relevé sur sept sites saoudiens majeurs (Nice One, Golden Scent,
+ministère de la Santé, Tamara, Tabby, NEOM, Zid). Tous utilisent les chiffres
+0-9 exclusivement, zéro occurrence arabo-indienne. Un prix en ٢٤٩ sur une page
+d'achat saoudienne lit comme une traduction, pas comme un commerçant local.
+
+**À valider.** Si la décision documentée prime, l'inversion est mécanique.
+
+### 2. L'échelle de prix ne correspond pas à la boutique en ligne
+
+| Source | Pack de 2 |
+|---|---|
+| `03-pricing.md` et cette page | **199 SAR** |
+| Boutique Shopify en production | **110 SAR** (barré 199) |
+| Tableur, ligne `SA04030400BUMO` | vente 110, panier moyen 171, COD 199 |
+
+La page applique l'échelle documentée 149 / 199 / 249. Trois sources, trois
+chiffres : **il faut trancher avant toute mise en ligne**, sinon la page
+annonce un prix que le paiement ne confirmera pas — exactement le mécanisme
+qui produit un refus à la livraison.
+
+### 3. Le comparateur avant/après de la version précédente est abandonné
+
+La version développée dans le dépôt `e-com` contenait un curseur avant/après
+alimenté par des images générées. `01-architecture.md` l'interdit
+explicitement. Il n'est pas repris ici et ne doit pas revenir.
+
+## Médias
+
+Cinq photographies retenues, toutes dans le registre matière et jamais dans
+le registre preuve : mousse sur pierre, mèche noire, macro de mousse, geste
+ganté, matières botaniques. Format WebP, deux largeurs chacune, 170 Ko au total.
+
+Deux générations ont été écartées après contrôle :
+
+- un plan « kit » montrant un flacon pompe qui n'est pas le produit ;
+- un plan « rinçage » sur cheveux **châtains**, en contradiction directe avec
+  le positionnement noir uniquement.
+
+Restent en repère de mise en page, clairement marqués comme tels : le packshot
+du flacon, l'applicateur et les trois visuels de paliers.
+
+## Mesures relevées
+
+| Contrôle | Résultat |
+|---|---|
+| Débordement horizontal de 320 à 1920 px | aucun |
+| Sans JavaScript | page entière lisible, formulaire soumissible |
+| `prefers-reduced-motion` | aucun élément masqué, anneau rempli |
+| Contrastes de texte | 4,6:1 minimum, AA sur tous les couples |
+| Chiffres arabo-indiens résiduels | 0 |
+| Navigation clavier | tous les points d'arrêt ont un contour visible |
+| Défilement complet, processeur bridé 6× | 482 ms |
+| Poids total transféré | 338 Ko |
+
+## Ce qui manque encore, et que la page ne peut pas inventer
+
+1. Le packshot réel du flacon et de l'applicateur.
+2. Des photographies de résultat réelles.
+3. Des avis clients authentiques, avec leur nombre.
+4. Les délais de livraison par pays.
+5. La durée de la fenêtre de retour.
+6. La liste INCI complète.

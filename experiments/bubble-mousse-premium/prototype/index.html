@@ -4,32 +4,61 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bubble Mousse — صالونكِ في بيتكِ</title>
-<meta name="description" content="صبغة شعر رغوية بلون أسود متجانس ولمعان طبيعي خلال ٢٥ دقيقة. الدفع عند الاستلام.">
+<meta name="description" content="صبغة شعر رغوية بلون أسود متجانس ولمعان طبيعي خلال 25 دقيقة. الدفع عند الاستلام.">
+<meta name="theme-color" content="#E3D7C4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23E3D7C4'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23654B1E' stroke-width='2'/%3E%3C/svg%3E">
+
+<!-- Les deux fontes arabes du premier écran. Le reste est chargé sans priorité. -->
+<link rel="preload" as="font" type="font/woff2" href="font/messiri-700-ar.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="font/plexar-400-ar.woff2" crossorigin>
+<link rel="stylesheet" href="font/fonts.css">
 <link rel="stylesheet" href="lp-bm.css">
 </head>
 <body class="lp-bm">
 
+<!-- Le masquage des révélations n'est activé que si le script s'exécute.
+     Posé pendant l'analyse du document pour éviter tout scintillement. -->
+<script>document.body.classList.add('lp-bm-js');</script>
+
+<div class="lp-bm-grain" aria-hidden="true"></div>
+
+<!-- Dégradé de l'anneau signature : l'or se comporte comme une lumière. -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <linearGradient id="lp-bm-ring" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#B08D4F" stop-opacity=".2"/>
+      <stop offset="55%"  stop-color="#C9A868" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#7A5D27" stop-opacity=".9"/>
+    </linearGradient>
+  </defs>
+</svg>
+
 <!-- ============ 1 · HERO ============ -->
 <header class="lp-bm-hero">
-  <div class="lp-bm-wrap lp-bm-hero__grid">
-    <figure class="lp-bm-hero__media">
-      <img src="img/hero.svg" alt="عبوة Bubble Mousse لصبغة الشعر الرغوية"
-           width="800" height="1000" fetchpriority="high" decoding="async">
-    </figure>
     <div class="lp-bm-hero__body">
+      <p class="lp-bm-mark">BEIROU</p>
       <p class="lp-bm-eyebrow">صبغة شعر رغوية — بدون أمونيا</p>
-      <h1 class="lp-bm-h1">صالونكِ في بيتكِ</h1>
-      <p class="lp-bm-lede">لون أسود متجانس ولمعان طبيعي خلال ٢٥ دقيقة</p>
+      <h1 class="lp-bm-h1">صالونكِ<br>في بيتكِ</h1>
+      <p class="lp-bm-lede">لون أسود متجانس ولمعان طبيعي خلال 25 دقيقة</p>
       <a href="#offre" class="lp-bm-btn lp-bm-btn--primary">
         اطلبي الآن<span class="lp-bm-btn__sub">الدفع عند الاستلام</span>
       </a>
       <ul class="lp-bm-strip">
         <li>الدفع عند الاستلام</li>
         <li>شحن سريع</li>
-        <li>صلاحية ٣ سنوات</li>
+        <li>صلاحية 3 سنوات</li>
       </ul>
     </div>
-  </div>
+
+    <figure class="lp-bm-hero__media">
+      <!-- EMPLACEMENT RÉSERVÉ : packshot réel du flacon. L'image ci-dessous
+           montre la matière (la mousse), jamais un flacon inventé. -->
+      <img src="img/hero.webp"
+           srcset="img/hero-sm.webp 640w, img/hero.webp 900w"
+           sizes="(min-width: 980px) 52vw, 100vw"
+           alt="رغوة بيضاء كثيفة على سطح حجري، بإضاءة جانبية"
+           width="900" height="1233" fetchpriority="high" decoding="async">
+    </figure>
 </header>
 
 <main>
@@ -37,21 +66,30 @@
 <!-- ============ 2 · LE RÉSULTAT ============ -->
 <section class="lp-bm-sec lp-bm-sec--result" aria-labelledby="t-result">
   <div class="lp-bm-wrap lp-bm-narrow">
+    <p class="lp-bm-chap">01 — النتيجة</p>
     <h2 id="t-result" class="lp-bm-h2 js-reveal">لون أسود متجانس من الجذور إلى الأطراف</h2>
-    <p class="lp-bm-p js-reveal">
+    <p class="lp-bm-p js-reveal" style="--d:60ms">
       تغطية واضحة ومتساوية للشعر الأبيض، بلا خطوط ولا فوارق.
       وبعد الغسيل، يبقى اللون حيويًا لفترة أطول.
     </p>
   </div>
-  <figure class="lp-bm-figure js-reveal">
-    <img src="img/result.svg" alt="خصلات شعر أسود لامع" width="1200" height="675" loading="lazy" decoding="async">
+
+  <figure class="lp-bm-bleed lp-bm-bleed--fade js-reveal" style="--d:120ms">
+    <img src="img/result.webp"
+         srcset="img/result-sm.webp 800w, img/result.webp 1344w"
+         sizes="100vw"
+         alt="خصلة شعر أسود لامع ممتدة على سطح فاتح"
+         width="1344" height="768" loading="lazy" decoding="async">
+    <figcaption class="lp-bm-figcap lp-bm-wrap">صورة توضيحية للملمس واللون</figcaption>
   </figure>
-  <!-- EMPLACEMENT RÉSERVÉ : photos de résultat réelles. Ne jamais générer en IA. -->
+  <!-- EMPLACEMENT RÉSERVÉ : photos de résultat RÉELLES.
+       Aucune preuve de résultat ne doit être fabriquée. Pas d'avant/après. -->
 </section>
 
-<!-- ============ 3 · LES 25 MINUTES ============ -->
-<section class="lp-bm-sec lp-bm-sec--steps" aria-labelledby="t-steps">
+<!-- ============ 3 · LES 25 MINUTES — animation signature ============ -->
+<section class="lp-bm-sec lp-bm-sec--defer" aria-labelledby="t-steps">
   <div class="lp-bm-wrap lp-bm-narrow">
+    <p class="lp-bm-chap">02 — الاستعمال</p>
     <h2 id="t-steps" class="lp-bm-h2 js-reveal">أربع خطوات. خمس وعشرون دقيقة.</h2>
 
     <div class="lp-bm-timer js-reveal" data-timer>
@@ -59,69 +97,94 @@
         <circle class="lp-bm-timer__track" cx="60" cy="60" r="52"/>
         <circle class="lp-bm-timer__fill"  cx="60" cy="60" r="52"/>
       </svg>
-      <p class="lp-bm-timer__num">٢٥<span>دقيقة</span></p>
+      <p class="lp-bm-timer__num"><span data-count aria-hidden="true">25</span>
+        <span>دقيقة</span></p>
+      <p class="lp-bm-sr">مدة ترك الرغوة على الشعر: 25 دقيقة</p>
     </div>
 
     <ol class="lp-bm-steps">
-      <li class="js-reveal"><span class="lp-bm-steps__n">١</span>ضعي الرغوة على شعرٍ مبلّل، تمامًا كما تفعلين مع الشامبو</li>
-      <li class="js-reveal"><span class="lp-bm-steps__n">٢</span>وزّعيها بالتساوي حتى تغطي الشعر بالكامل</li>
-      <li class="js-reveal"><span class="lp-bm-steps__n">٣</span>اتركيها ٢٥ دقيقة</li>
-      <li class="js-reveal"><span class="lp-bm-steps__n">٤</span>اشطفي بالماء الفاتر</li>
+      <li class="js-reveal"><span class="lp-bm-steps__n">01</span>ضعي الرغوة على شعرٍ مبلّل، تمامًا كما تفعلين مع الشامبو</li>
+      <li class="js-reveal" style="--d:50ms"><span class="lp-bm-steps__n">02</span>وزّعيها بالتساوي حتى تغطي الشعر بالكامل</li>
+      <li class="js-reveal" style="--d:100ms"><span class="lp-bm-steps__n">03</span>اتركيها 25 دقيقة</li>
+      <li class="js-reveal" style="--d:150ms"><span class="lp-bm-steps__n">04</span>اشطفي بالماء الفاتر</li>
     </ol>
 
     <p class="lp-bm-cta-inline"><a href="#offre" class="lp-bm-btn lp-bm-btn--ghost">اطلبي الآن</a></p>
   </div>
-  <figure class="lp-bm-figure lp-bm-figure--split js-reveal">
-    <img src="img/foam.svg" alt="رغوة ناعمة" width="800" height="800" loading="lazy" decoding="async">
-    <img src="img/gesture.svg" alt="توزيع الرغوة على الشعر" width="800" height="1000" loading="lazy" decoding="async">
+
+  <figure class="lp-bm-bleed lp-bm-bleed--fade js-reveal">
+    <img src="img/gesture.webp"
+         srcset="img/gesture-sm.webp 640w, img/gesture.webp 1024w"
+         sizes="(min-width: 980px) 70vw, 100vw"
+         alt="يدان بقفازين سوداوين تحملان كمية من الرغوة البيضاء"
+         width="1024" height="1024" loading="lazy" decoding="async">
+    <figcaption class="lp-bm-figcap lp-bm-wrap">صورة توضيحية لقوام الرغوة</figcaption>
   </figure>
 </section>
 
 <!-- ============ 4 · BÉNÉFICES ============ -->
-<section class="lp-bm-sec" aria-labelledby="t-benefits">
+<section class="lp-bm-sec lp-bm-sec--defer" aria-labelledby="t-benefits">
   <div class="lp-bm-wrap lp-bm-narrow">
+    <p class="lp-bm-chap">03 — لماذا هذه الرغوة</p>
     <h2 id="t-benefits" class="lp-bm-h2 js-reveal">بنفس البساطة، نتيجة مختلفة</h2>
     <dl class="lp-bm-benefits">
       <div class="js-reveal"><dt>تغطية متساوية للشعر الأبيض</dt><dd>من الجذور إلى الأطراف، بلا فوارق</dd></div>
-      <div class="js-reveal"><dt>لون يدوم بعد الغسيل</dt><dd>يبقى حيويًا لفترة أطول</dd></div>
-      <div class="js-reveal"><dt>رائحة فواكه خفيفة</dt><dd>تبقى على الشعر بعد الاستعمال</dd></div>
-      <div class="js-reveal"><dt>ملمس ناعم ولمعة طبيعية</dt><dd>شعر مرن وسهل التصفيف</dd></div>
+      <div class="js-reveal" style="--d:50ms"><dt>لون يدوم بعد الغسيل</dt><dd>يبقى حيويًا لفترة أطول</dd></div>
+      <div class="js-reveal" style="--d:100ms"><dt>رائحة فواكه خفيفة</dt><dd>تبقى على الشعر بعد الاستعمال</dd></div>
+      <div class="js-reveal" style="--d:150ms"><dt>ملمس ناعم ولمعة طبيعية</dt><dd>شعر مرن وسهل التصفيف</dd></div>
     </dl>
   </div>
+
+  <figure class="lp-bm-bleed lp-bm-bleed--fade js-reveal">
+    <img src="img/foam.webp"
+         srcset="img/foam-sm.webp 700w, img/foam.webp 1200w"
+         sizes="100vw"
+         alt="قوام الرغوة عن قرب"
+         width="1200" height="686" loading="lazy" decoding="async">
+  </figure>
 </section>
 
 <!-- ============ 5 · BOTANIQUE ============ -->
-<section class="lp-bm-sec lp-bm-sec--botanical" aria-labelledby="t-bot">
+<section class="lp-bm-sec lp-bm-sec--botanical lp-bm-sec--defer" aria-labelledby="t-bot">
   <div class="lp-bm-wrap lp-bm-two">
-    <figure class="lp-bm-figure js-reveal">
-      <img src="img/botanical.svg" alt="خلاصات نباتية" width="1200" height="675" loading="lazy" decoding="async">
+    <figure class="lp-bm-bleed lp-bm-bleed--fade js-reveal">
+      <img src="img/botanical.webp"
+           srcset="img/botanical-sm.webp 800w, img/botanical.webp 1344w"
+           sizes="(min-width: 980px) 48vw, 100vw"
+           alt="جذر الجينسنغ وحبوب السمسم الأسود وأوراق نباتية"
+           width="1344" height="768" loading="lazy" decoding="async">
     </figure>
     <div>
+      <p class="lp-bm-chap">04 — التركيبة</p>
       <h2 id="t-bot" class="lp-bm-h2 js-reveal">خلاصات نباتية في التركيبة</h2>
-      <p class="lp-bm-p js-reveal">
+      <p class="lp-bm-p js-reveal" style="--d:50ms">
         تحتوي التركيبة على خلاصات الجينسنغ والسابونين والفوتي والسمسم الأسود.
       </p>
       <!-- Formulation volontairement descriptive : ce que la formule CONTIENT,
            jamais ce que les extraits FONT. Ne pas ajouter « صبغة نباتية ». -->
       <dl class="lp-bm-actives">
         <div class="js-reveal"><dt>الجينسنغ</dt><dd>خلاصة نباتية تقليدية في العناية بالشعر</dd></div>
-        <div class="js-reveal"><dt>السابونين</dt><dd>معروف بخصائصه المنظّفة اللطيفة</dd></div>
-        <div class="js-reveal"><dt>الفوتي</dt><dd>عشبة تقليدية في العناية بالشعر</dd></div>
-        <div class="js-reveal"><dt>السمسم الأسود</dt><dd>خلاصة نباتية غنية</dd></div>
+        <div class="js-reveal" style="--d:50ms"><dt>السابونين</dt><dd>معروف بخصائصه المنظّفة اللطيفة</dd></div>
+        <div class="js-reveal" style="--d:100ms"><dt>الفوتي</dt><dd>عشبة تقليدية في العناية بالشعر</dd></div>
+        <div class="js-reveal" style="--d:150ms"><dt>السمسم الأسود</dt><dd>خلاصة نباتية غنية</dd></div>
       </dl>
     </div>
   </div>
 </section>
 
 <!-- ============ 6 · LE KIT OFFERT ============ -->
-<section class="lp-bm-sec lp-bm-sec--kit" aria-labelledby="t-kit">
+<section class="lp-bm-sec lp-bm-sec--kit lp-bm-sec--defer" aria-labelledby="t-kit">
   <div class="lp-bm-wrap lp-bm-narrow">
+    <p class="lp-bm-chap">05 — الطقم</p>
     <h2 id="t-kit" class="lp-bm-h2 js-reveal">وأداة التطبيق، هدية مع كل طلب</h2>
-    <p class="lp-bm-p js-reveal">زجاجة بأسنان مشط توزّع الصبغة بالتساوي على فروة الرأس.</p>
+    <p class="lp-bm-p js-reveal" style="--d:50ms">زجاجة بأسنان مشط توزّع الصبغة بالتساوي على فروة الرأس.</p>
   </div>
 
+  <!-- EMPLACEMENT RÉSERVÉ : photo réelle de l'applicateur.
+       Le tracé ci-dessous est un repère de mise en page, pas un produit. -->
   <div class="lp-bm-wrap lp-bm-hotspots js-reveal">
-    <img src="img/applicator.svg" alt="زجاجة التطبيق بأسنان مشط" width="800" height="1000" loading="lazy" decoding="async">
+    <img src="img/applicator.svg" alt="زجاجة التطبيق بأسنان مشط"
+         width="800" height="1000" loading="lazy" decoding="async">
     <button class="lp-bm-hs" style="--x:50%; --y:14%" data-hs="أسنان مشط توزّع الصبغة بالتساوي" aria-label="أسنان المشط"></button>
     <button class="lp-bm-hs" style="--x:62%; --y:52%" data-hs="خطوط قياس للتحكم بالكمية" aria-label="خطوط القياس"></button>
     <button class="lp-bm-hs" style="--x:38%; --y:76%" data-hs="بلاستيك مرن يمكن ضغطه بيد واحدة" aria-label="الجسم المرن"></button>
@@ -139,14 +202,15 @@
 </section>
 
 <!-- ============ 7 · RÉASSURANCE ============ -->
-<section class="lp-bm-sec lp-bm-sec--trust" aria-labelledby="t-trust">
+<section class="lp-bm-sec lp-bm-sec--defer" aria-labelledby="t-trust">
   <div class="lp-bm-wrap lp-bm-narrow">
-    <h2 id="t-trust" class="lp-bm-h2 js-reveal">قبل أن تطلبي</h2>
-    <ul class="lp-bm-trust js-reveal">
-      <li><strong>الدفع عند الاستلام</strong><span>لا تدفعين قبل أن تستلمي</span></li>
-      <li><strong>شحن إلى السعودية والإمارات وعُمان</strong><span>تأكيد الطلب عبر واتساب قبل الشحن</span></li>
-      <li><strong>صلاحية ٣ سنوات</strong><span>من تاريخ الإنتاج</span></li>
-      <li><strong>يناسب جميع أنواع الشعر</strong><span>الطبيعي والكثيف والمجعد</span></li>
+    <p class="lp-bm-chap">06 — قبل أن تطلبي</p>
+    <h2 id="t-trust" class="lp-bm-h2 js-reveal">كل شيء واضح قبل الدفع</h2>
+    <ul class="lp-bm-trust">
+      <li class="js-reveal"><strong>الدفع عند الاستلام</strong><span>لا تدفعين قبل أن تستلمي</span></li>
+      <li class="js-reveal" style="--d:50ms"><strong>شحن إلى السعودية والإمارات وعُمان</strong><span>تأكيد الطلب عبر واتساب قبل الشحن</span></li>
+      <li class="js-reveal" style="--d:100ms"><strong>صلاحية 3 سنوات</strong><span>من تاريخ الإنتاج</span></li>
+      <li class="js-reveal" style="--d:150ms"><strong>يناسب جميع أنواع الشعر</strong><span>الطبيعي والكثيف والمجعد</span></li>
     </ul>
     <!-- EMPLACEMENT RÉSERVÉ : avis clients RÉELS uniquement.
          Si aucun avis authentique n'est disponible, cette zone reste absente. -->
@@ -156,9 +220,10 @@
 <!-- ============ 8 · OFFRE + COMMANDE ============ -->
 <section class="lp-bm-sec lp-bm-sec--offer" id="offre" aria-labelledby="t-offer">
   <div class="lp-bm-wrap lp-bm-narrow">
-    <h2 id="t-offer" class="lp-bm-h2 js-reveal">اختاري عرضكِ</h2>
+    <p class="lp-bm-chap">07 — الطلب</p>
+    <h2 id="t-offer" class="lp-bm-h2">اختاري عرضكِ</h2>
 
-    <div class="lp-bm-country js-reveal">
+    <div class="lp-bm-country">
       <label for="country">الدولة</label>
       <select id="country" name="country" data-country>
         <option value="SA" selected>السعودية</option>
@@ -195,7 +260,7 @@
           <input type="radio" name="tier" value="3" data-tier="3">
           <span class="lp-bm-tier__badge lp-bm-tier__badge--alt">أفضل سعر للقطعة</span>
           <img src="img/pack-3.svg" alt="" width="800" height="800" loading="lazy">
-          <span class="lp-bm-tier__name">٣ عبوات + الطقم</span>
+          <span class="lp-bm-tier__name">3 عبوات + الطقم</span>
           <span class="lp-bm-tier__price" data-price="3"></span>
           <span class="lp-bm-tier__unit" data-unit="3"></span>
         </label>
@@ -235,17 +300,18 @@
       </div>
 
       <button type="submit" class="lp-bm-btn lp-bm-btn--primary lp-bm-btn--block">
-        أكّدي طلبك<span class="lp-bm-btn__sub">الدفع عند الاستلام</span>
+        اطلبي الآن<span class="lp-bm-btn__sub">الدفع عند الاستلام</span>
       </button>
       <p class="lp-bm-note">سنتواصل معكِ عبر واتساب لتأكيد الطلب قبل الشحن</p>
-      <p class="lp-bm-ok" data-ok hidden>تم استلام طلبكِ. سنتواصل معكِ قريبًا لتأكيده.</p>
+      <p class="lp-bm-ok" data-ok tabindex="-1" hidden>تم استلام طلبكِ. سنتواصل معكِ قريبًا لتأكيده.</p>
     </form>
   </div>
 </section>
 
 <!-- ============ 9 · FAQ ============ -->
-<section class="lp-bm-sec lp-bm-sec--faq" aria-labelledby="t-faq">
+<section class="lp-bm-sec lp-bm-sec--defer" aria-labelledby="t-faq">
   <div class="lp-bm-wrap lp-bm-narrow">
+    <p class="lp-bm-chap">08 — أسئلة</p>
     <h2 id="t-faq" class="lp-bm-h2 js-reveal">أسئلة شائعة</h2>
 
     <details class="lp-bm-faq"><summary>هل يحتوي على أمونيا؟</summary>
@@ -274,10 +340,11 @@
 </main>
 
 <footer class="lp-bm-foot">
-  <p>BEIROU — Bubble Mousse</p>
+  <p>BEIROU — BUBBLE MOUSSE</p>
 </footer>
 
-<!-- Barre CTA fixe mobile : le prix y figure en permanence (protection du NDR) -->
+<!-- Barre d'action fixe mobile : le prix y figure en permanence.
+     Sur un modèle payé à la livraison, une surprise de prix devient un refus. -->
 <div class="lp-bm-sticky" data-sticky hidden>
   <span class="lp-bm-sticky__price" data-sticky-price></span>
   <a href="#offre" class="lp-bm-btn lp-bm-btn--primary lp-bm-btn--sm">اطلبي الآن</a>

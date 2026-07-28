@@ -12,7 +12,7 @@
       cc: '+966', cur: 'ر.س', dec: 0,
       price: { 1: 149, 2: 199, 3: 249 },
       phone: /^0?5[0-9]{8}$/,
-      phoneHint: 'أدخلي رقمًا سعوديًا يبدأ بـ 5 (٩ أرقام)',
+      phoneHint: 'أدخلي رقمًا سعوديًا يبدأ بـ 5 (9 أرقام)',
       cities: ['الرياض','جدة','مكة المكرمة','المدينة المنورة','الدمام','الخبر',
                'الظهران','الأحساء','القطيف','الجبيل','الطائف','تبوك','بريدة',
                'عنيزة','حائل','خميس مشيط','أبها','نجران','جازان','ينبع','عرعر','سكاكا']
@@ -21,14 +21,14 @@
       cc: '+971', cur: 'د.إ', dec: 0,
       price: { 1: 149, 2: 199, 3: 249 },
       phone: /^0?5[0-9]{8}$/,
-      phoneHint: 'أدخلي رقمًا إماراتيًا يبدأ بـ 5 (٩ أرقام)',
+      phoneHint: 'أدخلي رقمًا إماراتيًا يبدأ بـ 5 (9 أرقام)',
       cities: ['دبي','أبوظبي','الشارقة','عجمان','أم القيوين','رأس الخيمة','الفجيرة','العين']
     },
     OM: {
       cc: '+968', cur: 'ر.ع', dec: 1,
       price: { 1: 14.9, 2: 19.9, 3: 24.9 },
       phone: /^[79][0-9]{7}$/,
-      phoneHint: 'أدخلي رقمًا عمانيًا من ٨ أرقام يبدأ بـ 7 أو 9',
+      phoneHint: 'أدخلي رقمًا عمانيًا من 8 أرقام يبدأ بـ 7 أو 9',
       cities: ['مسقط','السيب','مطرح','بوشر','صلالة','صحار','نزوى','صور',
                'البريمي','عبري','بركاء','الرستاق','إبراء','خصب']
     }
@@ -132,9 +132,31 @@
     revealables.forEach(function (el) { revealObs.observe(el); });
   }
 
-  /* ================= Anneau 25 minutes ================= */
+  /* ================= Anneau 25 minutes — animation signature =================
+     Seul moment cinématographique de la page : l'anneau se remplit pendant que
+     le nombre compte jusqu'à 25. Le nombre final est déjà dans le HTML, donc
+     la valeur reste juste si le script échoue, et le lecteur d'écran lit un
+     texte fixe (.lp-bm-sr) plutôt qu'un compteur qui change. */
 
-  var timer = $('[data-timer]');
+  var RING_MS = 1600;
+  var timer   = $('[data-timer]');
+  var countEl = $('[data-count]');
+
+  function runCount() {
+    if (!countEl) return;
+    var t0 = null;
+    function step(t) {
+      if (t0 === null) t0 = t;
+      var p = Math.min((t - t0) / RING_MS, 1);
+      /* Même courbe que le trait de l'anneau : les deux doivent finir ensemble. */
+      var eased = 1 - Math.pow(1 - p, 3);
+      countEl.textContent = String(Math.round(eased * 25));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    countEl.textContent = '0';
+    requestAnimationFrame(step);
+  }
+
   if (timer) {
     if (reduced || !('IntersectionObserver' in window)) {
       timer.classList.add('is-on');
@@ -143,6 +165,7 @@
         entries.forEach(function (e) {
           if (!e.isIntersecting) return;
           timer.classList.add('is-on');
+          runCount();
           timerObs.disconnect();
         });
       }, { threshold: 0.5 });

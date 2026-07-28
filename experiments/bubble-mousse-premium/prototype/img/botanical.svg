@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="P06 · Nature morte herbier">
   <defs><linearGradient id="g" x1="0" y1="0" x2="0.6" y2="1">
-    <stop offset="0" stop-color="#F7F3EC"/><stop offset="1" stop-color="#E8DFD0"/>
+    <stop offset="0" stop-color="#F2ECE1"/><stop offset="1" stop-color="#E3D7C4"/>
   </linearGradient></defs>
   <rect width="1200" height="675" fill="url(#g)"/>
   <rect x="24" y="24" width="1152" height="627" fill="none" stroke="#B08D4F" stroke-opacity="0.35" stroke-dasharray="10 8"/>
-  <text x="600" y="327" text-anchor="middle" font-family="system-ui,sans-serif" font-size="26" fill="#1B3A2F" fill-opacity="0.75">P06 · Nature morte herbier</text>
+  <text x="600" y="327" text-anchor="middle" font-family="system-ui,sans-serif" font-size="26" fill="#17332A" fill-opacity="0.75">P06 · Nature morte herbier</text>
   <text x="600" y="363" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" fill="#B08D4F">placeholder — voir docs/02-prompts-images.md</text>
 </svg>
