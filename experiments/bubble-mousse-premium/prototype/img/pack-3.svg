@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800" role="img" aria-label="P10 · 3 flacons">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0.6" y2="1">
+    <stop offset="0" stop-color="#F7F3EC"/><stop offset="1" stop-color="#E8DFD0"/>
+  </linearGradient></defs>
+  <rect width="800" height="800" fill="url(#g)"/>
+  <rect x="24" y="24" width="752" height="752" fill="none" stroke="#B08D4F" stroke-opacity="0.35" stroke-dasharray="10 8"/>
+  <text x="400" y="390" text-anchor="middle" font-family="system-ui,sans-serif" font-size="26" fill="#1B3A2F" fill-opacity="0.75">P10 · 3 flacons</text>
+  <text x="400" y="426" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" fill="#B08D4F">placeholder — voir docs/02-prompts-images.md</text>
+</svg>
