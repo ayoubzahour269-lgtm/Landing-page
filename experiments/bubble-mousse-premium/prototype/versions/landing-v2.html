@@ -1,0 +1,669 @@
+<title>Bubble Mousse — صبغة رغوية نباتية بلون يدوم</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<div dir="rtl" lang="ar" id="bm">
+<style>
+/* ================= TOKENS ================= */
+#bm{
+  --forest:#173D22; --leaf:#2E7D3A; --leaf-soft:#5CA968; --bottle:#6FBF5A;
+  --gold:#C29A3B; --gold-deep:#A87F26; --gold-soft:#E3C878;
+  --cream:#F7F3E8; --cream-2:#EFE9D8; --ink:#1C2418; --taupe:#77715C;
+  --white:#FFFFFF; --danger:#A33B2E; --line:#E2DBC6;
+  --radius:16px;
+  --fs-h1:clamp(27px,7.2vw,38px); --fs-h2:clamp(22px,5.6vw,28px);
+  font-family:"Segoe UI","SF Pro Text",Tahoma,"Noto Naskh Arabic",sans-serif;
+  background:var(--cream); color:var(--ink);
+  font-size:16px; line-height:1.75; display:block;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:clip;
+}
+#bm *{margin:0;padding:0;box-sizing:border-box}
+#bm img{max-width:100%;display:block}
+#bm .wrap{max-width:540px;margin-inline:auto;padding-inline:18px}
+#bm section{padding-block:52px;position:relative}
+#bm h1,#bm h2,#bm h3{line-height:1.35;text-wrap:balance;font-weight:800}
+#bm h2{font-size:var(--fs-h2);margin-bottom:10px}
+#bm .kicker{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;letter-spacing:.05em;color:var(--leaf);background:rgba(46,125,58,.09);border:1px solid rgba(46,125,58,.28);border-radius:999px;padding:5px 15px;margin-bottom:15px}
+#bm .kicker.gold{color:var(--gold-deep);background:rgba(194,154,59,.1);border-color:rgba(194,154,59,.4)}
+#bm .muted{color:var(--taupe)} #bm .small{font-size:13.5px}
+
+/* ============ SCROLL REVEALS ============ */
+#bm .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,.8,.3,1)}
+#bm .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){#bm .rv{opacity:1;transform:none;transition:none}}
+
+/* ============ MEDIA PLACEHOLDERS ============ */
+#bm .ph{position:relative;border-radius:var(--radius);overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;
+  background:radial-gradient(120% 90% at 70% 15%,rgba(111,191,90,.28),transparent 55%),linear-gradient(165deg,#DFE8CF,#C4D6B0 55%,#A9C494);
+  border:1.5px dashed #8FAE7E;color:#3E5A33}
+#bm .ph.dark{background:radial-gradient(130% 100% at 30% 0%,rgba(111,191,90,.35),transparent 60%),linear-gradient(165deg,#1C4527,#122A17);border-color:#3F6B49;color:#A9C9A2}
+#bm .ph .tag{font-weight:800;font-size:14.5px;display:block;margin-bottom:3px}
+#bm .ph .dim{font-size:11.5px;letter-spacing:.05em;direction:ltr;opacity:.85}
+
+/* ================= HERO ================= */
+#bm-hero{background:
+  radial-gradient(130% 80% at 85% -5%,rgba(94,169,104,.5),transparent 55%),
+  radial-gradient(100% 70% at 0% 100%,rgba(194,154,59,.25),transparent 55%),
+  linear-gradient(170deg,#122E1A,#173D22 55%,#1B4A29);
+  color:#F1EDDD;padding-block:0 42px;overflow:hidden}
+#bm-hero .fx{position:absolute;inset:0;pointer-events:none}
+#bm-hero .wrap{position:relative}
+#bm-hero .topbar{display:flex;justify-content:space-between;align-items:center;padding-block:16px 22px;font-size:12.5px}
+#bm-hero .brand{font-weight:800;font-size:15.5px;letter-spacing:.02em;color:#fff}
+#bm-hero .brand em{font-style:normal;color:var(--gold-soft)}
+#bm-hero .chip{background:linear-gradient(120deg,var(--gold-soft),var(--gold));color:#241B06;font-weight:800;font-size:12px;border-radius:999px;padding:5px 13px;box-shadow:0 4px 14px rgba(194,154,59,.35)}
+#bm-hero h1{font-size:var(--fs-h1);color:#fff;margin-bottom:12px}
+#bm-hero h1 .g{background:linear-gradient(100deg,var(--gold-soft) 20%,#F4E3AE 45%,var(--gold) 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+#bm-hero .sub{color:#C9D6BC;font-size:16.5px;margin-bottom:20px}
+#bm-hero .hero-media{aspect-ratio:1;max-height:min(38vh,350px);width:100%;margin-bottom:16px;border:0;border-radius:20px;
+  box-shadow:0 24px 60px rgba(0,0,0,.35), inset 0 0 0 1.5px rgba(227,200,120,.35)}
+#bm-hero .rating{display:flex;align-items:center;gap:9px;font-size:13.5px;margin-bottom:12px;color:#DCE5CF}
+#bm-hero .stars{color:var(--gold-soft);letter-spacing:2.5px}
+#bm-hero .price-row{display:flex;align-items:baseline;gap:12px;margin-bottom:18px}
+#bm-hero .price{font-size:38px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
+#bm-hero .price .cur{font-size:16px;font-weight:600;color:#C9D6BC}
+#bm-hero .compare{color:#8FA383;text-decoration:line-through;font-size:18px}
+#bm-hero .save{background:rgba(227,200,120,.14);border:1px solid rgba(227,200,120,.5);color:var(--gold-soft);font-size:12.5px;font-weight:800;border-radius:9px;padding:3px 11px}
+#bm-hero .cta-note{color:#A9BC9B}
+
+/* ================= CTA ================= */
+#bm .cta{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;border:0;border-radius:var(--radius);
+  background:linear-gradient(120deg,var(--gold-soft),var(--gold) 55%,var(--gold-deep));color:#241B06;
+  font-family:inherit;font-size:18px;font-weight:800;cursor:pointer;text-decoration:none;
+  box-shadow:0 10px 26px rgba(168,127,38,.4);transition:transform .13s ease,box-shadow .13s ease;overflow:hidden}
+#bm .cta:active{transform:scale(.98)}
+#bm .cta:focus-visible{outline:3px solid #fff;outline-offset:2px}
+#bm .cta .shine{position:absolute;top:0;bottom:0;width:46px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);animation:bm-shine 3.2s ease-in-out infinite;inset-inline-start:-70px}
+@keyframes bm-shine{0%,55%{inset-inline-start:-70px}85%,100%{inset-inline-start:130%}}
+@media (prefers-reduced-motion:reduce){#bm .cta .shine{display:none}}
+#bm .cta-note{text-align:center;font-size:12.5px;margin-top:10px;color:var(--taupe)}
+
+/* ================= MARQUEE ================= */
+#bm-marquee{background:var(--gold);color:#241B06;overflow:hidden;padding-block:11px;border-block:2px solid #8F6E1F}
+#bm-marquee .track{display:flex;gap:44px;white-space:nowrap;font-weight:800;font-size:14px;width:max-content;animation:bm-mq 22s linear infinite}
+#bm-marquee .track span{display:flex;align-items:center;gap:10px}
+#bm-marquee .track b{color:#5C4712;font-weight:400}
+@keyframes bm-mq{to{transform:translateX(50%)}}
+@media (prefers-reduced-motion:reduce){#bm-marquee .track{animation:none}}
+
+/* ================= TRUST ================= */
+#bm-trust{background:var(--white);border-bottom:1px solid var(--line);padding-block:18px}
+#bm-trust .row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}
+#bm-trust .t{font-size:11.5px;font-weight:700;line-height:1.5}
+#bm-trust .t svg{width:25px;height:25px;margin:0 auto 6px;display:block;stroke:var(--leaf);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ================= SHADES ================= */
+#bm-shades{background:var(--white)}
+#bm-shades .swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px}
+#bm-shades .sw{border:2px solid var(--line);border-radius:14px;padding:10px 6px 12px;background:var(--cream);cursor:pointer;text-align:center;transition:border-color .15s,transform .15s;font-family:inherit}
+#bm-shades .sw .dot{height:52px;border-radius:10px;margin-bottom:8px;box-shadow:inset 0 -14px 22px rgba(255,255,255,.18), inset 0 6px 14px rgba(0,0,0,.35)}
+#bm-shades .sw .nm{font-size:11.5px;font-weight:800;line-height:1.4}
+#bm-shades .sw.on{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 10px 22px rgba(28,36,24,.12)}
+#bm-shades .preview{margin-top:18px;border-radius:var(--radius);height:120px;background:linear-gradient(120deg,#141414,#2B2B2B 60%,#3A3A3A);position:relative;overflow:hidden;transition:background .4s ease}
+#bm-shades .preview::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(100deg,transparent 0 9px,rgba(255,255,255,.05) 9px 10px)}
+#bm-shades .preview .lbl{position:absolute;bottom:10px;inset-inline-start:14px;background:rgba(0,0,0,.5);color:#fff;font-size:12.5px;font-weight:800;border-radius:8px;padding:3px 12px;z-index:1}
+#bm-shades .note{margin-top:12px}
+
+/* ================= INGREDIENTS ================= */
+#bm-ingred{background:linear-gradient(180deg,var(--cream),var(--cream-2))}
+#bm-ingred .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+#bm-ingred .card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:16px 14px;text-align:center}
+#bm-ingred .card .ic{width:46px;height:46px;margin:0 auto 10px;border-radius:50%;background:rgba(46,125,58,.1);display:flex;align-items:center;justify-content:center;font-size:21px}
+#bm-ingred .card h3{font-size:14.5px;margin-bottom:3px}
+#bm-ingred .card p{font-size:12px;color:var(--taupe);line-height:1.6}
+#bm-ingred .media{margin-top:18px;aspect-ratio:16/9}
+
+/* ================= COUNTERS ================= */
+#bm-count{background:var(--forest);color:#EAF0DF;text-align:center}
+#bm-count .row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:24px}
+#bm-count .c .n{font-size:clamp(30px,8vw,40px);font-weight:800;color:var(--gold-soft);font-variant-numeric:tabular-nums;line-height:1.2}
+#bm-count .c .n small{font-size:14px;font-weight:700}
+#bm-count .c .l{font-size:12.5px;color:#B9CBA9;margin-top:4px;line-height:1.5}
+
+/* ================= STEPS ================= */
+#bm-steps{background:var(--white)}
+#bm-steps .tl{position:relative;margin-top:26px;padding-inline-start:26px}
+#bm-steps .tl::before{content:"";position:absolute;inset-block:8px;inset-inline-start:8px;width:2.5px;background:linear-gradient(180deg,var(--leaf-soft),var(--gold));border-radius:2px}
+#bm-steps .st{position:relative;padding-bottom:26px}
+#bm-steps .st:last-child{padding-bottom:0}
+#bm-steps .st::before{content:"";position:absolute;inset-inline-start:-24px;top:7px;width:13px;height:13px;border-radius:50%;background:var(--gold);border:3px solid var(--cream);box-shadow:0 0 0 2px var(--gold)}
+#bm-steps .st h3{font-size:16.5px;margin-bottom:3px}
+#bm-steps .st p{font-size:13.5px;color:var(--taupe)}
+#bm-steps .media{margin-top:22px;aspect-ratio:16/9}
+
+/* ================= BENEFITS ================= */
+#bm-benefits .b{display:grid;grid-template-columns:52px 1fr;gap:13px;align-items:start;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-top:12px}
+#bm-benefits .b .ic{width:52px;height:52px;border-radius:14px;background:linear-gradient(140deg,rgba(46,125,58,.12),rgba(194,154,59,.14));display:flex;align-items:center;justify-content:center;font-size:23px}
+#bm-benefits .b h3{font-size:15.5px;margin-bottom:2px}
+#bm-benefits .b p{font-size:13px;color:var(--taupe)}
+#bm-benefits .media{margin-top:18px;aspect-ratio:4/3}
+
+/* ================= BEFORE/AFTER ================= */
+#bm-ba{background:
+  radial-gradient(120% 80% at 15% 0%,rgba(94,169,104,.4),transparent 55%),
+  linear-gradient(170deg,#122E1A,#1B4A29);color:#EAF0DF}
+#bm-ba .frame{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:4/5;touch-action:none;user-select:none;box-shadow:0 22px 55px rgba(0,0,0,.35)}
+#bm-ba .layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+#bm-ba .after-l{background:radial-gradient(100% 80% at 60% 20%,#3A2B18,transparent 60%),linear-gradient(160deg,#231A10,#0F0B06);color:#C9BC9B}
+#bm-ba .before-l{background:linear-gradient(160deg,#D6CDB8,#B3A88E);color:#5D5340;clip-path:inset(0 0 0 50%)}
+#bm-ba .handle{position:absolute;top:0;bottom:0;left:50%;width:3px;background:var(--gold-soft);transform:translateX(-50%)}
+#bm-ba .handle::after{content:"⇄";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;background:linear-gradient(130deg,var(--gold-soft),var(--gold));color:#241B06;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;box-shadow:0 8px 20px rgba(0,0,0,.4)}
+#bm-ba .lab{position:absolute;bottom:12px;font-size:12px;font-weight:800;background:rgba(0,0,0,.5);color:#fff;border-radius:8px;padding:3px 11px}
+#bm-ba .lab.b{right:12px}#bm-ba .lab.a{left:12px}
+#bm-ba .legal{margin-top:11px;text-align:center;color:#93A886;font-size:11.5px}
+
+/* ================= GIFT ================= */
+#bm-gift{background:var(--white)}
+#bm-gift .box{position:relative;border:2px solid var(--gold);border-radius:20px;background:
+  radial-gradient(100% 100% at 100% 0%,rgba(194,154,59,.12),transparent 55%),var(--cream);
+  padding:22px 18px;display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:center;margin-top:18px}
+#bm-gift .box .ribbon{position:absolute;top:-13px;inset-inline-start:16px;background:linear-gradient(120deg,var(--gold-soft),var(--gold));color:#241B06;font-size:12px;font-weight:800;border-radius:999px;padding:3px 14px}
+#bm-gift .box .ph{aspect-ratio:3/4;border-radius:12px}
+#bm-gift .box h3{font-size:16.5px;margin-bottom:4px}
+#bm-gift .box p{font-size:13px;color:var(--taupe)}
+
+/* ================= REVIEWS ================= */
+#bm-reviews .r{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-top:13px}
+#bm-reviews .r .head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+#bm-reviews .r .av{width:42px;height:42px;border-radius:50%;flex:none}
+#bm-reviews .r .who{font-weight:800;font-size:14px}
+#bm-reviews .r .stars{color:var(--gold);font-size:13px;letter-spacing:2px}
+#bm-reviews .todo{border:1.5px dashed var(--danger);color:var(--danger);border-radius:var(--radius);padding:12px 16px;margin-top:15px;font-size:13px;font-weight:700;background:rgba(163,59,46,.05)}
+
+/* ================= COMPARE ================= */
+#bm-compare{background:var(--white)}
+#bm-compare .tbl{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-top:18px}
+#bm-compare table{width:100%;border-collapse:collapse;font-size:13px}
+#bm-compare th,#bm-compare td{padding:12px 9px;text-align:center;border-bottom:1px solid var(--line)}
+#bm-compare tr:last-child td{border-bottom:0}
+#bm-compare th:first-child,#bm-compare td:first-child{text-align:start;font-weight:700;padding-inline-start:14px}
+#bm-compare .us{background:rgba(46,125,58,.07);font-weight:800}
+#bm-compare th.us{color:var(--leaf)}
+#bm-compare .ok{color:var(--leaf);font-weight:800}
+#bm-compare .no{color:var(--danger)}
+
+/* ================= OFFER ================= */
+#bm-offer{background:
+  radial-gradient(130% 80% at 80% 0%,rgba(94,169,104,.45),transparent 55%),
+  linear-gradient(170deg,#122E1A,#173D22)}
+#bm-offer h2,#bm-offer > .wrap > p{color:#EAF0DF}
+#bm-offer .card{background:var(--cream);color:var(--ink);border-radius:22px;padding:24px 18px;margin-top:22px;box-shadow:0 26px 60px rgba(0,0,0,.35)}
+#bm-offer .opt{position:relative;display:block;border:2px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-top:12px;cursor:pointer;background:var(--white);transition:border-color .13s,box-shadow .13s}
+#bm-offer .opt input{position:absolute;opacity:0}
+#bm-offer .opt .row1{display:flex;justify-content:space-between;align-items:center;gap:8px}
+#bm-offer .opt .qty{font-weight:800;font-size:15.5px}
+#bm-offer .opt .p{font-weight:800;font-size:18px;white-space:nowrap;font-variant-numeric:tabular-nums}
+#bm-offer .opt .p .cur{font-size:12.5px;font-weight:600}
+#bm-offer .opt .cmp{color:var(--taupe);text-decoration:line-through;font-size:13px;margin-inline-start:6px}
+#bm-offer .opt .note{font-size:12.5px;color:var(--taupe);margin-top:2px}
+#bm-offer .opt.sel{border-color:var(--gold);box-shadow:0 0 0 3px rgba(194,154,59,.18)}
+#bm-offer .opt .badge{position:absolute;top:-11px;inset-inline-start:14px;background:linear-gradient(120deg,var(--gold-soft),var(--gold));color:#241B06;font-size:11.5px;font-weight:800;border-radius:999px;padding:2px 12px}
+#bm-offer label.f{display:block;font-weight:700;font-size:14px;margin:15px 0 6px}
+#bm-offer input[type=text],#bm-offer input[type=tel],#bm-offer select{width:100%;min-height:52px;border:1.5px solid var(--line);border-radius:12px;background:var(--white);font-family:inherit;font-size:16px;padding-inline:14px;color:var(--ink)}
+#bm-offer input:focus,#bm-offer select:focus{outline:none;border-color:var(--leaf);box-shadow:0 0 0 3px rgba(46,125,58,.14)}
+#bm-offer .err{display:none;color:var(--danger);font-size:12.5px;margin-top:5px;font-weight:700}
+#bm-offer .field.bad input{border-color:var(--danger)}
+#bm-offer .field.bad .err{display:block}
+#bm-offer .total{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:17px;border-top:1.5px dashed var(--line);margin-top:20px;padding-top:14px;font-variant-numeric:tabular-nums}
+#bm-offer .cta{margin-top:16px}
+#bm-offer .success{display:none;text-align:center;padding:28px 10px}
+#bm-offer .success .ic{width:60px;height:60px;border-radius:50%;background:rgba(46,125,58,.13);color:var(--leaf);font-size:27px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+#bm-offer.done .success{display:block}
+#bm-offer.done form,#bm-offer.done .opts,#bm-offer.done .total{display:none}
+#bm-offer .stack{margin-top:18px}
+#bm-offer .stack li{list-style:none;display:flex;gap:10px;align-items:center;padding-block:7px;font-size:14px}
+#bm-offer .stack .ok{color:var(--gold-deep);font-weight:800}
+
+/* ================= FAQ ================= */
+#bm-faq details{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);margin-top:12px;overflow:hidden}
+#bm-faq summary{list-style:none;cursor:pointer;font-weight:800;font-size:15px;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+#bm-faq summary::-webkit-details-marker{display:none}
+#bm-faq summary::after{content:"+";font-size:20px;color:var(--leaf);font-weight:600;transition:transform .15s}
+#bm-faq details[open] summary::after{transform:rotate(45deg)}
+#bm-faq .a{padding:0 18px 16px;font-size:14px;color:#4B5240}
+
+/* ================= FINAL ================= */
+#bm-final{text-align:center;padding-bottom:130px;background:linear-gradient(180deg,var(--cream),var(--cream-2))}
+#bm-final .drop{width:74px;height:74px;margin:0 auto 16px;position:relative}
+#bm-final .drop svg{width:100%;height:100%}
+#bm-final footer{margin-top:38px;font-size:11.5px;color:var(--taupe)}
+
+/* ================= STICKY ================= */
+#bm-sticky{position:fixed;bottom:0;inset-inline:0;z-index:60;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);border-top:1px solid var(--line);box-shadow:0 -8px 26px rgba(28,36,24,.12);padding:10px 14px calc(10px + env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .25s ease}
+#bm-sticky.show{transform:none}
+#bm-sticky .in{max-width:540px;margin-inline:auto;display:flex;align-items:center;gap:12px}
+#bm-sticky .pr{line-height:1.35}
+#bm-sticky .pr .name{font-size:11.5px;font-weight:700;color:var(--taupe);white-space:nowrap}
+#bm-sticky .pr .val{font-weight:800;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums}
+#bm-sticky .cta{min-height:48px;font-size:15.5px;flex:1;box-shadow:none}
+</style>
+
+<!-- ================= HERO ================= -->
+<section id="bm-hero">
+  <canvas class="fx" id="bm-fx" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="topbar">
+      <span class="brand">BUBBLE <em>MOUSSE</em>®</span>
+      <span class="chip">عرض قطعتين + هدية</span>
+    </div>
+
+    <h1>لون الصالون في بيتك…<br>برغوة <span class="g">نباتية</span> خلال 25 دقيقة</h1>
+    <p class="sub">صبغة رغوية نباتية تُستخدم مثل الشامبو — تغطّي الشيب بالتساوي، بلون يدوم ورائحة فواكه تبقى حتى 96 ساعة.</p>
+
+    <div class="ph dark hero-media">
+      <div>
+        <span class="tag">🎬 V-HERO — فيديو المنتج (لوب 8–10 ثوانٍ)</span>
+        <span class="dim">1080 × 1080 · MP4 ≤ 2.5MB · بديل صورة M1</span>
+      </div>
+    </div>
+
+    <div class="rating"><span class="stars" aria-hidden="true">★★★★★</span><span>4.8 من 5 — <b>[عدد التقييمات الحقيقي]</b></span></div>
+
+    <div class="price-row">
+      <span class="price">110 <span class="cur">ر.س</span></span>
+      <span class="compare"><bdi>199 ر.س</bdi></span>
+      <span class="save">وفّري 45%</span>
+    </div>
+
+    <a class="cta" href="#bm-offer"><span class="shine"></span>اطلبي الآن — الدفع عند الاستلام</a>
+    <p class="cta-note">توصيل 2–5 أيام لكل مدن المملكة · نتصل بكِ للتأكيد قبل الشحن</p>
+  </div>
+</section>
+
+<!-- ================= MARQUEE ================= -->
+<div id="bm-marquee" aria-hidden="true">
+  <div class="track" id="bm-mq-track">
+    <span>🌿 نباتية ولطيفة على الفروة</span><b>◆</b>
+    <span>🫧 تُستخدم مثل الشامبو</span><b>◆</b>
+    <span>⏱ النتيجة خلال 25 دقيقة</span><b>◆</b>
+    <span>🍑 رائحة فواكه حتى 96 ساعة</span><b>◆</b>
+    <span>🎁 هدية: أداة تطبيق الصبغة</span><b>◆</b>
+    <span>📦 500 مل — عبوة كبيرة</span><b>◆</b>
+  </div>
+</div>
+
+<!-- ================= TRUST ================= -->
+<div id="bm-trust">
+  <div class="wrap"><div class="row">
+    <div class="t"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/></svg>الدفع عند الاستلام</div>
+    <div class="t"><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>شحن سريع 2–5 أيام</div>
+    <div class="t"><svg viewBox="0 0 24 24"><path d="M12 21c-5-4-8-7-8-11a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 4-3 7-8 11z" transform="scale(.9) translate(1.3,1.3)"/></svg>تركيبة نباتية لطيفة</div>
+    <div class="t"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>تأكيد هاتفي قبل الشحن</div>
+  </div></div>
+</div>
+
+<!-- ================= SHADES ================= -->
+<section id="bm-shades">
+  <div class="wrap rv">
+    <span class="kicker">4 درجات طبيعية</span>
+    <h2>اختاري درجتكِ المفضلة</h2>
+    <p class="small muted">كل الدرجات بنفس التركيبة النباتية ونفس السعر.</p>
+
+    <div class="swatches" role="radiogroup" aria-label="درجة اللون">
+      <button type="button" class="sw on" data-shade="أسود طبيعي" data-c1="#141414" data-c2="#33302C"><span class="dot" style="background:linear-gradient(150deg,#33302C,#141414)"></span><span class="nm">أسود طبيعي</span></button>
+      <button type="button" class="sw" data-shade="بني كستنائي" data-c1="#3B2314" data-c2="#6B4226"><span class="dot" style="background:linear-gradient(150deg,#6B4226,#3B2314)"></span><span class="nm">بني كستنائي</span></button>
+      <button type="button" class="sw" data-shade="بني كوفي" data-c1="#2E1D12" data-c2="#59372E"><span class="dot" style="background:linear-gradient(150deg,#59372E,#2E1D12)"></span><span class="nm">بني كوفي</span></button>
+      <button type="button" class="sw" data-shade="بني داكن" data-c1="#241710" data-c2="#48301E"><span class="dot" style="background:linear-gradient(150deg,#48301E,#241710)"></span><span class="nm">بني داكن</span></button>
+    </div>
+
+    <div class="preview" id="bm-shade-preview"><span class="lbl" id="bm-shade-lbl">أسود طبيعي</span></div>
+    <p class="note small muted">📷 M7 — استبدلي هذا المعاينة بخصلات شعر حقيقية لكل درجة (4 صور 1200×400).</p>
+  </div>
+</section>
+
+<!-- ================= INGREDIENTS ================= -->
+<section id="bm-ingred">
+  <div class="wrap rv">
+    <span class="kicker">السرّ في التركيبة</span>
+    <h2>خلاصات نباتية تصبغ وتغذّي في خطوة واحدة</h2>
+    <p class="small muted">صبغة وحمّام كريم معاً: لون واضح مع ترطيب ولمعان — بدون قسوة الصبغات التقليدية.</p>
+
+    <div class="grid">
+      <div class="card"><div class="ic">🌱</div><h3>خلاصة الجينسنغ</h3><p>تنشّط فروة الرأس وتدعم حيوية الشعر</p></div>
+      <div class="card"><div class="ic">🖤</div><h3>السمسم الأسود</h3><p>يعزّز اللون الداكن الطبيعي ولمعانه</p></div>
+      <div class="card"><div class="ic">🌿</div><h3>عشبة الفو-تي</h3><p>عناية تقليدية معروفة للشعر الداكن</p></div>
+      <div class="card"><div class="ic">🫧</div><h3>السابونين النباتي</h3><p>رغوة غنية تنظّف بلطف دون جفاف</p></div>
+    </div>
+
+    <div class="ph media"><div><span class="tag">📷 M2 — فلات لاي الأعشاب حول العبوة</span><span class="dim">1200 × 675 · WebP ≤ 130KB</span></div></div>
+  </div>
+</section>
+
+<!-- ================= COUNTERS ================= -->
+<section id="bm-count">
+  <div class="wrap rv">
+    <span class="kicker gold" style="border-color:rgba(227,200,120,.4);background:rgba(227,200,120,.1);color:var(--gold-soft)">أرقام تتحدث</span>
+    <h2 style="color:#fff">نتيجة سريعة… وأثر يدوم</h2>
+    <div class="row">
+      <div class="c"><div class="n" data-count="25">0<small> دقيقة</small></div><div class="l">فقط حتى امتصاص اللون</div></div>
+      <div class="c"><div class="n" data-count="96">0<small> ساعة</small></div><div class="l">رائحة فواكه خفيفة تبقى</div></div>
+      <div class="c"><div class="n" data-count="500">0<small> مل</small></div><div class="l">عبوة كبيرة تكفي طويلاً</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STEPS ================= -->
+<section id="bm-steps">
+  <div class="wrap rv">
+    <span class="kicker">مثل غسلة شامبو عادية</span>
+    <h2>أربع خطوات… وينتهي الأمر</h2>
+    <div class="tl">
+      <div class="st"><h3>ضعي الرغوة بلطف</h3><p>على شعر جاف، مثل الشامبو تماماً — بالقفازين المرفقين.</p></div>
+      <div class="st"><h3>وزّعيها بالتساوي</h3><p>من الجذور للأطراف، وبأداة التطبيق المجانية للدقة حول الوجه.</p></div>
+      <div class="st"><h3>انتظري 25 دقيقة</h3><p>الرغوة ثابتة لا تسيل — أكملي أعمالك براحة.</p></div>
+      <div class="st"><h3>اشطفي بالماء الفاتر</h3><p>لون متجانس يغطّي الشيب، وشعر ناعم بلمعة طبيعية.</p></div>
+    </div>
+    <div class="ph media"><div><span class="tag">🎬 V-STEPS — فيديو الاستخدام 15 ثانية (أو 3 صور M4)</span><span class="dim">1080 × 608 · MP4 ≤ 2MB</span></div></div>
+  </div>
+</section>
+
+<!-- ================= BENEFITS ================= -->
+<section id="bm-benefits">
+  <div class="wrap rv">
+    <span class="kicker">لماذا تخترنها آلاف السيدات؟</span>
+    <h2>صبغة… وعناية كاملة في عبوة واحدة</h2>
+
+    <div class="b"><div class="ic">🎯</div><div><h3>تغطية متساوية للشيب</h3><p>من الجذور حتى الأطراف، بدون بقع ولا تفاوت في اللون.</p></div></div>
+    <div class="b"><div class="ic">⏳</div><div><h3>لون حيوي يدوم</h3><p>يحافظ على ثباته غسلة بعد غسلة لفترة أطول.</p></div></div>
+    <div class="b"><div class="ic">🍑</div><div><h3>رائحة فواكه 96 ساعة</h3><p>بدل رائحة الصبغة الكيماوية، عطر خفيف يرافقكِ أياماً.</p></div></div>
+    <div class="b"><div class="ic">🌿</div><div><h3>لطيفة على الفروة الحساسة</h3><p>تركيبة نباتية مغذية تناسب الجلد الرقيق.</p></div></div>
+    <div class="b"><div class="ic">💇‍♀️</div><div><h3>لكل أنواع الشعر</h3><p>الطبيعي والكثيف والمجعد — نفس النتيجة المتجانسة.</p></div></div>
+    <div class="b"><div class="ic">✨</div><div><h3>نعومة ولمعان</h3><p>تركيبة خفيفة تترك الشعر ناعماً مرناً بلمعة صحية.</p></div></div>
+
+    <div class="ph media"><div><span class="tag">📷 M5 — قريب على جذور مغطاة بالكامل</span><span class="dim">1200 × 900 · WebP ≤ 130KB</span></div></div>
+  </div>
+</section>
+
+<!-- ================= BEFORE / AFTER ================= -->
+<section id="bm-ba">
+  <div class="wrap rv">
+    <span class="kicker gold" style="border-color:rgba(227,200,120,.4);background:rgba(227,200,120,.1);color:var(--gold-soft)">اسحبي وشوفي الفرق</span>
+    <h2 style="color:#fff">من الشيب… إلى لون متجانس يلمع</h2>
+    <p class="small" style="color:#B9CBA9;margin-bottom:18px">حرّكي المقبض الذهبي يميناً ويساراً</p>
+    <div class="frame" id="bm-ba-frame">
+      <div class="layer after-l"><div style="text-align:center"><span style="font-weight:800;display:block">📷 M3b — بعد</span><span style="font-size:11.5px;direction:ltr">1080 × 1350</span></div></div>
+      <div class="layer before-l" id="bm-ba-before"><div style="text-align:center"><span style="font-weight:800;display:block">📷 M3a — قبل</span><span style="font-size:11.5px;direction:ltr">1080 × 1350</span></div></div>
+      <div class="handle" id="bm-ba-handle"></div>
+      <span class="lab b">قبل</span><span class="lab a">بعد</span>
+    </div>
+    <p class="legal">صورة توضيحية — النتائج قد تختلف من شخص لآخر.</p>
+  </div>
+</section>
+
+<!-- ================= GIFT ================= -->
+<section id="bm-gift">
+  <div class="wrap rv">
+    <span class="kicker gold">هدية مع كل طلب</span>
+    <h2>أداة تطبيق الصبغة — مجاناً</h2>
+    <div class="box">
+      <span class="ribbon">🎁 هدية مجانية</span>
+      <div class="ph"><div><span class="tag">📷 M6</span><span class="dim">أداة التطبيق</span></div></div>
+      <div><h3>زجاجة التطبيق بفرشاة مدمجة</h3><p>وزّعي الرغوة بدقة على الجذور وخط الجبهة — تلوين نظيف مثل يد المختصّة في الصالون.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REVIEWS ================= -->
+<section id="bm-reviews">
+  <div class="wrap rv">
+    <span class="kicker">آراء العميلات</span>
+    <h2>ماذا قلن بعد التجربة؟</h2>
+    <div class="todo">⚠︎ قبل النشر: استبدلي البطاقات الثلاث بتقييمات حقيقية مع صور فعلية (أنبكسينغ أو نتيجة). لا تُنشر الصفحة بآراء تجريبية.</div>
+    <div class="r"><div class="head"><div class="ph av"></div><div><div class="who">[اسم العميلة] — [المدينة]</div><div class="stars">★★★★★</div></div></div><p class="small">«[نص التقييم الحقيقي — أبرزي جملة واحدة بالخط العريض]»</p></div>
+    <div class="r"><div class="head"><div class="ph av"></div><div><div class="who">[اسم العميلة] — [المدينة]</div><div class="stars">★★★★★</div></div></div><p class="small">«[نص التقييم الحقيقي]»</p></div>
+    <div class="r"><div class="head"><div class="ph av"></div><div><div class="who">[اسم العميلة] — [المدينة]</div><div class="stars">★★★★★</div></div></div><p class="small">«[نص التقييم الحقيقي]»</p></div>
+    <a class="cta" href="#bm-offer" style="margin-top:20px"><span class="shine"></span>أريد نفس النتيجة — اطلبي الآن</a>
+  </div>
+</section>
+
+<!-- ================= COMPARE ================= -->
+<section id="bm-compare">
+  <div class="wrap rv">
+    <span class="kicker">مقارنة صريحة</span>
+    <h2>لماذا الرغوة النباتية؟</h2>
+    <div class="tbl"><table>
+      <tr><th></th><th class="us">Bubble Mousse</th><th>صبغة كيماوية</th><th>الصالون</th></tr>
+      <tr><td>الوقت الكلي</td><td class="us ok">~25 دقيقة</td><td>ساعة+</td><td>ساعتان+</td></tr>
+      <tr><td>الرائحة</td><td class="us ok">فواكه خفيفة</td><td class="no">أمونيا نفّاذة</td><td class="no">أمونيا</td></tr>
+      <tr><td>لطف على الفروة</td><td class="us ok">نباتية لطيفة</td><td class="no">قد تهيّج</td><td>حسب المنتج</td></tr>
+      <tr><td>خطوات وخلط</td><td class="us ok">لا — مثل الشامبو</td><td class="no">خلط وفرشاة</td><td>—</td></tr>
+      <tr><td>تكلفة الجلسة</td><td class="us ok">~55 ر.س</td><td>~70 ر.س</td><td class="no">150+ ر.س</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ================= OFFER ================= -->
+<section id="bm-offer">
+  <div class="wrap rv">
+    <span class="kicker gold" style="border-color:rgba(227,200,120,.4);background:rgba(227,200,120,.1);color:var(--gold-soft)">العرض الحالي</span>
+    <h2>اختاري باقتكِ واطلبي الآن</h2>
+    <p class="small" style="color:#B9CBA9">الدفع كاملاً عند الاستلام — لا نطلب أي دفع إلكتروني.</p>
+
+    <div class="card">
+      <!-- easysell: version Shopify → <div id="easysell-form-here"></div> -->
+      <div class="opts" role="radiogroup" aria-label="اختاري الكمية">
+        <label class="opt" data-price="65" data-qty="عبوة واحدة">
+          <input type="radio" name="bm-qty" value="1">
+          <div class="row1"><span class="qty">عبوة واحدة</span><span class="p">65 <span class="cur">ر.س</span></span></div>
+          <div class="note">للتجربة الأولى — 500 مل</div>
+        </label>
+        <label class="opt sel" data-price="110" data-qty="عبوتان + هدية">
+          <span class="badge">الأكثر طلباً — وفّري 45%</span>
+          <input type="radio" name="bm-qty" value="2" checked>
+          <div class="row1"><span class="qty">عبوتان + الهدية</span><span class="p">110 <span class="cur">ر.س</span><span class="cmp"><bdi>199 ر.س</bdi></span></span></div>
+          <div class="note">لتثبيت اللون شهوراً + أداة التطبيق مجاناً</div>
+        </label>
+        <label class="opt" data-price="150" data-qty="3 عبوات + هدية">
+          <input type="radio" name="bm-qty" value="3">
+          <div class="row1"><span class="qty">3 عبوات + الهدية</span><span class="p">150 <span class="cur">ر.س</span><span class="cmp"><bdi>297 ر.س</bdi></span></span></div>
+          <div class="note">أفضل سعر للعبوة — شاركيها مع العائلة</div>
+        </label>
+      </div>
+
+      <form id="bm-form" novalidate>
+        <label class="f" for="bm-shade-sel">درجة اللون</label>
+        <select id="bm-shade-sel" name="shade">
+          <option>أسود طبيعي</option><option>بني كستنائي</option><option>بني كوفي</option><option>بني داكن</option>
+        </select>
+        <div class="field">
+          <label class="f" for="bm-name">الاسم الكامل</label>
+          <input type="text" id="bm-name" name="name" autocomplete="name" required>
+          <p class="err">فضلاً أدخلي اسمكِ الكامل</p>
+        </div>
+        <div class="field">
+          <label class="f" for="bm-phone">رقم الجوال</label>
+          <input type="tel" id="bm-phone" name="phone" inputmode="numeric" autocomplete="tel" dir="ltr" style="text-align:end" placeholder="05XXXXXXXX" required>
+          <p class="err">أدخلي رقم جوال سعودي صحيح يبدأ بـ 05</p>
+        </div>
+        <div class="field">
+          <label class="f" for="bm-city">المدينة</label>
+          <input type="text" id="bm-city" name="city" autocomplete="address-level2" required>
+          <p class="err">فضلاً أدخلي مدينتكِ</p>
+        </div>
+        <div class="total"><span>الإجمالي — يُدفع عند الاستلام</span><span id="bm-total">110 ر.س</span></div>
+        <button type="submit" class="cta" id="bm-submit"><span class="shine"></span>تأكيد الطلب — الدفع عند الاستلام</button>
+        <p class="cta-note">لا دفع إلكتروني · نتصل بكِ خلال 24 ساعة للتأكيد</p>
+      </form>
+
+      <div class="success" aria-live="polite">
+        <div class="ic">✓</div>
+        <h3 style="font-size:19px;margin-bottom:6px">تم استلام طلبكِ بنجاح 🌿</h3>
+        <p class="small muted">سيتصل بكِ فريقنا خلال 24 ساعة لتأكيد الطلب واللون، ثم يصلكِ الشحن خلال 2–5 أيام عمل. الدفع كاملاً عند الاستلام.</p>
+      </div>
+
+      <ul class="stack">
+        <li><span class="ok">✓</span> عبوتا Bubble Mousse نباتية 500 مل</li>
+        <li><span class="ok">✓</span> 🎁 أداة تطبيق الصبغة — مجاناً</li>
+        <li><span class="ok">✓</span> قفازات مع كل عبوة</li>
+        <li><span class="ok">✓</span> فحص الطلب أمام المندوب قبل الدفع</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section id="bm-faq">
+  <div class="wrap rv">
+    <span class="kicker">أسئلة شائعة</span>
+    <h2>كل ما تودّين معرفته</h2>
+    <details><summary>هل تناسب الفروة الحساسة؟</summary><div class="a">نعم — التركيبة نباتية لطيفة مصممة للفروة الحساسة والجلد الرقيق. جرّبي كمية صغيرة خلف الأذن أولاً كعادة صحية مع أي منتج جديد.</div></details>
+    <details><summary>ما الدرجات المتوفرة؟</summary><div class="a">أربع درجات: أسود طبيعي، بني كستنائي، بني كوفي، وبني داكن — تحددين درجتكِ في نموذج الطلب ويؤكدها معكِ فريقنا هاتفياً.</div></details>
+    <details><summary>كم تكفي العبوة؟</summary><div class="a">العبوة 500 مل — من أكبر الأحجام المتوفرة، وتكفي لعدة استخدامات حسب طول الشعر وكثافته.</div></details>
+    <details><summary>هل تغطي الشيب فعلاً؟</summary><div class="a">نعم، تغطي الشعر الرمادي بشكل متساوٍ من الجذور للأطراف خلال 25 دقيقة، مع إعادة الاستخدام عند ظهور جذور جديدة.</div></details>
+    <details><summary>كيف أدفع ومتى يصلني الطلب؟</summary><div class="a">الدفع كاملاً عند الاستلام. التوصيل خلال 2–5 أيام عمل لجميع مدن المملكة، بعد مكالمة تأكيد الطلب.</div></details>
+    <details><summary>ماذا لو وصل المنتج متضرراً؟</summary><div class="a">افحصي طلبكِ أمام المندوب — وإن وجدتِ أي ضرر نستبدله مباشرة دون أي تكلفة.</div></details>
+  </div>
+</section>
+
+<!-- ================= FINAL ================= -->
+<section id="bm-final">
+  <div class="wrap rv">
+    <div class="drop" aria-hidden="true">
+      <svg viewBox="0 0 74 74"><defs>
+        <linearGradient id="bm-dg" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#E3C878"/><stop offset=".5" stop-color="#C29A3B"/><stop offset=".5" stop-color="#FFFFFF"/><stop offset="1" stop-color="#EDE7D6"/>
+        </linearGradient></defs>
+      <path d="M37 6C37 6 16 32 16 47a21 21 0 0 0 42 0C58 32 37 6 37 6z" fill="url(#bm-dg)" stroke="#8F6E1F" stroke-width="1.5"/></svg>
+    </div>
+    <h2>لون يدوم، رائحة تبقى… وراحة الشامبو</h2>
+    <p class="muted small" style="margin-bottom:20px">عبوتان + هدية أداة التطبيق بـ <b>110 ر.س</b> بدل <s>199 ر.س</s> — الدفع عند الاستلام.</p>
+    <a class="cta" href="#bm-offer"><span class="shine"></span>اطلبي الآن — الدفع عند الاستلام</a>
+    <footer>Bubble Mousse® — جميع الحقوق محفوظة · سياسة الاستبدال · التواصل عبر واتساب</footer>
+  </div>
+</section>
+
+<!-- ================= STICKY ================= -->
+<div id="bm-sticky" aria-hidden="true">
+  <div class="in">
+    <div class="pr"><span class="name" id="bm-sticky-name">عبوتان + هدية</span><br><span class="val" id="bm-sticky-val">110 ر.س</span></div>
+    <a class="cta" href="#bm-offer">اطلبي الآن</a>
+  </div>
+</div>
+
+<script>
+(function(){
+var page=document.getElementById('bm');
+var reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---- Hero canvas: bulles + feuilles flottantes ---- */
+var cv=document.getElementById('bm-fx');
+if(cv&&!reduced){
+  var ctx=cv.getContext('2d'),W,H,parts=[];
+  function size(){W=cv.width=cv.offsetWidth*devicePixelRatio;H=cv.height=cv.offsetHeight*devicePixelRatio}
+  size();addEventListener('resize',size);
+  for(var i=0;i<26;i++){parts.push({x:Math.random(),y:Math.random(),r:(2+Math.random()*7),s:.12+Math.random()*.3,o:.06+Math.random()*.16,leaf:Math.random()<.3,a:Math.random()*6.28,va:(Math.random()-.5)*.02})}
+  (function loop(){
+    ctx.clearRect(0,0,W,H);
+    parts.forEach(function(p){
+      p.y-=p.s/600;p.a+=p.va;if(p.y<-0.05){p.y=1.05;p.x=Math.random()}
+      var x=p.x*W,y=p.y*H,r=p.r*devicePixelRatio;
+      ctx.globalAlpha=p.o;
+      if(p.leaf){ctx.save();ctx.translate(x,y);ctx.rotate(p.a);ctx.fillStyle='#7FC488';ctx.beginPath();ctx.ellipse(0,0,r*1.5,r*.65,0,0,6.28);ctx.fill();ctx.restore()}
+      else{ctx.strokeStyle='#E9F3E2';ctx.lineWidth=devicePixelRatio;ctx.beginPath();ctx.arc(x,y,r,0,6.28);ctx.stroke();
+        ctx.globalAlpha=p.o*.7;ctx.fillStyle='#E9F3E2';ctx.beginPath();ctx.arc(x-r*.35,y-r*.35,r*.18,0,6.28);ctx.fill()}
+    });
+    ctx.globalAlpha=1;requestAnimationFrame(loop);
+  })();
+}
+
+/* ---- Scroll reveals ---- */
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+page.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+
+/* ---- Compteurs animés ---- */
+var cio=new IntersectionObserver(function(es){es.forEach(function(e){
+  if(!e.isIntersecting)return;cio.unobserve(e.target);
+  var el=e.target,target=+el.dataset.count,small=el.querySelector('small'),suffix=small?small.outerHTML:'';
+  if(reduced){el.innerHTML=target+suffix;return}
+  var t0=performance.now();
+  (function step(t){var p=Math.min((t-t0)/1200,1);p=1-Math.pow(1-p,3);
+    el.innerHTML=Math.round(target*p)+suffix;
+    if(p<1)requestAnimationFrame(step)})(t0);
+})},{threshold:.6});
+page.querySelectorAll('[data-count]').forEach(function(el){cio.observe(el)});
+
+/* ---- Sélecteur de teintes ---- */
+var sws=page.querySelectorAll('#bm-shades .sw');
+var prev=document.getElementById('bm-shade-preview');
+var lbl=document.getElementById('bm-shade-lbl');
+var shadeSel=document.getElementById('bm-shade-sel');
+sws.forEach(function(sw){sw.addEventListener('click',function(){
+  sws.forEach(function(x){x.classList.remove('on')});sw.classList.add('on');
+  prev.style.background='linear-gradient(120deg,'+sw.dataset.c1+','+sw.dataset.c2+' 60%,'+sw.dataset.c1+')';
+  lbl.textContent=sw.dataset.shade;
+  if(shadeSel)shadeSel.value=sw.dataset.shade;
+})});
+
+/* ---- Marquee: dupliquer la piste ---- */
+var mq=document.getElementById('bm-mq-track');
+if(mq)mq.innerHTML+=mq.innerHTML;
+
+/* ---- Bundle selector ---- */
+var opts=page.querySelectorAll('#bm-offer .opt');
+var totalEl=document.getElementById('bm-total');
+var stVal=document.getElementById('bm-sticky-val');
+var stName=document.getElementById('bm-sticky-name');
+opts.forEach(function(o){o.addEventListener('change',function(){
+  opts.forEach(function(x){x.classList.remove('sel')});o.classList.add('sel');
+  totalEl.textContent=o.dataset.price+' ر.س';stVal.textContent=o.dataset.price+' ر.س';stName.textContent=o.dataset.qty;
+})});
+
+/* ---- Formulaire COD ---- */
+var form=document.getElementById('bm-form');
+var offer=document.getElementById('bm-offer');
+var submitting=false;
+function bad(f,is){f.closest('.field').classList.toggle('bad',is);return !is}
+form.addEventListener('submit',function(e){
+  e.preventDefault();if(submitting)return;
+  var name=document.getElementById('bm-name'),phone=document.getElementById('bm-phone'),city=document.getElementById('bm-city');
+  var ok=true;
+  ok=bad(name,name.value.trim().length<3)&&ok;
+  ok=bad(phone,!/^05\d{8}$/.test(phone.value.replace(/[\s-]/g,'')))&&ok;
+  ok=bad(city,city.value.trim().length<2)&&ok;
+  if(!ok)return;
+  submitting=true;
+  var btn=document.getElementById('bm-submit');
+  btn.textContent='جارٍ إرسال الطلب…';btn.disabled=true;
+  /* ── WIRING (version Shopify) ─────────────────────────────
+     Démo : simulation. En prod EasySell remplace ce bloc via
+     l'ancre #easysell-form-here (fallback /cart/add).
+     TRACKING sur le succès uniquement :
+     fbq('track','Purchase',{value:PRICE,currency:'SAR'});
+     ttq.track('CompletePayment'); snaptr('track','PURCHASE');
+     dataLayer.push({event:'cod_order',value:PRICE,shade:SHADE});
+  ─────────────────────────────────────────────────────────── */
+  setTimeout(function(){offer.classList.add('done');offer.scrollIntoView({behavior:'smooth'})},900);
+});
+['bm-name','bm-phone','bm-city'].forEach(function(id){
+  var f=document.getElementById(id);
+  f.addEventListener('input',function(){f.closest('.field').classList.remove('bad')});
+});
+
+/* ---- Sticky bar ---- */
+var sticky=document.getElementById('bm-sticky');
+var hero=document.getElementById('bm-hero');
+var heroGone=false,offerSeen=false;
+function upd(){var s=heroGone&&!offerSeen;sticky.classList.toggle('show',s);sticky.setAttribute('aria-hidden',s?'false':'true')}
+new IntersectionObserver(function(en){heroGone=!en[0].isIntersecting;upd()},{threshold:0}).observe(hero);
+new IntersectionObserver(function(en){offerSeen=en[0].isIntersecting;upd()},{threshold:.05}).observe(offer);
+
+/* ---- Slider avant/après ---- */
+var frame=document.getElementById('bm-ba-frame');
+var before=document.getElementById('bm-ba-before');
+var handle=document.getElementById('bm-ba-handle');
+function setPos(cx){var r=frame.getBoundingClientRect();var p=Math.min(Math.max((cx-r.left)/r.width,0.05),0.95)*100;
+  before.style.clipPath='inset(0 0 0 '+p+'%)';handle.style.left=p+'%'}
+frame.addEventListener('pointerdown',function(e){
+  frame.setPointerCapture(e.pointerId);setPos(e.clientX);
+  function mv(ev){setPos(ev.clientX)}
+  function up(){frame.removeEventListener('pointermove',mv);frame.removeEventListener('pointerup',up)}
+  frame.addEventListener('pointermove',mv);frame.addEventListener('pointerup',up);
+});
+
+/* ---- Ancres douces ---- */
+page.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){var t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView(reduced?{}:{behavior:'smooth'})}});
+});
+})();
+</script>
+</div>

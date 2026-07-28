@@ -1,0 +1,792 @@
+<title>Bubble Mousse — لون يعود في ٢٥ دقيقة</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<div dir="rtl" lang="ar" id="bm" data-shade="black">
+<style>
+{{FONTS}}
+
+/* ============================ TOKENS ============================ */
+#bm{
+  --ground:#0A0E0B; --ground-2:#0D120E;
+  --ivory:#F4F1E9; --sage:#9AA79B; --faint:#5F6B60;
+  --gold:#D9AC55; --gold-soft:#F0D89A; --gold-deep:#A97E2F;
+  --hair:#151A16;
+  --amb:16,26,20;            /* ambient RGB — change avec la teinte */
+  --glass:rgba(244,241,233,.04);
+  --edge:rgba(244,241,233,.10);
+  --edge-soft:rgba(244,241,233,.06);
+  --danger:#C96A5B;
+  --disp:'Tajawal',system-ui,sans-serif;
+  --body:'IBMPlexAr','Segoe UI',Tahoma,sans-serif;
+  --mono:'PlexMono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-family:var(--body); background:var(--ground); color:var(--ivory);
+  font-size:16px; line-height:1.85; display:block; overflow-x:clip;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  transition:background 1.2s ease;
+}
+#bm *{margin:0;padding:0;box-sizing:border-box}
+#bm ::selection{background:var(--gold);color:#141005}
+#bm img{max-width:100%;height:auto;display:block}
+#bm .wrap{max-width:560px;margin-inline:auto;padding-inline:22px}
+#bm section{padding-block:clamp(64px,14vw,110px);position:relative}
+#bm h1,#bm h2{font-family:var(--disp);font-weight:800;line-height:1.28;text-wrap:balance;letter-spacing:normal}
+#bm h2{font-size:clamp(27px,7vw,36px);margin-bottom:14px}
+#bm .lead{color:var(--sage);font-size:16.5px}
+#bm .eyebrow{display:block;font-family:var(--body);font-weight:600;font-size:11.5px;letter-spacing:.32em;color:var(--gold);margin-bottom:18px}
+#bm .num{font-variant-numeric:tabular-nums}
+#bm .gold-t{background:linear-gradient(92deg,var(--gold-soft) 10%,var(--gold) 55%,var(--gold-deep));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* grain : tuile feTurbulence rasterisée une seule fois puis répétée */
+#bm::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:160px 160px}
+#bm.lowend::after{display:none}
+
+/* ambient glow par section */
+#bm .aura::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(90% 55% at 50% 0%,rgba(var(--amb),.55),transparent 65%);
+  transition:background 1.2s ease}
+
+/* ============================ REVEALS ============================ */
+#bm .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0;user-select:none}
+#bm.js .w{display:inline-block;opacity:0;transform:translateY(.42em);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.75,.3,1)}
+#bm.js .rv.in .w{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){#bm.js .w{opacity:1;transform:none;transition:none}}
+
+/* barre de progression — le "clock" unique rendu visible */
+#progress{position:fixed;top:0;inset-inline:0;height:2px;z-index:80;background:linear-gradient(90deg,var(--gold-soft),var(--gold));transform-origin:0 50%;transform:scaleX(0);pointer-events:none}
+/* Si le navigateur sait piloter une animation par le scroll, elle tourne hors du main thread.
+   Sinon le rAF plus bas prend le relais. */
+@supports (animation-timeline: scroll()){
+  @media (prefers-reduced-motion:no-preference){
+    #progress{animation:bm-prog linear both;animation-timeline:scroll(root block)}
+    @keyframes bm-prog{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  }
+}
+
+#bm.js .rv{opacity:0;transform:translateY(34px);transition:opacity .9s ease,transform .9s cubic-bezier(.19,.8,.26,1)}
+#bm.js .rv.in{opacity:1;transform:none}
+#bm.js .rv.d1{transition-delay:.08s} #bm.js .rv.d2{transition-delay:.16s} #bm.js .rv.d3{transition-delay:.24s}
+@media (prefers-reduced-motion:reduce){#bm.js .rv{opacity:1;transform:none;transition:none}}
+
+/* ============================ HERO ============================ */
+#hero{min-height:100svh;display:flex;flex-direction:column;padding-block:0;overflow:hidden;background:var(--ground)}
+#hero .bg{position:absolute;inset:0;background-image:url("{{IMG:hero-bg}}");background-size:cover;background-position:70% 30%;opacity:.62}
+#hero .veil{position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(10,14,11,.30) 0%,rgba(10,14,11,.78) 52%,var(--ground) 88%),
+  radial-gradient(120% 70% at 85% 10%,transparent 30%,rgba(10,14,11,.5) 75%)}
+#hero .amb{position:absolute;inset:0;background:radial-gradient(85% 50% at 50% 100%,rgba(var(--amb),.6),transparent 70%);transition:background 1.2s ease}
+#hero canvas{position:absolute;inset:0;pointer-events:none}
+#hero .in-wrap{position:relative;display:flex;flex-direction:column;flex:1;width:100%;max-width:560px;margin-inline:auto;padding:0 22px calc(30px + env(safe-area-inset-bottom))}
+#hero .top{display:flex;justify-content:space-between;align-items:center;padding-block:20px}
+#hero .logo{font-family:var(--disp);font-weight:900;font-size:16px;letter-spacing:.04em;color:var(--ivory)}
+#hero .logo i{font-style:normal;color:var(--gold)}
+#hero .top .tag{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.14em;color:var(--sage);border:1px solid var(--edge);border-radius:999px;padding:6px 14px}
+#hero .mid{flex:1;display:flex;flex-direction:column;justify-content:flex-end}
+#hero .eyebrow{margin-bottom:12px}
+#hero h1{font-size:clamp(40px,12.5vw,64px);font-weight:900;line-height:1.16;margin-bottom:16px}
+#hero h1 .dim{display:block;color:var(--faint);font-size:.62em;font-weight:800;letter-spacing:0}
+#hero .sub{color:var(--sage);font-size:16px;max-width:42ch;margin-bottom:26px}
+#hero .sub b{color:var(--ivory);font-weight:600}
+#hero .meta{display:flex;align-items:center;gap:14px;margin-bottom:18px;font-size:13px;color:var(--sage)}
+#hero .meta .stars{color:var(--gold);letter-spacing:3px;font-size:13px}
+#hero .meta .stars .half{color:var(--faint)}
+#hero .meta .sep{width:1px;height:14px;background:var(--edge)}
+#hero .price-line{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+#hero .price-line .p{font-family:var(--disp);font-weight:900;font-size:44px;line-height:1;color:var(--ivory)}
+#hero .price-line .p small{font-size:15px;font-weight:600;color:var(--sage)}
+#hero .price-line .old{color:var(--faint);text-decoration:line-through;font-size:17px}
+#hero .price-line .ship{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.08em;color:var(--leaf,#9AA79B);border:1px solid var(--edge);border-radius:999px;padding:5px 12px}
+#hero .price-line .off{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--gold);border:1px solid rgba(217,172,85,.4);border-radius:999px;padding:5px 12px}
+
+/* ============================ CTA ============================ */
+#bm .cta{position:relative;display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:60px;
+  border:0;border-radius:14px;background:linear-gradient(115deg,var(--gold-soft),var(--gold) 50%,var(--gold-deep));
+  color:#161006;font-family:var(--disp);font-size:18px;font-weight:800;cursor:pointer;text-decoration:none;
+  box-shadow:0 14px 40px rgba(217,172,85,.28),inset 0 1px 0 rgba(255,255,255,.5);
+  transition:transform .14s ease;overflow:hidden}
+#bm .cta:active{transform:scale(.98)}
+#bm .cta:focus-visible{outline:2.5px solid var(--ivory);outline-offset:3px}
+#bm .cta .sh{position:absolute;top:0;bottom:0;width:52px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-18deg);inset-inline-start:-80px;animation:sh 3.6s ease-in-out infinite}
+@keyframes sh{0%,58%{inset-inline-start:-80px}88%,100%{inset-inline-start:130%}}
+@media (prefers-reduced-motion:reduce){#bm .cta .sh{display:none}}
+#bm .cta-note{text-align:center;font-size:12.5px;margin-top:12px;color:var(--sage)}
+#bm .cta-note b{color:var(--gold-soft);font-weight:600}
+#bm .cta-ghost{display:flex;align-items:center;justify-content:center;min-height:54px;border:1px solid var(--edge);border-radius:14px;color:var(--ivory);font-family:var(--disp);font-weight:800;font-size:15.5px;text-decoration:none;background:var(--glass)}
+
+/* ============================ TICKER ============================ */
+#ticker{border-block:1px solid var(--edge-soft);padding-block:14px;overflow:hidden;background:var(--ground-2);position:relative}
+#ticker:hover .tk,#ticker:focus-within .tk,#ticker.paused .tk{animation-play-state:paused}
+#tk-pause{position:absolute;inset-inline-end:8px;top:50%;transform:translateY(-50%);z-index:2;width:26px;height:26px;border-radius:50%;
+  border:1px solid var(--edge);background:rgba(10,14,11,.85);color:var(--sage);font-family:var(--mono);font-size:10px;cursor:pointer;line-height:1}
+#tk-pause:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#ticker .tk{display:flex;gap:38px;width:max-content;white-space:nowrap;animation:tk 30s linear infinite;font-size:12px;font-weight:600;letter-spacing:.22em;color:var(--sage)}
+#ticker .tk span{display:flex;align-items:center;gap:38px}
+#ticker .tk i{font-style:normal;color:var(--gold);font-size:8px}
+@keyframes tk{to{transform:translateX(50%)}}
+@media (prefers-reduced-motion:reduce){#ticker .tk{animation:none}}
+
+/* ============================ OFFRE RAPIDE ============================ */
+#quick{padding-block:clamp(48px,10vw,72px)}
+#quick .q-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:22px}
+#quick .q-card{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;
+  border:1.5px solid var(--edge);border-radius:14px;padding:18px 6px 14px;background:var(--glass);
+  text-decoration:none;color:var(--sage);transition:border-color .2s,background .2s}
+#quick .q-card.on{border-color:var(--gold);background:rgba(217,172,85,.07);color:var(--ivory)}
+#quick .q-card .q-n{font-family:var(--disp);font-weight:900;font-size:26px;line-height:1;color:var(--ivory)}
+#quick .q-card .q-l{font-size:11px;line-height:1.4;text-align:center}
+#quick .q-card .q-p{font-family:var(--disp);font-weight:800;font-size:15px;color:var(--gold);margin-top:4px}
+#quick .q-card .q-p::after{content:" ر.س";font-family:var(--body);font-size:10px;font-weight:600;color:var(--sage)}
+#quick .q-card .q-b{position:absolute;top:-10px;inset-inline-start:50%;transform:translateX(50%);
+  background:linear-gradient(115deg,var(--gold-soft),var(--gold));color:#161006;font-family:var(--mono);
+  font-size:9px;font-weight:500;letter-spacing:.06em;border-radius:999px;padding:2px 9px;white-space:nowrap}
+
+/* ============================ EDITORIAL ============================ */
+#truth p{font-family:var(--disp);font-weight:800;font-size:clamp(26px,7.6vw,38px);line-height:1.45;color:var(--faint)}
+#truth p b{color:var(--ivory);font-weight:800}
+#truth p .x{color:var(--danger)}
+#truth .pivot{margin-top:26px;font-family:var(--disp);font-weight:800;font-size:clamp(22px,6vw,28px)}
+
+/* ============================ SHADES ============================ */
+#shades .strip{border-radius:18px;overflow:hidden;border:1px solid var(--edge);margin-block:26px 18px;position:relative}
+#shades .strip img{width:100%;aspect-ratio:11/6;object-fit:cover}
+#shades .strip .spot{position:absolute;top:6px;bottom:6px;width:25%;left:0;z-index:2;border:1.5px solid var(--gold);border-radius:12px;
+  box-shadow:0 0 0 999px rgba(6,9,7,.62);transition:left .75s cubic-bezier(.2,.75,.3,1)}
+#shades .strip::after{content:"";position:absolute;inset:0;background:rgba(var(--amb),.28);mix-blend-mode:soft-light;transition:background 1.2s ease}
+#shades .chips{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+#shades .chip{font-family:var(--body);border:1px solid var(--edge);border-radius:12px;background:var(--glass);color:var(--sage);padding:12px 4px 11px;cursor:pointer;text-align:center;transition:border-color .25s,color .25s,background .25s}
+#shades .chip .dot{display:block;width:26px;height:26px;border-radius:50%;margin:0 auto 8px;box-shadow:inset 0 -6px 10px rgba(255,255,255,.14),inset 0 5px 9px rgba(0,0,0,.55),0 0 0 1px var(--edge)}
+#shades .chip .nm{font-size:11.5px;font-weight:600;line-height:1.4}
+#shades .chip.on{border-color:var(--gold);color:var(--ivory);background:rgba(217,172,85,.07)}
+#shades .hint{font-size:12.5px;color:var(--faint)}
+
+/* ============================ FULL-BLEED CLAIMS ============================ */
+#bm .bleed{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--edge)}
+#bm .bleed img{width:100%;aspect-ratio:4/3;object-fit:cover}
+#bm .bleed .cap{position:absolute;inset-inline:0;bottom:0;padding:64px 20px 18px;background:linear-gradient(180deg,transparent,rgba(8,11,9,.55) 42%,rgba(8,11,9,.93) 78%)}
+#bm .bleed .cap h3{font-family:var(--disp);font-weight:800;font-size:21px;margin-bottom:4px}
+#bm .bleed .cap p{font-size:13px;color:var(--sage)}
+
+/* ============================ INGREDIENTS ============================ */
+#ingred .rows{margin-top:26px;border-top:1px solid var(--edge-soft)}
+#ingred .row{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:baseline;padding-block:16px;border-bottom:1px solid var(--edge-soft)}
+#ingred .row .i{font-family:var(--disp);font-weight:800;color:var(--gold);font-size:13px}
+#ingred .row h3{font-family:var(--disp);font-size:16.5px;font-weight:800}
+#ingred .row p{font-size:12.5px;color:var(--sage);grid-column:2/4}
+#ingred .row .r{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--faint)}
+#ingred .bleed{margin-top:26px}
+
+/* ============================ STEPS ============================ */
+#steps .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px}
+#steps .s{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--edge)}
+#steps .s img{width:100%;height:auto;aspect-ratio:1;object-fit:cover}
+#steps .s .n{position:absolute;top:8px;inset-inline-start:8px;width:26px;height:26px;border-radius:50%;background:rgba(8,11,9,.75);color:var(--gold);font-family:var(--disp);font-weight:800;font-size:12.5px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(217,172,85,.45)}
+#steps .caps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+#steps .caps p{font-size:11.5px;color:var(--sage);line-height:1.6;text-align:center}
+#steps .clock{display:flex;align-items:baseline;justify-content:center;gap:12px;margin-top:34px;font-family:var(--disp)}
+#steps .clock .big{font-size:clamp(56px,17vw,84px);font-weight:900;line-height:1}
+#steps .clock .u{color:var(--sage);font-size:15px;font-weight:600}
+#steps .clock-l{ text-align:center;color:var(--sage);font-size:13px;margin-top:4px}
+
+/* ============================ BEFORE/AFTER ============================ */
+#ba .frame{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:3/4;touch-action:none;user-select:none;border:1px solid var(--edge);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+#ba .layer{position:absolute;inset:0}
+#ba .layer img{width:100%;height:100%;object-fit:cover}
+#ba .before-l{clip-path:inset(0 0 0 50%)}
+#ba .handle{position:absolute;top:0;bottom:0;left:50%;width:2px;background:var(--gold-soft);transform:translateX(-50%)}
+#ba .handle::after{content:"⇄";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;background:linear-gradient(130deg,var(--gold-soft),var(--gold));color:#161006;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;box-shadow:0 10px 26px rgba(0,0,0,.5)}
+#ba .lab{position:absolute;top:12px;font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.14em;background:rgba(8,11,9,.65);color:var(--ivory);border:1px solid var(--edge);border-radius:999px;padding:4px 13px}
+#ba .lab.b{right:12px}#ba .lab.a{left:12px}
+#ba .legal{margin-top:12px;text-align:center;color:var(--faint);font-size:11.5px}
+
+/* ============================ RESULT / CLAIMS ============================ */
+#result .claims{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--edge-soft);border:1px solid var(--edge-soft);border-radius:14px;overflow:hidden;margin-top:24px}
+#result .claims div{background:var(--ground);padding:16px 8px;text-align:center}
+#result .claims b{font-family:var(--disp);font-weight:800;font-size:14px;display:block;margin-bottom:3px}
+#result .claims span{font-size:11px;color:var(--sage)}
+
+/* ============================ GIFT ============================ */
+#gift .card{position:relative;border:1px solid rgba(217,172,85,.5);border-radius:18px;padding:26px 22px;background:
+  radial-gradient(120% 120% at 100% 0%,rgba(217,172,85,.1),transparent 55%),var(--glass)}
+#gift .card .rib{position:absolute;top:-12px;inset-inline-start:18px;background:linear-gradient(115deg,var(--gold-soft),var(--gold));color:#161006;font-family:var(--disp);font-size:12px;font-weight:800;border-radius:999px;padding:3px 16px}
+#gift .card h3{font-family:var(--disp);font-size:19px;font-weight:800;margin-bottom:6px}
+#gift .card p{font-size:13.5px;color:var(--sage)}
+#gift .card .v{margin-top:12px;font-size:12px;color:var(--gold);letter-spacing:.1em;font-weight:600}
+
+/* ============================ GARANTIE ============================ */
+#warranty .w-grid{display:grid;gap:10px;margin-top:20px}
+#warranty .w-card{border:1px solid var(--edge-soft);border-radius:16px;padding:18px 20px;background:var(--glass);
+  display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:baseline}
+#warranty .w-card .w-n{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--gold);grid-row:1/3}
+#warranty .w-card h3{font-family:var(--disp);font-weight:800;font-size:16px}
+#warranty .w-card p{font-size:13px;color:var(--sage);grid-column:2}
+#warranty .w-todo{border:1px dashed var(--danger);color:var(--danger);border-radius:14px;padding:13px 16px;
+  margin-top:14px;font-size:12px;font-weight:600;line-height:1.6;direction:ltr;text-align:left}
+
+/* ============================ REVIEWS ============================ */
+#reviews .r{border:1px solid var(--edge-soft);border-radius:16px;padding:18px 20px;margin-top:12px;background:var(--glass)}
+#reviews .r .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+#reviews .r .who{font-family:var(--disp);font-weight:800;font-size:14px}
+#reviews .r .stars{color:var(--gold);font-size:12px;letter-spacing:2.5px}
+#reviews .r p{font-size:13.5px;color:var(--sage)}
+#reviews .todo{border:1px dashed var(--danger);color:var(--danger);border-radius:14px;padding:13px 16px;margin-top:16px;font-size:12.5px;font-weight:600}
+
+/* ============================ OFFER ============================ */
+#offer .card{border:1px solid var(--edge);border-radius:22px;background:rgba(13,18,14,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:26px 20px;margin-top:26px;box-shadow:0 40px 100px rgba(0,0,0,.5)}
+#offer .opt{position:relative;display:block;border:1.5px solid var(--edge);border-radius:14px;padding:15px 16px;margin-top:12px;cursor:pointer;background:var(--glass);transition:border-color .2s,background .2s}
+#offer .opt input{position:absolute;opacity:0}
+#offer .opt .r1{display:flex;justify-content:space-between;align-items:center;gap:8px}
+#offer .opt .q{font-family:var(--disp);font-weight:800;font-size:15.5px}
+#offer .opt .p{font-family:var(--disp);font-weight:800;font-size:18px;white-space:nowrap}
+#offer .opt .p small{font-size:12px;color:var(--sage);font-weight:600}
+#offer .opt .cmp{color:var(--faint);text-decoration:line-through;font-size:12.5px;margin-inline-start:7px}
+#offer .opt .note{font-size:12px;color:var(--sage);margin-top:3px}
+#offer .opt.sel{border-color:var(--gold);background:rgba(217,172,85,.06)}
+#offer .opt .badge{position:absolute;top:-11px;inset-inline-start:14px;background:linear-gradient(115deg,var(--gold-soft),var(--gold));color:#161006;font-family:var(--disp);font-size:11px;font-weight:800;border-radius:999px;padding:2px 13px}
+#offer label.f{display:block;font-weight:600;font-size:13.5px;margin:16px 0 7px;color:var(--ivory)}
+#offer input[type=text],#offer input[type=tel],#offer select{width:100%;min-height:54px;border:1.5px solid var(--edge);border-radius:13px;background:rgba(8,11,9,.6);font-family:var(--body);font-size:16px;padding-inline:15px;color:var(--ivory)}
+#offer select option{color:#111;background:#fff}
+#offer input:focus,#offer select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,172,85,.18)}
+#offer .err{display:none;color:var(--danger);font-size:12px;margin-top:6px;font-weight:600}
+#offer .field.bad input{border-color:var(--danger)}
+#offer .field.bad .err{display:block}
+#offer .ship-line{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--sage);margin-top:20px}
+#offer .ship-line .free{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--gold)}
+#offer .no-extra{font-size:12px;color:var(--faint);margin-top:8px;text-align:center}
+#offer .total{display:flex;justify-content:space-between;align-items:center;font-family:var(--disp);font-weight:800;font-size:17px;border-top:1px dashed var(--edge);margin-top:12px;padding-top:16px}
+#offer .cta{margin-top:16px}
+#offer .success{display:none;text-align:center;padding:30px 8px}
+#offer .success .ic{width:60px;height:60px;border-radius:50%;border:1.5px solid var(--gold);color:var(--gold);font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+#offer.done .success{display:block}
+#offer.done form,#offer.done .opts,#offer.done .total{display:none}
+#offer .inc{margin-top:20px;border-top:1px solid var(--edge-soft);padding-top:6px}
+#offer .inc li{list-style:none;display:flex;gap:12px;align-items:center;padding-block:8px;font-size:13.5px;color:var(--sage)}
+#offer .inc .d{color:var(--gold);font-size:9px}
+
+/* ============================ FAQ ============================ */
+#faq details{border-bottom:1px solid var(--edge-soft)}
+#faq details:first-of-type{border-top:1px solid var(--edge-soft)}
+#faq summary{list-style:none;cursor:pointer;font-family:var(--disp);font-weight:800;font-size:15.5px;padding:17px 2px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+#faq summary::-webkit-details-marker{display:none}
+#faq summary::after{content:"+";font-size:20px;color:var(--gold);font-weight:400;transition:transform .18s}
+#faq details[open] summary::after{transform:rotate(45deg)}
+#faq .a{padding:0 2px 17px;font-size:13.5px;color:var(--sage)}
+
+/* ============================ FINAL ============================ */
+#final{text-align:center;padding-bottom:150px}
+#final h2{font-size:clamp(30px,9vw,44px);font-weight:900}
+#final .sub2{color:var(--sage);font-size:14.5px;margin-bottom:28px}
+#final .wordmark{font-family:var(--disp);font-weight:900;font-size:clamp(52px,17vw,110px);
+  letter-spacing:.01em;line-height:.9;margin-top:64px;opacity:.16;white-space:nowrap;
+  direction:ltr;overflow:hidden;text-overflow:clip;-webkit-user-select:none;user-select:none}
+#final footer{margin-top:44px;font-size:11px;color:var(--faint);letter-spacing:.06em}
+
+/* Appareil modeste : on retire le flou d'arrière-plan (multi-passes GPU) et on opacifie */
+#bm.lowend #sticky,#bm.lowend #offer .card{backdrop-filter:none;-webkit-backdrop-filter:none}
+#bm.lowend #sticky{background:#0A0E0B}
+#bm.lowend #offer .card{background:#0D120E}
+
+/* Sections hors écran : on évite d'en payer le rendu tant qu'elles ne sont pas approchées */
+#ingred,#steps,#ba,#result,#gift,#warranty,#reviews,#compare,#faq,#final{content-visibility:auto;contain-intrinsic-size:auto 900px}
+#bm .bleed,#reviews .r,#offer .opt,#ingred .row{contain:content}
+
+/* ============================ STICKY ============================ */
+#sticky{position:fixed;bottom:0;inset-inline:0;z-index:70;background:rgba(10,14,11,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--edge);padding:10px 16px calc(10px + env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .3s ease}
+#sticky.show{transform:none}
+#sticky .in{max-width:560px;margin-inline:auto;display:flex;align-items:center;gap:14px}
+#sticky .pr .n1{font-size:11px;color:var(--sage);white-space:nowrap}
+#sticky .pr .n2{font-family:var(--disp);font-weight:800;font-size:16px;white-space:nowrap}
+#sticky .cta{min-height:48px;font-size:15px;flex:1;box-shadow:none}
+</style>
+
+<script>document.getElementById("bm").classList.add("js")</script>
+
+<!-- ============================ HERO ============================ -->
+<section id="hero">
+  <div class="bg"></div><div class="amb"></div><div class="veil"></div>
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="in-wrap">
+    <div class="top">
+      <span class="logo">BUBBLE <i>MOUSSE</i></span>
+      <span class="tag num">٥٠٠ مل · نباتية</span>
+    </div>
+    <div class="mid">
+      <span class="eyebrow rv">صبغة رغوية نباتية — عرض قطعتين</span>
+      <h1 class="rv d1"><span class="dim">انسي الصبغة القديمة.</span><span class="gold-t">اغسلي شعرك فقط.</span></h1>
+      <p class="sub rv d2">رغوة تُوزَّع مثل الشامبو وتعيد اللون في <b class="num">٢٥ دقيقة</b> — بلا أمونيا، بلا فوضى، وبرائحة فواكه تبقى <b class="num">٩٦ ساعة</b>.</p>
+      <div class="meta rv d2"><span class="stars">★★★★★</span><span class="num">4.8 من 5</span><span class="sep"></span><span>[عدد التقييمات الحقيقي]</span></div>
+      <div class="price-line rv d2">
+        <span class="p num">110<small> ر.س</small></span>
+        <span class="old num"><bdi>199 ر.س</bdi></span>
+        <span class="off num">وفّري 45%</span>
+        <span class="ship">شامل الشحن</span>
+      </div>
+      <a class="cta rv d3" href="#offer"><span class="sh"></span>اطلبي الآن — الدفع عند الاستلام</a>
+      <p class="cta-note rv d3 num"><b>الشحن مجاني</b> · التوصيل خلال 2–5 أيام · لا رسوم إضافية عند الاستلام</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ TICKER ============================ -->
+<div id="ticker"><button type="button" id="tk-pause" aria-label="إيقاف الشريط المتحرك">II</button><div class="tk" id="tk" aria-hidden="true">
+  <span>نباتية ١٠٠٪<i>◆</i>بلا أمونيا<i>◆</i>عطر يبقى ٩٦ ساعة<i>◆</i>النتيجة في ٢٥ دقيقة<i>◆</i>هدية: أداة التطبيق<i>◆</i>الدفع عند الاستلام<i>◆</i></span>
+</div></div>
+
+<!-- ============================ OFFRE RAPIDE (au 2e écran) ============================ -->
+<section id="quick">
+  <div class="wrap rv">
+    <span class="eyebrow">العرض</span>
+    <h2>عبوتان + الهدية بـ <span class="gold-t num">110 ر.س</span></h2>
+    <p class="lead">بدل <s class="num">199 ر.س</s> · شحن مجاني · الدفع عند الاستلام</p>
+    <div class="q-grid">
+      <a class="q-card" href="#offer"><span class="q-n num">1</span><span class="q-l">عبوة</span><span class="q-p num">65</span></a>
+      <a class="q-card on" href="#offer"><span class="q-b">الأكثر طلباً</span><span class="q-n num">2</span><span class="q-l">عبوتان + هدية</span><span class="q-p num">110</span></a>
+      <a class="q-card" href="#offer"><span class="q-n num">3</span><span class="q-l">عبوات + هدية</span><span class="q-p num">150</span></a>
+    </div>
+    <a class="cta" href="#offer" style="margin-top:18px"><span class="sh"></span>اطلبي الآن — الدفع عند الاستلام</a>
+  </div>
+</section>
+
+<!-- ============================ EDITORIAL ============================ -->
+<section id="truth" class="aura">
+  <div class="wrap rv">
+    <span class="eyebrow">لماذا ما زلتِ تعانين؟</span>
+    <p>الصبغة القديمة تأخذ <b class="num">ساعتين</b>، تملأ البيت <span class="x">برائحة الأمونيا</span>، وتترك بقعاً على كل شيء.</p>
+    <p class="pivot gold-t">هذه الرغوة تنهي القصة في غسلة واحدة.</p>
+  </div>
+</section>
+
+<!-- ============================ SHADES ============================ -->
+<section id="shades">
+  <div class="wrap rv">
+    <span class="eyebrow">٤ درجات طبيعية</span>
+    <h2>اختاري درجتكِ… وتتبدّل الصفحة معكِ</h2>
+    <p class="lead">نفس التركيبة النباتية لكل الدرجات — حدّدي لونكِ وسنؤكده معكِ هاتفياً.</p>
+    <div class="strip"><span class="spot" id="spot" aria-hidden="true"></span><img src="{{IMG:shades}}" width="1100" height="600" alt="أربع خصلات شعر بالدرجات المتوفرة" loading="lazy"></div>
+    <div class="chips" role="radiogroup" aria-label="درجة اللون">
+      <button type="button" class="chip on" data-shade="black" data-name="أسود طبيعي" data-amb="16,26,20"><span class="dot" style="background:radial-gradient(circle at 35% 30%,#3A3A38,#101010)"></span><span class="nm">أسود طبيعي</span></button>
+      <button type="button" class="chip" data-shade="chestnut" data-name="بني كستنائي" data-amb="38,22,10"><span class="dot" style="background:radial-gradient(circle at 35% 30%,#7A4A28,#33200F)"></span><span class="nm">بني كستنائي</span></button>
+      <button type="button" class="chip" data-shade="coffee" data-name="بني كوفي" data-amb="30,18,10"><span class="dot" style="background:radial-gradient(circle at 35% 30%,#5E3A26,#241610)"></span><span class="nm">بني كوفي</span></button>
+      <button type="button" class="chip" data-shade="dark" data-name="بني داكن" data-amb="26,17,9"><span class="dot" style="background:radial-gradient(circle at 35% 30%,#4C3018,#1E130A)"></span><span class="nm">بني داكن</span></button>
+    </div>
+    <p class="hint" style="margin-top:12px">جرّبي الضغط — الإضاءة المحيطة بالصفحة تتغيّر مع كل درجة.</p>
+  </div>
+</section>
+
+<!-- ============================ FOAM ============================ -->
+<section id="foam" class="aura">
+  <div class="wrap rv">
+    <div class="bleed">
+      <img src="{{IMG:foam}}" width="900" height="490" alt="رغوة كثيفة" loading="lazy">
+      <div class="cap"><h3>رغوة كثيفة لا تسيل</h3><p>تثبت مكانها ٢٥ دقيقة كاملة — لا قطرات على الجبين، ولا بقع على المناشف.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ INGREDIENTS ============================ -->
+<section id="ingred">
+  <div class="wrap rv">
+    <span class="eyebrow">السر في التركيبة</span>
+    <h2>خلاصات تصبغ وتغذّي معاً</h2>
+    <div class="rows">
+      <div class="row"><span class="i num">٠١</span><h3>خلاصة الجينسنغ</h3><span class="r">GINSENG</span><p>تنشّط فروة الرأس وتدعم حيوية الشعر من الجذور.</p></div>
+      <div class="row"><span class="i num">٠٢</span><h3>السمسم الأسود</h3><span class="r">BLACK SESAME</span><p>يعمّق اللون الداكن الطبيعي ويمنحه لمعاناً.</p></div>
+      <div class="row"><span class="i num">٠٣</span><h3>عشبة الفو-تي</h3><span class="r">FO-TI</span><p>عناية شرقية عريقة معروفة للشعر الداكن.</p></div>
+      <div class="row"><span class="i num">٠٤</span><h3>السابونين النباتي</h3><span class="r">SAPONIN</span><p>رغوة غنية تنظّف بلطف دون أن تجفّف الشعر.</p></div>
+    </div>
+    <div class="bleed">
+      <img src="{{IMG:ingredients}}" width="1100" height="628" alt="مكونات نباتية" loading="lazy">
+      <div class="cap"><h3>صبغة وحمّام كريم في خطوة</h3><p>لون واضح مع ترطيب — بلا قسوة الصبغات التقليدية على الفروة الحساسة.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ STEPS ============================ -->
+<section id="steps" class="aura">
+  <div class="wrap rv">
+    <span class="eyebrow">مثل غسلة شامبو</span>
+    <h2>ثلاث حركات… وينتهي الأمر</h2>
+    <div class="grid">
+      <div class="s"><span class="n num">١</span><img src="{{IMG:step1}}" width="700" height="700" alt="ضعي الرغوة" loading="lazy"></div>
+      <div class="s"><span class="n num">٢</span><img src="{{IMG:step2}}" width="700" height="700" alt="وزعيها بالتساوي" loading="lazy"></div>
+      <div class="s"><span class="n num">٣</span><img src="{{IMG:step3}}" width="700" height="700" alt="اشطفي بالماء" loading="lazy"></div>
+    </div>
+    <div class="caps">
+      <p>ضعي الرغوة بالقفازين على شعر جاف</p>
+      <p>وزّعيها من الجذور للأطراف</p>
+      <p>اشطفي بالماء الفاتر</p>
+    </div>
+    <div class="clock"><span class="big gold-t num" id="clock" data-count="25">0</span><span class="u">دقيقة فقط</span></div>
+    <p class="clock-l">حتى يثبت اللون تماماً — أكملي قهوتكِ وارجعي.</p>
+  </div>
+</section>
+
+<!-- ============================ BEFORE / AFTER ============================ -->
+<section id="ba">
+  <div class="wrap rv">
+    <span class="eyebrow">اسحبي المقبض</span>
+    <h2>من الشيب… إلى لون متجانس</h2>
+    <div class="frame" id="ba-frame" style="margin-top:24px">
+      <div class="layer"><img src="{{IMG:ba-after}}" alt="بعد الاستخدام" width="900" height="1233"></div>
+      <div class="layer before-l" id="ba-before"><img src="{{IMG:ba-before}}" alt="قبل الاستخدام" width="900" height="1233"></div>
+      <div class="handle" id="ba-handle"></div>
+      <span class="lab b">قبل</span><span class="lab a">بعد</span>
+    </div>
+    <p class="legal">صورة توضيحية — النتائج قد تختلف من شخصٍ لآخر.</p>
+  </div>
+</section>
+
+<!-- ============================ RESULT ============================ -->
+<section id="result" class="aura">
+  <div class="wrap rv">
+    <div class="bleed">
+      <img src="{{IMG:result}}" width="900" height="490" alt="جذور مغطاة بالكامل" loading="lazy">
+      <div class="cap"><h3>تغطية متساوية حتى عند الجذور</h3><p>لون واحد متجانس من الجذور إلى الأطراف — بلا تفاوت ولا بقع.</p></div>
+    </div>
+    <div class="claims">
+      <div><b>لون يدوم</b><span>غسلة بعد غسلة</span></div>
+      <div><b class="num">٩٦ ساعة</b><span>رائحة فواكه</span></div>
+      <div><b>لمعان صحي</b><span>نعومة ومرونة</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ GIFT ============================ -->
+<section id="gift">
+  <div class="wrap rv">
+    <div class="card">
+      <span class="rib">هدية مع كل طلب</span>
+      <h3>أداة تطبيق الصبغة — مجاناً</h3>
+      <p>زجاجة بفرشاة مدمجة توزّع الرغوة بدقة على الجذور وخطّ الجبهة — تلوين نظيف كيد المختصّة في الصالون.</p>
+      <p class="v">قيمتها ٢٩ ر.س — مجاناً اليوم</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ GARANTIE ============================ -->
+<section id="warranty">
+  <div class="wrap rv">
+    <span class="eyebrow">الضمان</span>
+    <h2>اطلبي وأنتِ مطمئنة</h2>
+    <div class="w-todo">⚠ À COMPLÉTER — remplacer par la politique réelle. La méta-analyse du Journal
+      of Retailing (21 études) montre qu'une politique souple augmente les achats plus qu'elle
+      n'augmente les retours, et qu'un délai PLUS LONG réduit les retours. Ne rien promettre qui ne
+      soit pas tenu.</div>
+    <div class="w-grid">
+      <div class="w-card"><span class="w-n num">01</span><h3>افحصي قبل الدفع</h3><p>افتحي الطلب أمام المندوب — لا تدفعين قبل أن تري المنتج.</p></div>
+      <div class="w-card"><span class="w-n num">02</span><h3>استبدال فوري</h3><p>أي عبوة تصل متضررة نستبدلها مباشرة دون تكلفة.</p></div>
+      <div class="w-card"><span class="w-n num">03</span><h3>[مدة الإرجاع]</h3><p>[أدخلي هنا مدة الإرجاع الحقيقية — كلما طالت المدة قلّت نسبة الإرجاع فعلياً.]</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ REVIEWS ============================ -->
+<section id="reviews" class="aura">
+  <div class="wrap rv">
+    <span class="eyebrow">آراء العميلات</span>
+    <h2>ماذا قلن بعد التجربة؟</h2>
+    <div class="todo">⚠ قبل النشر: استبدال البطاقات بثلاث تقييمات حقيقية مع صور فعلية — لا تُنشر الصفحة بآراء تجريبية.</div>
+    <div class="r"><div class="head"><span class="who">[اسم العميلة] — [المدينة]</span><span class="stars">★★★★★</span></div><p>«[نص التقييم الحقيقي]»</p></div>
+    <div class="r"><div class="head"><span class="who">[اسم العميلة] — [المدينة]</span><span class="stars">★★★★★</span></div><p>«[نص التقييم الحقيقي]»</p></div>
+    <div class="r"><div class="head"><span class="who">[اسم العميلة] — [المدينة]</span><span class="stars">★★★★★</span></div><p>«[نص التقييم الحقيقي]»</p></div>
+    <a class="cta" href="#offer" style="margin-top:24px"><span class="sh"></span>أريد النتيجة نفسها</a>
+  </div>
+</section>
+
+<!-- ============================ OFFER ============================ -->
+<section id="offer">
+  <div class="wrap rv">
+    <span class="eyebrow">العرض الحالي</span>
+    <h2>اختاري باقتكِ واطلبي الآن</h2>
+    <p class="lead">الدفع كاملاً عند الاستلام — لا نطلب أي دفع إلكتروني.</p>
+
+    <div class="card">
+      <!-- easysell: version Shopify → <div id="easysell-form-here"></div> -->
+      <div class="opts" role="radiogroup" aria-label="اختاري الكمية">
+        <label class="opt" data-price="65" data-qty="عبوة واحدة">
+          <input type="radio" name="qty" value="1">
+          <div class="r1"><span class="q">عبوة واحدة</span><span class="p num">65<small> ر.س</small></span></div>
+          <div class="note num">للتجربة الأولى — 500 مل</div>
+        </label>
+        <label class="opt sel" data-price="110" data-qty="عبوتان + هدية">
+          <span class="badge">الأكثر طلباً · وفّري 45%</span>
+          <input type="radio" name="qty" value="2" checked>
+          <div class="r1"><span class="q">عبوتان + الهدية</span><span class="p num">110<small> ر.س</small><span class="cmp num"><bdi>199</bdi></span></span></div>
+          <div class="note">لتثبيت اللون شهوراً + أداة التطبيق مجاناً</div>
+        </label>
+        <label class="opt" data-price="150" data-qty="٣ عبوات + هدية">
+          <input type="radio" name="qty" value="3">
+          <div class="r1"><span class="q num">3 عبوات + الهدية</span><span class="p num">150<small> ر.س</small><span class="cmp num"><bdi>297</bdi></span></span></div>
+          <div class="note">أفضل سعر للعبوة — شاركيها مع العائلة</div>
+        </label>
+      </div>
+
+      <form id="form" novalidate>
+        <label class="f" for="f-shade">درجة اللون</label>
+        <select id="f-shade" name="shade">
+          <option>أسود طبيعي</option><option>بني كستنائي</option><option>بني كوفي</option><option>بني داكن</option>
+        </select>
+        <div class="field">
+          <label class="f" for="f-name">الاسم الكامل</label>
+          <input type="text" id="f-name" autocomplete="name" required>
+          <p class="err">فضلاً أدخلي اسمكِ الكامل</p>
+        </div>
+        <div class="field">
+          <label class="f" for="f-phone">رقم الجوال</label>
+          <input type="tel" id="f-phone" inputmode="numeric" autocomplete="tel" dir="ltr" style="text-align:end" placeholder="05XXXXXXXX" required>
+          <p class="err">أدخلي رقم جوال سعودي صحيح يبدأ بـ 05</p>
+        </div>
+        <div class="field">
+          <label class="f" for="f-city">المدينة</label>
+          <input type="text" id="f-city" autocomplete="address-level2" required>
+          <p class="err">فضلاً أدخلي مدينتكِ</p>
+        </div>
+        <div class="ship-line"><span>الشحن</span><span class="free">مجاني</span></div>
+        <div class="total"><span>الإجمالي — يُدفع للمندوب</span><span class="num" id="total">110 ر.س</span></div>
+        <p class="no-extra num">هذا هو المبلغ النهائي — لا رسوم إضافية ولا ضريبة مضافة عند الباب.</p>
+        <button type="submit" class="cta" id="submit"><span class="sh"></span>تأكيد الطلب — الدفع عند الاستلام</button>
+        <p class="cta-note">لا دفع إلكتروني · نتصل بكِ خلال 24 ساعة للتأكيد</p>
+      </form>
+
+      <div class="success" aria-live="polite">
+        <div class="ic">✓</div>
+        <h3 style="font-family:var(--disp);font-size:19px;font-weight:800;margin-bottom:6px">تم استلام طلبكِ بنجاح</h3>
+        <p style="font-size:13.5px;color:var(--sage)">سنتّصل بكِ خلال 24 ساعة لتأكيد الطلب والدرجة، ثم يصلكِ الشحن خلال 2–5 أيام عمل. الدفع كاملاً عند الاستلام.</p>
+      </div>
+
+      <ul class="inc">
+        <li><span class="d">◆</span>عبوتا Bubble Mousse نباتية — 500 مل</li>
+        <li><span class="d">◆</span>هدية: أداة تطبيق الصبغة</li>
+        <li><span class="d">◆</span>قفازات مع كل عبوة</li>
+        <li><span class="d">◆</span>شحن مجاني لكل مدن المملكة</li>
+        <li><span class="d">◆</span>فحص الطلب أمام المندوب قبل الدفع</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FAQ ============================ -->
+<section id="faq">
+  <div class="wrap rv">
+    <span class="eyebrow">أسئلة شائعة</span>
+    <h2 style="margin-bottom:22px">كل ما تودّين معرفته</h2>
+    <details><summary>هل تناسب الفروة الحساسة؟</summary><div class="a">نعم — التركيبة نباتية لطيفة مصممة للفروة الحساسة. جرّبي كمية صغيرة خلف الأذن أولاً كعادة صحية مع أي منتج جديد.</div></details>
+    <details><summary>هل تغطي الشيب فعلاً؟</summary><div class="a">تغطي الشعر الرمادي بالتساوي من الجذور للأطراف خلال ٢٥ دقيقة، ويعاد الاستخدام عند ظهور جذور جديدة.</div></details>
+    <details><summary>كم تكفي العبوة؟</summary><div class="a">العبوة ٥٠٠ مل من أكبر الأحجام المتوفرة — تكفي لعدة استخدامات حسب طول الشعر وكثافته.</div></details>
+    <details><summary>ما الدرجات المتوفرة؟</summary><div class="a">أربع درجات: أسود طبيعي، بني كستنائي، بني كوفي، بني داكن — تختارينها في نموذج الطلب ونؤكدها معكِ هاتفياً.</div></details>
+    <details><summary>كيف أدفع ومتى يصل الطلب؟</summary><div class="a">الدفع كاملاً عند الاستلام. التوصيل خلال ٢–٥ أيام عمل لجميع مدن المملكة بعد مكالمة التأكيد.</div></details>
+    <details><summary>ماذا لو وصل المنتج متضرراً؟</summary><div class="a">افحصي الطلب أمام المندوب — أي ضرر نستبدله مباشرة دون أي تكلفة.</div></details>
+  </div>
+</section>
+
+<!-- ============================ FINAL ============================ -->
+<section id="final" class="aura">
+  <div class="wrap rv">
+    <span class="eyebrow">جاهزة؟</span>
+    <h2><span class="gold-t">لونكِ يعود الليلة.</span></h2>
+    <p class="sub2 num">عبوتان + هدية أداة التطبيق — 110 ر.س بدل <s>199</s> · الدفع عند الاستلام</p>
+    <a class="cta" href="#offer"><span class="sh"></span>اطلبي الآن</a>
+    <div class="wordmark gold-t" aria-hidden="true">BUBBLE MOUSSE</div>
+    <footer>BUBBLE MOUSSE · جميع الحقوق محفوظة · سياسة الاستبدال</footer>
+  </div>
+</section>
+
+<!-- ============================ STICKY ============================ -->
+<div id="progress" aria-hidden="true"></div>
+<div id="sticky" aria-hidden="true">
+  <div class="in">
+    <div class="pr"><div class="n1" id="st-n">عبوتان + هدية · شحن مجاني</div><div class="n2 num" id="st-p">110 ر.س</div></div>
+    <a class="cta" href="#offer">اطلبي الآن</a>
+  </div>
+</div>
+
+<script>
+(function(){
+var bm=document.getElementById('bm');
+var mqReduce=matchMedia('(prefers-reduced-motion: reduce)');
+var reduced=mqReduce.matches;
+var lowend=(navigator.hardwareConcurrency||4)<=4||(navigator.deviceMemory||4)<=4;
+if(lowend)bm.classList.add('lowend');
+mqReduce.addEventListener('change',function(e){reduced=e.matches;bm.classList.toggle('reduced',e.matches)});
+
+/* ---------- Canvas héro : bulles d'or qui respirent + attraction curseur ---------- */
+var cv=document.getElementById('fx');
+if(cv&&!reduced){
+  var ctx=cv.getContext('2d'),W,H,P=[],M={x:-1e4,y:-1e4},heroVisible=true,rafId=0;
+  function size(){var d=Math.min(devicePixelRatio,2);W=cv.width=cv.offsetWidth*d;H=cv.height=cv.offsetHeight*d}
+  size();addEventListener('resize',size);
+  addEventListener('pointermove',function(e){var r=cv.getBoundingClientRect();M.x=(e.clientX-r.left)*(W/r.width);M.y=(e.clientY-r.top)*(H/r.height)},{passive:true});
+  var COUNT=lowend?16:42;
+  for(var i=0;i<COUNT;i++){P.push({x:Math.random(),y:Math.random(),r:.8+Math.random()*2.6,s:.06+Math.random()*.22,ph:Math.random()*6.28,o:.15+Math.random()*.45})}
+  new IntersectionObserver(function(e){
+    heroVisible=e[0].isIntersecting;
+    if(heroVisible&&!rafId){rafId=requestAnimationFrame(loop)}
+  },{threshold:0}).observe(document.getElementById('hero'));
+  function loop(t){
+    if(!heroVisible){rafId=0;return}
+    ctx.clearRect(0,0,W,H);
+    var d=Math.min(devicePixelRatio,2);
+    P.forEach(function(p){
+      p.y-=p.s/900;p.ph+=.012;
+      if(p.y<-.04){p.y=1.04;p.x=Math.random()}
+      var x=(p.x+Math.sin(p.ph)*.012)*W, y=p.y*H;
+      var dx=M.x-x,dy=M.y-y,dist=Math.hypot(dx,dy);
+      if(dist<180*d){x+=dx/dist*(180*d-dist)*.06;y+=dy/dist*(180*d-dist)*.06}
+      var r=p.r*d*(1+.18*Math.sin(p.ph*1.7));
+      var g=ctx.createRadialGradient(x,y,0,x,y,r*3.2);
+      g.addColorStop(0,'rgba(240,216,154,'+(p.o*.9)+')');
+      g.addColorStop(.45,'rgba(217,172,85,'+(p.o*.35)+')');
+      g.addColorStop(1,'rgba(217,172,85,0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r*3.2,0,6.28);ctx.fill();
+    });
+    rafId=requestAnimationFrame(loop);
+  }
+  rafId=requestAnimationFrame(loop);
+}
+
+/* ---------- Split par mot : chaque titre se révèle mot à mot ---------- */
+function doSplit(){
+  var NAMEABLE={H1:1,H2:1,H3:1,H4:1,H5:1,H6:1,A:1,BUTTON:1,SUMMARY:1,LABEL:1};
+  bm.querySelectorAll('#hero h1, #bm h2, #truth p').forEach(function(el){
+    var i=0, source=el.textContent.replace(/\s+/g,' ').trim();
+    if(NAMEABLE[el.tagName]){
+      el.setAttribute('aria-label', source);
+    } else {
+      /* rôle générique : on ajoute un doublon lisible par lecteur d'écran, invisible à l'œil */
+      var sr=document.createElement('span');sr.className='sr-only';sr.textContent=source;
+      el.appendChild(sr);
+    }
+    (function walk(node){
+      Array.prototype.slice.call(node.childNodes).forEach(function(n){
+        if(n.nodeType===3){
+          var parts=n.textContent.split(/(\s+)/), frag=document.createDocumentFragment();
+          parts.forEach(function(p){
+            if(!p.trim()){frag.appendChild(document.createTextNode(p));return}
+            var sp=document.createElement('span');sp.className='w';sp.textContent=p;sp.setAttribute('aria-hidden','true');
+            sp.style.transitionDelay=(i++*0.055)+'s';frag.appendChild(sp);
+          });
+          node.replaceChild(frag,n);
+        } else if(n.nodeType===1&&n.className!=='sr-only'){ walk(n) }
+      });
+    })(el);
+  });
+}
+if(!reduced){ (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(doSplit) }
+
+/* ---------- Reveals ---------- */
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.14});
+bm.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+
+/* ---------- Le clock unique : une seule boucle pilote parallax + progression ---------- */
+var bgEl=document.querySelector('#hero .bg'), prog=document.getElementById('progress'), heroH=innerHeight;
+addEventListener('resize',function(){heroH=innerHeight});
+var nativeTimeline = CSS.supports('animation-timeline','scroll()');
+if(!reduced){
+  var lastY=-1, clockId=0, inHero=true;
+  new IntersectionObserver(function(e){
+    inHero=e[0].isIntersecting;
+    if(!clockId) clockId=requestAnimationFrame(clock);
+  },{threshold:0}).observe(document.getElementById('hero'));
+  function clock(){
+    var y=scrollY;
+    if(y!==lastY){
+      lastY=y;
+      if(inHero&&bgEl) bgEl.style.transform='translate3d(0,'+(y*0.22)+'px,0) scale(1.08)';
+      if(!nativeTimeline){
+        var max=document.documentElement.scrollHeight-innerHeight;
+        prog.style.transform='scaleX('+(max>0?Math.min(y/max,1):0)+')';
+      }
+    }
+    /* on s'arrête quand le héro est sorti ET que la barre est native : plus rien à piloter */
+    if(!inHero&&nativeTimeline){clockId=0;return}
+    clockId=requestAnimationFrame(clock);
+  }
+  clockId=requestAnimationFrame(clock);
+}
+
+/* ---------- Compteur 25 ---------- */
+var ck=document.getElementById('clock');
+new IntersectionObserver(function(es,obs){es.forEach(function(e){
+  if(!e.isIntersecting)return;obs.unobserve(ck);
+  var T=+ck.dataset.count;
+  if(reduced){ck.textContent=T;return}
+  var t0=performance.now();
+  (function st(t){var p=Math.min((t-t0)/1100,1);p=1-Math.pow(1-p,3);ck.textContent=Math.round(T*p);if(p<1)requestAnimationFrame(st)})(t0);
+})},{threshold:.6}).observe(ck);
+
+/* ---------- Ticker : dupliqué + pause pilotable ---------- */
+var tk=document.getElementById('tk');tk.innerHTML+=tk.innerHTML;
+var tkBtn=document.getElementById('tk-pause'),tkBox=document.getElementById('ticker');
+tkBtn.addEventListener('click',function(){
+  var p=tkBox.classList.toggle('paused');
+  tkBtn.textContent=p?'\u25B6':'II';
+  tkBtn.setAttribute('aria-label',p?'تشغيل الشريط المتحرك':'إيقاف الشريط المتحرك');
+});
+
+/* ---------- Teintes : le monde change ---------- */
+var chips=bm.querySelectorAll('#shades .chip');
+var sel=document.getElementById('f-shade');
+chips.forEach(function(c){c.addEventListener('click',function(){
+  chips.forEach(function(x){x.classList.remove('on')});c.classList.add('on');
+  bm.style.setProperty('--amb',c.dataset.amb);
+  bm.dataset.shade=c.dataset.shade;
+  if(sel)sel.value=c.dataset.name;
+  var spot=document.getElementById('spot');
+  if(spot)spot.style.left=(Array.prototype.indexOf.call(chips,c)*25)+'%';
+})});
+
+/* ---------- Offre ---------- */
+var opts=bm.querySelectorAll('#offer .opt');
+var total=document.getElementById('total'),stP=document.getElementById('st-p'),stN=document.getElementById('st-n');
+opts.forEach(function(o){o.addEventListener('change',function(){
+  opts.forEach(function(x){x.classList.remove('sel')});o.classList.add('sel');
+  total.textContent=o.dataset.price+' ر.س';stP.textContent=o.dataset.price+' ر.س';stN.textContent=o.dataset.qty;
+})});
+
+/* ---------- Formulaire ---------- */
+var form=document.getElementById('form'),offer=document.getElementById('offer'),busy=false;
+function bad(f,is){f.closest('.field').classList.toggle('bad',is);return !is}
+form.addEventListener('submit',function(e){
+  e.preventDefault();if(busy)return;
+  var n=document.getElementById('f-name'),p=document.getElementById('f-phone'),c=document.getElementById('f-city'),ok=true;
+  ok=bad(n,n.value.trim().length<3)&&ok;
+  ok=bad(p,!/^05\d{8}$/.test(p.value.replace(/[\s-]/g,'')))&&ok;
+  ok=bad(c,c.value.trim().length<2)&&ok;
+  if(!ok)return;
+  busy=true;
+  var b=document.getElementById('submit');b.textContent='جارٍ إرسال الطلب…';b.disabled=true;
+  /* WIRING Shopify : EasySell remplace ce bloc via #easysell-form-here.
+     Tracking (au succès seulement) : fbq Purchase / ttq CompletePayment /
+     snaptr PURCHASE / dataLayer.push cod_order. */
+  setTimeout(function(){offer.classList.add('done');offer.scrollIntoView({behavior:reduced?'auto':'smooth'})},900);
+});
+['f-name','f-phone','f-city'].forEach(function(id){var f=document.getElementById(id);
+  f.addEventListener('input',function(){f.closest('.field').classList.remove('bad')})});
+
+/* ---------- Sticky ---------- */
+var sticky=document.getElementById('sticky'),hero=document.getElementById('hero'),hg=false,os=false;
+function upd(){var s=hg&&!os;sticky.classList.toggle('show',s);sticky.setAttribute('aria-hidden',!s)}
+new IntersectionObserver(function(e){hg=!e[0].isIntersecting;upd()},{threshold:0}).observe(hero);
+new IntersectionObserver(function(e){os=e[0].isIntersecting;upd()},{threshold:.05}).observe(offer);
+
+/* ---------- Avant/Après ---------- */
+var fr=document.getElementById('ba-frame'),bf=document.getElementById('ba-before'),hd=document.getElementById('ba-handle');
+var frRect=null;
+function pos(cx){var r=frRect||(frRect=fr.getBoundingClientRect());
+  var p=Math.min(Math.max((cx-r.left)/r.width,.06),.94)*100;
+  bf.style.clipPath='inset(0 0 0 '+p+'%)';hd.style.left=p+'%'}
+addEventListener('resize',function(){frRect=null});
+addEventListener('scroll',function(){frRect=null},{passive:true});
+fr.addEventListener('pointerdown',function(e){
+  frRect=fr.getBoundingClientRect();fr.setPointerCapture(e.pointerId);pos(e.clientX);
+  function mv(ev){pos(ev.clientX)}
+  function up(){fr.removeEventListener('pointermove',mv);fr.removeEventListener('pointerup',up)}
+  fr.addEventListener('pointermove',mv);fr.addEventListener('pointerup',up);
+});
+
+/* ---------- Ancres ---------- */
+bm.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){
+  var t=document.getElementById(a.getAttribute('href').slice(1));
+  if(t){e.preventDefault();t.scrollIntoView(reduced?{}:{behavior:'smooth'})}})});
+})();
+</script>
+</div>

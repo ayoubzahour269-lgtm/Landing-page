@@ -1,0 +1,550 @@
+<title>شامبو الصبغة السوداء Bubble Mousse — عرض قطعتين</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<div dir="rtl" lang="ar" id="bm-page">
+<style>
+  /* ============ TOKENS ============ */
+  #bm-page{
+    --bg:#F6F2EA; --surface:#FFFFFF; --ink:#171310; --panel:#1B1611;
+    --panel-ink:#F3EDE2; --accent:#0F6E4E; --accent-press:#0B573E;
+    --gold:#C29A3B; --taupe:#857766; --line:#E5DCCB;
+    --danger:#A33B2E;
+    --radius:14px;
+    --fs-h1:clamp(26px,7vw,34px); --fs-h2:clamp(21px,5.5vw,26px);
+    --fs-body:16px; --fs-small:13.5px;
+    font-family:"Segoe UI","SF Pro Text",Tahoma,"Noto Naskh Arabic",sans-serif;
+    background:var(--bg); color:var(--ink);
+    font-size:var(--fs-body); line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    display:block; margin:0 auto;
+  }
+  #bm-page *{margin:0;padding:0;box-sizing:border-box}
+  #bm-page img{max-width:100%;display:block}
+  #bm-page .wrap{max-width:520px;margin-inline:auto;padding-inline:18px}
+  #bm-page section{padding-block:44px}
+  #bm-page h1,#bm-page h2{line-height:1.35;text-wrap:balance;font-weight:800}
+  #bm-page h2{font-size:var(--fs-h2);margin-bottom:8px}
+  #bm-page .kicker{display:inline-block;font-size:12.5px;font-weight:700;letter-spacing:.06em;color:var(--accent);background:rgba(15,110,78,.09);border:1px solid rgba(15,110,78,.25);border-radius:999px;padding:4px 14px;margin-bottom:14px}
+  #bm-page .muted{color:var(--taupe)}
+  #bm-page .small{font-size:var(--fs-small)}
+
+  /* ============ MEDIA PLACEHOLDERS ============ */
+  #bm-page .ph{
+    position:relative;border-radius:var(--radius);overflow:hidden;
+    background:
+      repeating-linear-gradient(45deg,rgba(23,19,16,.05) 0 14px,transparent 14px 28px),
+      linear-gradient(160deg,#EFE7D8,#E2D6C2);
+    border:1.5px dashed #C9BBA2; display:flex;align-items:center;justify-content:center;
+    text-align:center;color:#6E6250;
+  }
+  #bm-page .ph.dark{background:repeating-linear-gradient(45deg,rgba(243,237,226,.06) 0 14px,transparent 14px 28px),linear-gradient(160deg,#241E17,#171310);border-color:#4A4032;color:#B9AC97}
+  #bm-page .ph .tag{font-weight:800;font-size:15px;display:block;margin-bottom:4px}
+  #bm-page .ph .dim{font-size:12px;letter-spacing:.05em;direction:ltr}
+
+  /* ============ HERO ============ */
+  #bm-hero{background:var(--panel);color:var(--panel-ink);padding-block:26px 34px}
+  #bm-hero .topbar{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;padding-block:6px 18px;color:#CBBFA9}
+  #bm-hero .brand{font-weight:800;font-size:15px;color:var(--panel-ink)}
+  #bm-hero .offer-chip{background:var(--gold);color:#1B1611;font-weight:800;font-size:12.5px;border-radius:999px;padding:4px 12px}
+  #bm-hero h1{font-size:var(--fs-h1);margin-bottom:10px}
+  #bm-hero .sub{color:#CBBFA9;margin-bottom:20px;font-size:16.5px}
+  #bm-hero .hero-media{aspect-ratio:1;max-height:min(38vh,340px);width:100%;margin-bottom:14px}
+  #bm-hero .rating{display:flex;align-items:center;gap:8px;font-size:14px;margin-bottom:14px}
+  #bm-hero .stars{color:var(--gold);letter-spacing:2px;font-size:15px}
+  #bm-hero .price-row{display:flex;align-items:baseline;gap:12px;margin-bottom:16px}
+  #bm-hero .price{font-size:34px;font-weight:800;color:#fff}
+  #bm-hero .price .cur{font-size:16px;font-weight:600}
+  #bm-hero .compare{color:#9A8D77;text-decoration:line-through;font-size:18px}
+  #bm-hero .save{background:rgba(194,154,59,.15);border:1px solid rgba(194,154,59,.5);color:var(--gold);font-size:12.5px;font-weight:700;border-radius:8px;padding:2px 10px}
+
+  /* ============ CTA ============ */
+  #bm-page .cta{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    width:100%;min-height:56px;border:0;border-radius:var(--radius);
+    background:var(--accent);color:#fff;font-family:inherit;
+    font-size:18px;font-weight:800;cursor:pointer;
+    box-shadow:0 6px 18px rgba(15,110,78,.35);
+    transition:transform .12s ease, background .12s ease;
+    text-decoration:none;
+  }
+  #bm-page .cta:active{transform:scale(.985);background:var(--accent-press)}
+  #bm-page .cta:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  #bm-page .cta-note{text-align:center;font-size:12.5px;margin-top:10px;color:var(--taupe)}
+  #bm-hero .cta-note{color:#B9AC97}
+
+  /* ============ TRUST BAR ============ */
+  #bm-trust{background:var(--surface);border-block:1px solid var(--line);padding-block:16px}
+  #bm-trust .row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}
+  #bm-trust .t{font-size:12px;font-weight:700;line-height:1.45}
+  #bm-trust .t svg{width:24px;height:24px;margin-inline:auto;margin-bottom:6px;display:block;stroke:var(--accent);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ============ PROBLEM ============ */
+  #bm-problem .scene{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-top:12px}
+  #bm-problem .scene .x{flex:none;width:26px;height:26px;border-radius:50%;background:rgba(163,59,46,.1);color:var(--danger);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;margin-top:2px}
+  #bm-problem .pivot{margin-top:22px;font-size:18px;font-weight:800;color:var(--accent)}
+
+  /* ============ STEPS ============ */
+  #bm-steps{background:var(--surface)}
+  #bm-steps .step{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:start;margin-top:22px}
+  #bm-steps .step .ph{aspect-ratio:1;border-radius:12px}
+  #bm-steps .n{font-weight:800;color:var(--accent);font-size:13px;letter-spacing:.04em}
+  #bm-steps .step h3{font-size:17px;font-weight:800;margin-bottom:2px}
+
+  /* ============ BENEFITS ============ */
+  #bm-benefits .b{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-top:16px}
+  #bm-benefits .b .ph{border-radius:0;border:0;border-bottom:1.5px dashed #C9BBA2;aspect-ratio:16/9}
+  #bm-benefits .b .txt{padding:16px 18px}
+  #bm-benefits .b h3{font-size:17.5px;font-weight:800;margin-bottom:4px}
+
+  /* ============ BEFORE / AFTER ============ */
+  #bm-ba{background:var(--panel);color:var(--panel-ink)}
+  #bm-ba .frame{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:4/5;touch-action:none;user-select:none}
+  #bm-ba .layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  #bm-ba .after-l{background:linear-gradient(160deg,#241E17,#0E0B08);color:#B9AC97}
+  #bm-ba .before-l{background:linear-gradient(160deg,#D8CDBB,#B7AA93);color:#5D5241;clip-path:inset(0 0 0 50%)}
+  #bm-ba .handle{position:absolute;top:0;bottom:0;left:50%;width:3px;background:var(--gold);transform:translateX(-50%)}
+  #bm-ba .handle::after{content:"⇄";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:var(--gold);color:#1B1611;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700}
+  #bm-ba .lab{position:absolute;bottom:12px;font-size:12px;font-weight:800;background:rgba(0,0,0,.45);color:#fff;border-radius:8px;padding:3px 10px}
+  #bm-ba .lab.b{right:12px} #bm-ba .lab.a{left:12px}
+  #bm-ba .legal{margin-top:10px;text-align:center;color:#8F8471;font-size:11.5px}
+
+  /* ============ REVIEWS ============ */
+  #bm-reviews .r{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-top:14px}
+  #bm-reviews .r .head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  #bm-reviews .r .av{width:40px;height:40px;border-radius:50%;flex:none}
+  #bm-reviews .r .who{font-weight:800;font-size:14.5px}
+  #bm-reviews .r .stars{color:var(--gold);font-size:13px;letter-spacing:2px}
+  #bm-reviews .r .hl{font-weight:800}
+  #bm-reviews .todo{border:1.5px dashed var(--danger);color:var(--danger);border-radius:var(--radius);padding:12px 16px;margin-top:14px;font-size:13px;font-weight:700;background:rgba(163,59,46,.05)}
+
+  /* ============ COMPARE ============ */
+  #bm-compare{background:var(--surface)}
+  #bm-compare .tbl{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-top:18px}
+  #bm-compare table{width:100%;border-collapse:collapse;font-size:13.5px}
+  #bm-compare th,#bm-compare td{padding:12px 10px;text-align:center;border-bottom:1px solid var(--line)}
+  #bm-compare tr:last-child td{border-bottom:0}
+  #bm-compare th{font-size:12.5px}
+  #bm-compare th:first-child,#bm-compare td:first-child{text-align:start;font-weight:700;padding-inline-start:14px}
+  #bm-compare .us{background:rgba(15,110,78,.06);font-weight:800}
+  #bm-compare th.us{color:var(--accent)}
+  #bm-compare .ok{color:var(--accent);font-weight:800}
+  #bm-compare .no{color:var(--danger)}
+
+  /* ============ OFFER / FORM ============ */
+  #bm-offer{background:var(--panel);color:var(--panel-ink)}
+  #bm-offer .card{background:var(--bg);color:var(--ink);border-radius:18px;padding:22px 18px;margin-top:20px}
+  #bm-offer .opt{position:relative;display:block;border:2px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-top:12px;cursor:pointer;background:var(--surface);transition:border-color .12s}
+  #bm-offer .opt input{position:absolute;opacity:0}
+  #bm-offer .opt .row1{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  #bm-offer .opt .qty{font-weight:800;font-size:16px}
+  #bm-offer .opt .p{font-weight:800;font-size:18px;white-space:nowrap}
+  #bm-offer .opt .p .cur{font-size:12.5px;font-weight:600}
+  #bm-offer .opt .cmp{color:var(--taupe);text-decoration:line-through;font-size:13px;margin-inline-start:6px}
+  #bm-offer .opt .note{font-size:12.5px;color:var(--taupe);margin-top:2px}
+  #bm-offer .opt.sel{border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,110,78,.12)}
+  #bm-offer .opt .badge{position:absolute;top:-11px;inset-inline-start:14px;background:var(--gold);color:#1B1611;font-size:11.5px;font-weight:800;border-radius:999px;padding:2px 12px}
+  #bm-offer .form{margin-top:22px}
+  #bm-offer label{display:block;font-weight:700;font-size:14px;margin:14px 0 6px}
+  #bm-offer input[type=text],#bm-offer input[type=tel],#bm-offer select{
+    width:100%;min-height:52px;border:1.5px solid var(--line);border-radius:12px;
+    background:var(--surface);font-family:inherit;font-size:16px;padding-inline:14px;color:var(--ink)
+  }
+  #bm-offer input:focus,#bm-offer select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(15,110,78,.12)}
+  #bm-offer .err{display:none;color:var(--danger);font-size:12.5px;margin-top:5px;font-weight:700}
+  #bm-offer .field.bad input{border-color:var(--danger)}
+  #bm-offer .field.bad .err{display:block}
+  #bm-offer .total{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:17px;border-top:1.5px dashed var(--line);margin-top:20px;padding-top:14px}
+  #bm-offer .cta{margin-top:16px}
+  #bm-offer .success{display:none;text-align:center;padding:26px 10px}
+  #bm-offer .success .ic{width:58px;height:58px;border-radius:50%;background:rgba(15,110,78,.12);color:var(--accent);font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+  #bm-offer.done .success{display:block}
+  #bm-offer.done .form,#bm-offer.done .opts,#bm-offer.done .total-row{display:none}
+  #bm-offer .stack{margin-top:18px}
+  #bm-offer .stack li{list-style:none;display:flex;gap:10px;align-items:center;padding-block:7px;font-size:14.5px}
+  #bm-offer .stack .ok{color:var(--gold);font-weight:800}
+
+  /* ============ FAQ ============ */
+  #bm-faq details{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);margin-top:12px;overflow:hidden}
+  #bm-faq summary{list-style:none;cursor:pointer;font-weight:800;font-size:15px;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  #bm-faq summary::-webkit-details-marker{display:none}
+  #bm-faq summary::after{content:"+";font-size:20px;color:var(--accent);font-weight:600;transition:transform .15s}
+  #bm-faq details[open] summary::after{transform:rotate(45deg)}
+  #bm-faq .a{padding:0 18px 16px;font-size:14.5px;color:#4A4236}
+
+  /* ============ FINAL ============ */
+  #bm-final{text-align:center;padding-bottom:120px}
+  #bm-final .g{width:60px;height:60px;margin:0 auto 14px;border-radius:50%;background:rgba(194,154,59,.14);display:flex;align-items:center;justify-content:center}
+  #bm-final .g svg{width:30px;height:30px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  #bm-final footer{margin-top:36px;font-size:11.5px;color:var(--taupe)}
+
+  /* ============ STICKY BAR ============ */
+  #bm-sticky{position:fixed;bottom:0;inset-inline:0;z-index:50;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -6px 24px rgba(23,19,16,.08);padding:10px 14px calc(10px + env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .25s ease}
+  #bm-sticky.show{transform:none}
+  #bm-sticky .in{max-width:520px;margin-inline:auto;display:flex;align-items:center;gap:12px}
+  #bm-sticky .pr{line-height:1.3}
+  #bm-sticky .pr .name{font-size:12px;font-weight:700;color:var(--taupe);white-space:nowrap}
+  #bm-sticky .pr .val{font-weight:800;font-size:16px;white-space:nowrap}
+  #bm-sticky .cta{min-height:48px;font-size:15.5px;flex:1;box-shadow:none}
+
+  @media (prefers-reduced-motion:reduce){
+    #bm-page *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+  }
+</style>
+
+<!-- ======================= 1 · HERO ======================= -->
+<section id="bm-hero">
+  <div class="wrap">
+    <div class="topbar">
+      <span class="brand">Bubble Mousse®</span>
+      <span class="offer-chip">عرض قطعتين</span>
+    </div>
+
+    <h1>يغطّي الشيب في دقائق… أثناء غسل الشعر</h1>
+    <p class="sub">رغوة صبغة سوداء خالية من الأمونيا — لون طبيعي متجانس من أول استخدام، بلا فوضى الصبغات التقليدية.</p>
+
+    <div class="ph dark hero-media">
+      <div>
+        <span class="tag">📷 M1 — باكشوت العرض (قطعتان)</span>
+        <span class="dim">1080 × 1350 · WebP ≤ 200KB</span>
+      </div>
+    </div>
+
+    <div class="rating" aria-label="التقييم">
+      <span class="stars" aria-hidden="true">★★★★★</span>
+      <span class="small">4.8 من 5 — <b>[عدد التقييمات الحقيقي]</b></span>
+    </div>
+
+    <div class="price-row">
+      <span class="price">110 <span class="cur">ر.س</span></span>
+      <span class="compare"><bdi>199 ر.س</bdi></span>
+      <span class="save">وفّر 45%</span>
+    </div>
+
+    <a class="cta" href="#bm-offer">اطلب الآن — الدفع عند الاستلام</a>
+    <p class="cta-note">توصيل خلال 2–5 أيام داخل السعودية · نتّصل بك لتأكيد الطلب</p>
+  </div>
+</section>
+
+<!-- ======================= 2 · TRUST BAR ======================= -->
+<div id="bm-trust">
+  <div class="wrap">
+    <div class="row">
+      <div class="t"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20"/></svg>الدفع عند الاستلام</div>
+      <div class="t"><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>شحن سريع لكل المدن</div>
+      <div class="t"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>خالٍ من الأمونيا</div>
+      <div class="t"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>تأكيد هاتفي قبل الشحن</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= 3 · PROBLEM ======================= -->
+<section id="bm-problem">
+  <div class="wrap">
+    <span class="kicker">هل يبدو هذا مألوفاً؟</span>
+    <h2>الصبغة التقليدية تحلّ مشكلة… وتخلق ثلاثاً غيرها</h2>
+    <div class="scene"><span class="x">✕</span><p>رائحة أمونيا نفّاذة تملأ الحمّام وتزعج العينين طوال الجلسة.</p></div>
+    <div class="scene"><span class="x">✕</span><p>بقع على الجبين والمناشف والملابس، وتنظيف يستغرق أطول من الصبغة نفسها.</p></div>
+    <div class="scene"><span class="x">✕</span><p>خلط وأدوات وفرشاة وانتظار طويل — ثم يعود الشيب للظهور بعد أسابيع قليلة.</p></div>
+    <p class="pivot">Bubble Mousse يختصرها كلّها: رغوة جاهزة تُوزَّع كالشامبو، وينتهي الأمر.</p>
+  </div>
+</section>
+
+<!-- ======================= 4 · HOW IT WORKS ======================= -->
+<section id="bm-steps">
+  <div class="wrap">
+    <span class="kicker">ثلاث خطوات فقط</span>
+    <h2>أسهل من غسلة شعر عادية</h2>
+
+    <div class="step">
+      <div class="ph"><span class="dim">M4a</span></div>
+      <div><span class="n">الخطوة 1</span><h3>اضغط الرغوة ووزّعها</h3><p class="small muted">بقفازين، وزّع الرغوة على شعر جاف كما توزّع الشامبو — بلا خلط وبلا فرشاة.</p></div>
+    </div>
+    <div class="step">
+      <div class="ph"><span class="dim">M4b</span></div>
+      <div><span class="n">الخطوة 2</span><h3>انتظر 15–20 دقيقة</h3><p class="small muted">تعمل الرغوة بثبات دون أن تسيل على الوجه أو الرقبة.</p></div>
+    </div>
+    <div class="step">
+      <div class="ph"><span class="dim">M4c</span></div>
+      <div><span class="n">الخطوة 3</span><h3>اشطف بالماء</h3><p class="small muted">لون أسود متجانس يغطّي الشيب، وملمس ناعم بدون جفاف الصبغات.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 5 · BENEFITS ======================= -->
+<section id="bm-benefits">
+  <div class="wrap">
+    <span class="kicker">لماذا يختاره الآلاف؟</span>
+    <h2>نتيجة الصالون… من حمّام منزلك</h2>
+
+    <div class="b">
+      <div class="ph"><div><span class="tag">📷 M5 — تغطية الشيب (قريب على الجذور)</span><span class="dim">1200 × 675 · WebP ≤ 120KB</span></div></div>
+      <div class="txt"><h3>تغطية كاملة من الاستخدام الأول</h3><p class="small muted">صيغة سريعة المفعول تغطّي الشعر الأبيض في جلسة واحدة، حتى عند الجذور.</p></div>
+    </div>
+
+    <div class="b">
+      <div class="ph"><div><span class="tag">📷 M6 — ماكرو الرغوة على اليد</span><span class="dim">1200 × 675 · WebP ≤ 120KB</span></div></div>
+      <div class="txt"><h3>خالٍ من الأمونيا — بلا رائحة نفّاذة</h3><p class="small muted">تركيبة لطيفة على فروة الرأس، تجربة مريحة بدون دموع ولا تهيّج.</p></div>
+    </div>
+
+    <div class="b">
+      <div class="ph"><div><span class="tag">📷 M7 — الرغوة الثابتة (لا تسيل)</span><span class="dim">1200 × 675 · WebP ≤ 120KB</span></div></div>
+      <div class="txt"><h3>رغوة كثيفة لا تسيل ولا تلطّخ</h3><p class="small muted">تثبت مكانها حتى نهاية المدة — وداعاً لبقع الجبين والمناشف.</p></div>
+    </div>
+
+    <div class="b">
+      <div class="ph"><div><span class="tag">📷 M8 — لايف ستايل النتيجة</span><span class="dim">1200 × 675 · WebP ≤ 120KB</span></div></div>
+      <div class="txt"><h3>لون يدوم أسابيع</h3><p class="small muted">مع الغسل المعتدل يحافظ اللون على ثباته أسابيع، وقطعتان تكفيان لعدة استخدامات.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 6 · BEFORE / AFTER ======================= -->
+<section id="bm-ba">
+  <div class="wrap">
+    <span class="kicker" style="background:rgba(194,154,59,.12);border-color:rgba(194,154,59,.4);color:var(--gold)">اسحب لترى الفرق</span>
+    <h2 style="color:#fff">من الشيب إلى الأسود الطبيعي</h2>
+    <p class="small" style="color:#B9AC97;margin-bottom:18px">حرّك المقبض يميناً ويساراً</p>
+
+    <div class="frame" id="bm-ba-frame">
+      <div class="layer after-l"><div style="text-align:center"><span class="tag" style="font-weight:800;display:block">📷 M3b — بعد (شعر أسود)</span><span class="dim" style="font-size:12px;direction:ltr">1080 × 1350</span></div></div>
+      <div class="layer before-l" id="bm-ba-before"><div style="text-align:center"><span class="tag" style="font-weight:800;display:block">📷 M3a — قبل (شيب)</span><span class="dim" style="font-size:12px;direction:ltr">1080 × 1350</span></div></div>
+      <div class="handle" id="bm-ba-handle"></div>
+      <span class="lab b">قبل</span><span class="lab a">بعد</span>
+    </div>
+    <p class="legal">صورة توضيحية — النتائج قد تختلف من شخص لآخر.</p>
+  </div>
+</section>
+
+<!-- ======================= 7 · REVIEWS ======================= -->
+<section id="bm-reviews">
+  <div class="wrap">
+    <span class="kicker">آراء العملاء</span>
+    <h2>ماذا قالوا بعد التجربة؟</h2>
+
+    <div class="todo">⚠︎ للاستبدال قبل النشر: أدخل 3 تقييمات حقيقية مع صور عملاء فعلية (أنبكسنغ أو نتيجة). لا تُنشر الصفحة بتقييمات تجريبية.</div>
+
+    <div class="r">
+      <div class="head"><div class="ph av"></div><div><div class="who">[اسم العميل] — [المدينة]</div><div class="stars">★★★★★</div></div></div>
+      <p class="small">«[نص التقييم الحقيقي — أبرز جملة واحدة بالخط العريض]»</p>
+    </div>
+    <div class="r">
+      <div class="head"><div class="ph av"></div><div><div class="who">[اسم العميل] — [المدينة]</div><div class="stars">★★★★★</div></div></div>
+      <p class="small">«[نص التقييم الحقيقي]»</p>
+    </div>
+    <div class="r">
+      <div class="head"><div class="ph av"></div><div><div class="who">[اسم العميل] — [المدينة]</div><div class="stars">★★★★★</div></div></div>
+      <p class="small">«[نص التقييم الحقيقي]»</p>
+    </div>
+
+    <a class="cta" href="#bm-offer" style="margin-top:20px">أريد نفس النتيجة — اطلب الآن</a>
+  </div>
+</section>
+
+<!-- ======================= 8 · COMPARE ======================= -->
+<section id="bm-compare">
+  <div class="wrap">
+    <span class="kicker">المقارنة العادلة</span>
+    <h2>لماذا الرغوة وليس الصبغة أو الصالون؟</h2>
+    <div class="tbl">
+      <table>
+        <tr><th></th><th class="us">Bubble Mousse</th><th>صبغة تقليدية</th><th>الصالون</th></tr>
+        <tr><td>الوقت الكلي</td><td class="us ok">~20 دقيقة</td><td>ساعة+</td><td>ساعتان+</td></tr>
+        <tr><td>رائحة الأمونيا</td><td class="us ok">لا يوجد</td><td class="no">قوية</td><td class="no">قوية</td></tr>
+        <tr><td>بقع وفوضى</td><td class="us ok">بلا تلطيخ</td><td class="no">شائعة</td><td>—</td></tr>
+        <tr><td>يحتاج خبرة</td><td class="us ok">لا</td><td class="no">نعم</td><td>نعم</td></tr>
+        <tr><td>تكلفة الجلسة</td><td class="us ok">~55 ر.س</td><td>~70 ر.س</td><td class="no">150+ ر.س</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 9 · OFFER + COD FORM ======================= -->
+<section id="bm-offer">
+  <div class="wrap">
+    <span class="kicker" style="background:rgba(194,154,59,.12);border-color:rgba(194,154,59,.4);color:var(--gold)">العرض الحالي</span>
+    <h2 style="color:#fff">اختر باقتك واطلب الآن</h2>
+    <p class="small" style="color:#B9AC97">الدفع كاملاً عند الاستلام — لا نطلب أي دفع إلكتروني.</p>
+
+    <div class="card">
+      <!-- easysell: dans la version Shopify, remplacer ce bloc par <div id="easysell-form-here"></div> -->
+      <div class="opts" role="radiogroup" aria-label="اختر الكمية">
+        <label class="opt" data-price="65" data-qty="قطعة واحدة">
+          <input type="radio" name="bm-qty" value="1">
+          <div class="row1"><span class="qty">قطعة واحدة</span><span class="p">65 <span class="cur">ر.س</span></span></div>
+          <div class="note">للتجربة الأولى</div>
+        </label>
+        <label class="opt sel" data-price="110" data-qty="قطعتان">
+          <span class="badge">الأكثر طلباً — وفّر 45%</span>
+          <input type="radio" name="bm-qty" value="2" checked>
+          <div class="row1"><span class="qty">قطعتان</span><span class="p">110 <span class="cur">ر.س</span><span class="cmp"><bdi>199 ر.س</bdi></span></span></div>
+          <div class="note">تكفي لعدة أشهر من الاستخدام</div>
+        </label>
+        <label class="opt" data-price="199" data-qty="4 قطع">
+          <input type="radio" name="bm-qty" value="4">
+          <div class="row1"><span class="qty">4 قطع — عرض العائلة</span><span class="p">199 <span class="cur">ر.س</span><span class="cmp"><bdi>398 ر.س</bdi></span></span></div>
+          <div class="note">أفضل سعر للقطعة</div>
+        </label>
+      </div>
+
+      <form class="form" id="bm-form" novalidate>
+        <div class="field">
+          <label for="bm-name">الاسم الكامل</label>
+          <input type="text" id="bm-name" name="name" autocomplete="name" required>
+          <p class="err">فضلاً أدخل اسمك الكامل</p>
+        </div>
+        <div class="field">
+          <label for="bm-phone">رقم الجوال</label>
+          <input type="tel" id="bm-phone" name="phone" inputmode="numeric" autocomplete="tel" dir="ltr" style="text-align:end" placeholder="05XXXXXXXX" required>
+          <p class="err">أدخل رقم جوال سعودي صحيح يبدأ بـ 05</p>
+        </div>
+        <div class="field">
+          <label for="bm-city">المدينة</label>
+          <input type="text" id="bm-city" name="city" autocomplete="address-level2" required>
+          <p class="err">فضلاً أدخل مدينتك</p>
+        </div>
+
+        <div class="total total-row"><span>الإجمالي — يُدفع عند الاستلام</span><span id="bm-total">110 ر.س</span></div>
+
+        <button type="submit" class="cta" id="bm-submit">تأكيد الطلب — الدفع عند الاستلام</button>
+        <p class="cta-note">لا دفع إلكتروني · سنتصل بك خلال 24 ساعة لتأكيد الطلب</p>
+      </form>
+
+      <div class="success" aria-live="polite">
+        <div class="ic">✓</div>
+        <h3 style="font-size:19px;font-weight:800;margin-bottom:6px">تم استلام طلبك بنجاح</h3>
+        <p class="small muted">سيتّصل بك فريقنا خلال 24 ساعة لتأكيد الطلب، ثم يصلك الشحن خلال 2–5 أيام عمل. الدفع كاملاً عند الاستلام.</p>
+      </div>
+
+      <ul class="stack">
+        <li><span class="ok">✓</span> قطعتان من Bubble Mousse الأصلي</li>
+        <li><span class="ok">✓</span> قفازات تطبيق مع كل قطعة</li>
+        <li><span class="ok">✓</span> شحن سريع 2–5 أيام لجميع مدن المملكة</li>
+        <li><span class="ok">✓</span> فحص المنتج أمام المندوب قبل الدفع</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 10 · FAQ ======================= -->
+<section id="bm-faq">
+  <div class="wrap">
+    <span class="kicker">أسئلة شائعة</span>
+    <h2>كل ما تريد معرفته</h2>
+
+    <details><summary>هل يناسب الرجال والنساء؟</summary><div class="a">نعم، التركيبة مناسبة للجنسين ولجميع أنواع الشعر التي يظهر فيها الشيب.</div></details>
+    <details><summary>هل له رائحة أمونيا؟</summary><div class="a">لا. التركيبة خالية من الأمونيا، لذلك لا رائحة نفّاذة ولا تهيّج للعينين أثناء الاستخدام.</div></details>
+    <details><summary>كم يدوم اللون؟</summary><div class="a">مع الغسل المعتدل يحافظ اللون على ثباته لعدة أسابيع، ويُعاد الاستخدام عند ظهور الجذور الجديدة.</div></details>
+    <details><summary>كيف أدفع؟</summary><div class="a">الدفع كاملاً عند الاستلام نقداً أو بالشبكة حسب المندوب. لا نطلب أي دفع إلكتروني مسبق.</div></details>
+    <details><summary>متى يصلني الطلب؟</summary><div class="a">خلال 2 إلى 5 أيام عمل لجميع مدن المملكة. نتصل بك أولاً لتأكيد الطلب قبل الشحن.</div></details>
+    <details><summary>ماذا لو وصلني المنتج متضرراً؟</summary><div class="a">افحص طلبك أمام المندوب — وإن وجدت أي ضرر في المنتج نستبدله لك مباشرة دون أي تكلفة إضافية.</div></details>
+  </div>
+</section>
+
+<!-- ======================= 11 · FINAL CTA ======================= -->
+<section id="bm-final">
+  <div class="wrap">
+    <div class="g"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+    <h2>شعر أسود متجانس… بجلسة واحدة في المنزل</h2>
+    <p class="muted small" style="margin-bottom:20px">عرض قطعتين بـ <b>110 ر.س</b> بدل <s>199 ر.س</s> — الدفع عند الاستلام.</p>
+    <a class="cta" href="#bm-offer">اطلب الآن — الدفع عند الاستلام</a>
+    <footer>Bubble Mousse® — جميع الحقوق محفوظة · سياسة الاستبدال · التواصل عبر واتساب</footer>
+  </div>
+</section>
+
+<!-- ======================= STICKY BAR ======================= -->
+<div id="bm-sticky" aria-hidden="true">
+  <div class="in">
+    <div class="pr"><span class="name">عرض قطعتين</span><br><span class="val">110 ر.س</span></div>
+    <a class="cta" href="#bm-offer">اطلب الآن</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  var page=document.getElementById('bm-page');
+
+  /* Bundle selector */
+  var opts=page.querySelectorAll('#bm-offer .opt');
+  var totalEl=document.getElementById('bm-total');
+  var stickyVal=page.querySelector('#bm-sticky .val');
+  var stickyName=page.querySelector('#bm-sticky .name');
+  opts.forEach(function(o){
+    o.addEventListener('change',function(){
+      opts.forEach(function(x){x.classList.remove('sel')});
+      o.classList.add('sel');
+      totalEl.textContent=o.dataset.price+' ر.س';
+      stickyVal.textContent=o.dataset.price+' ر.س';
+      stickyName.textContent=o.dataset.qty;
+    });
+  });
+
+  /* COD form */
+  var form=document.getElementById('bm-form');
+  var offer=document.getElementById('bm-offer');
+  var submitting=false;
+  function bad(f,is){f.closest('.field').classList.toggle('bad',is);return !is}
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(submitting)return;
+    var name=document.getElementById('bm-name');
+    var phone=document.getElementById('bm-phone');
+    var city=document.getElementById('bm-city');
+    var ok=true;
+    ok=bad(name,name.value.trim().length<3)&&ok;
+    ok=bad(phone,!/^05\d{8}$/.test(phone.value.replace(/[\s-]/g,'')))&&ok;
+    ok=bad(city,city.value.trim().length<2)&&ok;
+    if(!ok)return;
+    submitting=true;
+    var btn=document.getElementById('bm-submit');
+    btn.textContent='جارٍ إرسال الطلب…';btn.disabled=true;
+    /* ── WIRING (version Shopify) ──────────────────────────────
+       Cette démo simule l'envoi. En production EasySell remplace
+       tout le bloc formulaire via l'ancre #easysell-form-here.
+       Fallback sans EasySell : POST /cart/add puis /checkout.
+       TRACKING (à câbler sur le succès, jamais sur le clic) :
+       fbq('track','Purchase',{value:PRICE,currency:'SAR'});
+       ttq.track('CompletePayment'); snaptr('track','PURCHASE');
+       dataLayer.push({event:'cod_order',value:PRICE});
+    ──────────────────────────────────────────────────────────── */
+    setTimeout(function(){offer.classList.add('done');offer.scrollIntoView({behavior:'smooth'})},900);
+  });
+  ['bm-name','bm-phone','bm-city'].forEach(function(id){
+    var f=document.getElementById(id);
+    f.addEventListener('input',function(){f.closest('.field').classList.remove('bad')});
+  });
+
+  /* Sticky bar : visible après le hero, cachée quand le formulaire est à l'écran */
+  var sticky=document.getElementById('bm-sticky');
+  var hero=document.getElementById('bm-hero');
+  var heroGone=false,offerSeen=false;
+  function upd(){var s=heroGone&&!offerSeen;sticky.classList.toggle('show',s);sticky.setAttribute('aria-hidden',s?'false':'true')}
+  new IntersectionObserver(function(en){heroGone=!en[0].isIntersecting;upd()},{threshold:0}).observe(hero);
+  new IntersectionObserver(function(en){offerSeen=en[0].isIntersecting;upd()},{threshold:.05}).observe(offer);
+
+  /* Before/After slider */
+  var frame=document.getElementById('bm-ba-frame');
+  var before=document.getElementById('bm-ba-before');
+  var handle=document.getElementById('bm-ba-handle');
+  function setPos(clientX){
+    var r=frame.getBoundingClientRect();
+    var p=Math.min(Math.max((clientX-r.left)/r.width,0.05),0.95)*100;
+    before.style.clipPath='inset(0 0 0 '+p+'%)';
+    handle.style.left=p+'%';
+  }
+  frame.addEventListener('pointerdown',function(e){
+    frame.setPointerCapture(e.pointerId);setPos(e.clientX);
+    function mv(ev){setPos(ev.clientX)}
+    function up(){frame.removeEventListener('pointermove',mv);frame.removeEventListener('pointerup',up)}
+    frame.addEventListener('pointermove',mv);
+    frame.addEventListener('pointerup',up);
+  });
+
+  /* Smooth anchors */
+  page.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var t=document.querySelector(a.getAttribute('href'));
+      if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}
+    });
+  });
+})();
+</script>
+</div>
