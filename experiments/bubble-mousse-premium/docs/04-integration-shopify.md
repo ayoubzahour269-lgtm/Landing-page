@@ -1,161 +1,164 @@
 # Bubble Mousse — Stratégie d'intégration Shopify
 
-Hébergement retenu : **Shopify**. Contrainte non négociable : la landing page
-ne doit hériter d'aucun style ni script du thème principal.
+Rédigé après audit du dépôt `ayoubzahour269-lgtm/e-com` (commit `8e62d46`).
+Remplace la version spéculative précédente.
 
 ---
 
-## 1. Le problème à résoudre
+## 1. Ce que l'audit a trouvé
 
-Une page Shopify classique passe par `layout/theme.liquid`, qui charge le CSS
-global du thème, son JavaScript, ses polices, son en-tête, son pied de page et
-tous les scripts injectés par les applications installées. C'est exactement ce
-qui produirait une landing page générique, lente et visuellement contaminée.
+L'écosystème existe et il est plus solide que prévu. Le pattern d'isolation que
+j'avais recommandé à l'aveugle **est déjà en place et éprouvé en production**.
 
-## 2. Architecture retenue — layout alternatif
-
-Shopify permet à un template de déclarer un layout différent de `theme`. C'est
-le mécanisme d'isolation natif, et il ne nécessite ni application, ni headless,
-ni sortie de l'écosystème.
-
-```
-layout/
-└── lp-bare.liquid                    ← layout minimal, aucun héritage
-
-templates/
-└── page.bubble-mousse.liquid         ← {% layout 'lp-bare' %}
-
-sections/
-├── lp-bm-hero.liquid
-├── lp-bm-result.liquid
-├── lp-bm-steps.liquid
-├── lp-bm-benefits.liquid
-├── lp-bm-botanical.liquid
-├── lp-bm-kit.liquid
-├── lp-bm-trust.liquid
-├── lp-bm-offer.liquid
-└── lp-bm-faq.liquid
-
-assets/
-├── lp-bm.css                         ← unique feuille de style chargée
-├── lp-bm.js
-└── lp-bm-*.avif
-```
-
-`lp-bare.liquid` ne contient que `{{ content_for_header }}`, la feuille
-`lp-bm.css`, `{{ content_for_layout }}` et `lp-bm.js`. Aucun `header`, aucun
-`footer`, aucun `theme.css`, aucune police du thème.
-
-**Préfixe `lp-bm-` sur tout.** Chaque classe CSS, chaque fichier, chaque
-section. Cela garantit qu'aucune règle du thème ne peut atteindre la page et
-qu'aucune règle de la page ne peut fuiter vers la boutique.
-
-**Vérification d'isolation :** la page doit rester identique si l'on désactive
-entièrement le CSS du thème. Si elle change, elle est contaminée.
-
-### Ce que `content_for_header` impose
-
-Cette balise est obligatoire et injecte les scripts Shopify ainsi que ceux des
-applications configurées pour toutes les pages. C'est le seul vecteur de
-contamination résiduel. À auditer application par application dans les
-paramètres de pixels et de scripts, et à désactiver sur ce template lorsque
-c'est possible. Chaque script d'application non nécessaire coûte directement
-en LCP, donc en CPA.
-
-## 3. Le formulaire COD
-
-Le checkout Shopify natif est inadapté à ce funnel : plusieurs étapes, création
-de compte suggérée, champs superflus, et il n'expose pas la ville en liste
-déroulante contrôlée dont dépend le NDR.
-
-Trois options, par ordre de préférence :
-
-| Option | Description | Verdict |
-|---|---|---|
-| **A** | Formulaire custom → App Proxy → création de commande via Admin API | **Recommandé.** Contrôle total sur les champs, la validation et le tracking. |
-| B | Application COD du marché (type Releasit, EasySell) | Acceptable si déjà installée et éprouvée. Moins de contrôle sur le markup et la performance. |
-| C | Checkout Shopify natif avec méthode de paiement manuelle « الدفع عند الاستلام » | À éviter sur trafic froid. Trop d'étapes, NDR dégradé. |
-
-L'option A suppose une application privée sur la boutique. À trancher après
-l'audit du dépôt `e-com` : si une application COD éprouvée est déjà en place et
-que ses taux de confirmation sont connus, la conserver vaut mieux que de
-reconstruire.
-
-**Non négociable quelle que soit l'option :** ville en liste déroulante, format
-de téléphone validé par pays, prix visible avant le formulaire, confirmation
-WhatsApp annoncée.
-
-## 4. Multi-pays
-
-Shopify Markets pour l'Arabie saoudite, les Émirats et Oman : un marché par
-pays, prix fixés manuellement selon la grille de `03-pricing.md` plutôt que par
-conversion automatique — les paliers psychologiques (149 / 199 / 249) doivent
-être identiques d'un marché à l'autre, ce qu'une conversion automatique casse.
-
-La liste des villes et le format de téléphone suivent le marché détecté, avec
-un sélecteur de pays visible et modifiable par la cliente : une détection
-géographique erronée sur un formulaire COD produit une adresse non livrable.
-
-## 5. Produit et variantes
-
-Un seul produit, trois variantes correspondant aux trois paliers. La teinte
-noire est la seule vendue sur cette page — les trois bruns ne sont pas exposés
-comme options, afin de ne pas introduire de décision supplémentaire sur trafic
-froid.
-
-Le kit applicateur n'est pas une variante ni un produit lié : il est inclus
-dans chaque palier et présenté comme cadeau. Le gérer comme un article séparé
-créerait une ligne de panier et une hésitation.
-
-## 6. RTL
-
-`<html dir="rtl" lang="ar">` dans `lp-bare.liquid`. Toutes les propriétés CSS
-en logique directionnelle : `margin-inline`, `padding-inline`, `inset-inline`,
-`text-align: start`. Aucune valeur `left` ou `right` codée en dur.
-
-Polices auto-hébergées dans `assets/`, en `woff2`, avec `font-display: swap` et
-préchargement de la seule graisse utilisée en titrage. Ne pas dépendre de
-Google Fonts : requête tierce, coût en LCP, et blocage possible selon les
-réseaux.
-
-## 7. Performance — budget
-
-| Ressource | Budget |
+| Élément | État constaté |
 |---|---|
-| CSS | ≤ 25 ko compressé |
-| JS de la page | ≤ 15 ko compressé |
-| Image hero | ≤ 180 ko AVIF |
-| Total au premier rendu | ≤ 400 ko |
-| LCP mobile 4G | ≤ 2,0 s |
-| CLS | ≤ 0,05 |
+| Boutique | `dw0dwe-bp.myshopify.com` |
+| Thème live | Horizon, id `188180398382` |
+| Thème dev | id `188183183662` (vierge, CLI) |
+| Accès | Theme Kit Access, proxy `theme-kit-access.shopifyapps.com` |
+| Layouts | `theme.liquid`, `landing.liquid` (300 l.), `landing-v3.liquid` (25 l.) |
+| Sections | 19 sections préfixées `landing-*` |
+| Templates | `product.mechat-landing.json` → layout `landing-v3` |
+| COD | **EasySell installé**, ancre `#easysell-form-here` |
+| Langue | فصحى, `dir="rtl"` au niveau du layout |
+| Devise | ر.س codée en dur dans les sections |
+| Analytics | **Aucun pixel dans le thème** — tout est côté admin Shopify |
 
-Aucune bibliothèque d'animation externe. Les six animations de la page sont
-réalisables en CSS et en `IntersectionObserver`. GSAP, Lenis, Three.js et
-Framer Motion sont **écartés** : le Concept A ne les justifie pas, et leur coût
-se paierait en CPA.
+`landing-v3.liquid` fait 25 lignes : `content_for_header`, deux polices Google,
+un `<style>` minimal, `content_for_layout`. Aucun en-tête, aucun pied de page,
+aucun CSS de thème. **C'est exactement l'isolation recherchée**, déjà validée.
 
-## 8. Séquence de mise en production
+## 2. Corrections à mes recommandations précédentes
 
-1. Audit du dépôt `e-com` — version du thème, applications installées, pixels
-   en place, solution COD existante, marchés configurés. **En attente
-   d'attachement du dépôt.**
-2. Duplication du thème en brouillon. Aucune modification sur le thème publié.
-3. Ajout du layout, du template et des sections préfixés. Aucun fichier
-   existant modifié — l'ensemble de l'intégration est additif.
-4. Prévisualisation sur le thème brouillon, contrôle d'isolation CSS.
-5. Contrôle Lighthouse mobile et test sur appareil Android d'entrée de gamme.
-6. Câblage des pixels et vérification de la déduplication `event_id`.
-7. Publication, puis mise en place des conversions hors ligne
-   `order_confirmed` et `order_delivered`.
+| Ce que j'avais recommandé | Ce qu'il faut faire |
+|---|---|
+| Créer un layout `lp-bare.liquid` | **Réutiliser `landing-v3.liquid`** — il fait déjà le travail |
+| Formulaire custom via App Proxy (option A) | **Garder EasySell** — installé, rodé, taux connus |
+| Auditer les scripts d'applications | Confirmé nécessaire : `content_for_header` reste le seul vecteur |
 
-**Risque de régression : quasi nul.** L'intégration n'écrase aucun fichier
-existant. Le seul point de contact avec la boutique est `content_for_header` et
-la configuration des Markets.
+Le formulaire custom reste préférable **sur le papier** — ville en liste
+déroulante et validation du numéro par pays sont les deux leviers directs sur le
+NDR, et EasySell ne les expose pas forcément. Mais reconstruire un tunnel COD
+éprouvé pour un gain non mesuré est un mauvais échange. **Décision : garder
+EasySell**, et vérifier dans son back-office si la liste de villes et le format
+de téléphone sont configurables. Si oui, le gain NDR est obtenu sans réécriture.
 
-## 9. En attente
+## 3. Architecture retenue
 
-- Attachement du dépôt `e-com` pour l'audit technique.
-- Version et nature du thème actuel (Online Store 2.0 requis pour les sections
-  de template).
-- Existence et performance d'une solution COD déjà en place.
-- Applications injectant des scripts sur toutes les pages.
+```
+layout/landing-v3.liquid                    ← existant, réutilisé tel quel
+templates/product.bubble-mousse.json        ← nouveau, layout: landing-v3
+sections/lpbm-hero.liquid
+sections/lpbm-result.liquid
+sections/lpbm-steps.liquid
+sections/lpbm-benefits.liquid
+sections/lpbm-botanical.liquid
+sections/lpbm-kit.liquid
+sections/lpbm-trust.liquid
+sections/lpbm-offer.liquid
+sections/lpbm-faq.liquid
+assets/lpbm-*.webp
+```
+
+Préfixe `lpbm-`, distinct du `landing-*` existant. Aucun fichier existant n'est
+modifié : l'intégration est purement additive.
+
+## 4. Pièges Shopify hérités du projet précédent
+
+Ces contraintes ont été apprises en production sur ce thème. Les respecter évite
+de refaire les mêmes erreurs.
+
+**Ne jamais nommer une clé de section `order`.** Une section nommée `"order"`
+dans le tableau `order[]` d'un template JSON casse le rendu de la page —
+collision avec le tableau lui-même. Toujours préfixer : `lpbm_order`.
+
+**Les pages d'erreur sont cachées par URL pendant 15 à 60 minutes.** Pour
+tester, dupliquer le template sous un autre suffixe et appeler `?view=<suffixe>`
+sur une URL fraîche, puis supprimer le doublon.
+
+**L'API Products est bloquée pour les tokens Theme Access** (redirection 302).
+Toute modification de prix, de SKU ou d'image produit se fait à la main dans
+l'admin. Les paliers 149 / 199 / 249 devront donc être créés manuellement en
+variantes.
+
+**Le CDN Shopify ré-encode les images.** Vérifier le rendu à l'œil, pas par
+comparaison de hash.
+
+**Throttling.** Des 503 apparaissent après une série de PUT — prévoir un retry
+avec backoff lors du déploiement des sections.
+
+## 5. Deux dettes techniques repérées
+
+**Police manquante.** `landing-order.liquid` déclare `font-family:'Cairo'` dans
+sept règles CSS, mais `landing-v3.liquid` ne charge que Amiri et IBM Plex Sans
+Arabic. Cairo n'est jamais chargée : tout ce texte retombe silencieusement sur
+la sans-serif système. Soit ajouter Cairo au chargement, soit retirer la
+déclaration. En l'état, la typographie affichée n'est pas celle qui est écrite.
+
+**Minuteur permanent.** `landing-order.liquid` lance un `setInterval(sync, 2000)`
+sans jamais l'arrêter. Il tourne indéfiniment pour surveiller l'apparition du
+formulaire EasySell. Un `clearInterval` une fois le formulaire détecté suffirait.
+
+Aucune des deux n'est bloquante. Toutes deux sont hors de mon périmètre — je les
+signale sans y toucher.
+
+## 6. Polices — décision révisée
+
+Le thème charge Amiri et IBM Plex Sans Arabic depuis Google Fonts. Mon
+prototype utilise une pile système avec Tajawal en tête.
+
+**Décision : aligner le prototype sur IBM Plex Sans Arabic**, déjà chargée par
+le layout. Cela supprime une requête réseau supplémentaire et garantit un rendu
+identique. Amiri (serif) reste disponible si un contraste éditorial est
+souhaité sur les titres — à trancher visuellement.
+
+L'auto-hébergement des `woff2` reste préférable à terme, mais ce n'est pas la
+priorité tant que le layout existant dépend de Google Fonts.
+
+## 7. Multi-pays
+
+Le thème actuel code `ر.س` en dur et ne cible que l'Arabie saoudite. Pour les
+Émirats et Oman, il faut Shopify Markets avec des prix fixés manuellement selon
+`03-pricing.md` — les paliers 149 / 199 / 249 doivent rester identiques d'un
+marché à l'autre, ce qu'une conversion automatique casserait.
+
+Le sélecteur de pays du prototype devra être remplacé par la détection Markets,
+en gardant un contrôle manuel visible : une détection erronée sur un formulaire
+COD produit une adresse non livrable.
+
+## 8. Analytics
+
+Aucun pixel n'est présent dans le code du thème — ils sont configurés côté admin
+Shopify. Le plan de `01-architecture.md` §9 reste valable, avec une précision :
+les événements devront être poussés via les Customer Events de Shopify plutôt
+qu'en dur dans les sections.
+
+Le point critique reste inchangé : avec un NDR de 42 %, `order_confirmed` et
+`order_delivered` doivent être renvoyés en conversions hors ligne via la CAPI.
+EasySell expose les statuts de commande — c'est la source à brancher.
+
+## 9. Séquence de déploiement
+
+1. Créer le produit et ses trois variantes **à la main dans l'admin** (API
+   Products inaccessible).
+2. Configurer EasySell : ancre `#easysell-form-here`, offres quantité.
+3. Pousser les sections `lpbm-*` et le template sur le **thème de développement**
+   (id `188183183662`), jamais sur le thème live.
+4. Tester via `?view=` sur une URL fraîche.
+5. Lighthouse mobile + test sur Android d'entrée de gamme.
+6. Publication, puis conversions hors ligne.
+
+## 10. Blocage réseau à lever
+
+Cette session ne peut atteindre **aucun** hôte externe nécessaire :
+
+```
+theme-kit-access.shopifyapps.com   refusé
+api.kie.ai                         refusé
+kieai.redpandaai.co                refusé
+cdn.shopify.com                    refusé
+```
+
+À ajouter à la politique réseau de l'environnement, puis rouvrir une session.
+Sans cela, le déploiement des sections et la génération d'images doivent être
+faits depuis une machine locale.
